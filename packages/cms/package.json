@@ -1,0 +1,38 @@
+{
+  "name": "@workspace/cms",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    "./browser": "./src/browser.ts",
+    "./server": "./src/server.ts",
+    "./queries": "./src/queries/index.ts",
+    "./react-query": "./src/react-query.ts",
+    "./schema": "./src/schema/index.ts",
+    "./types": "./src/types.ts",
+    "./image": "./src/image.ts",
+    "./validation": "./src/validation.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@sanity/client": "7.23.2",
+    "@sanity/image-url": "^2.1.1",
+    "groq": "6.5.0",
+    "sanity": "6.5.0",
+    "server-only": "^0.0.1"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": "^5.66.8",
+    "react": "^19.2.0"
+  },
+  "devDependencies": {
+    "@tanstack/react-query": "^5.66.8",
+    "@types/react": "^19.2.14",
+    "typescript": "~6.0.2",
+    "vitest": "^4.1.10"
+  }
+}

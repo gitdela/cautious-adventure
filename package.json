@@ -1,0 +1,24 @@
+{
+  "name": "petrosol",
+  "private": true,
+  "packageManager": "bun@1.3.13",
+  "devDependencies": {
+    "turbo": "latest"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:website": "turbo run dev --filter=website",
+    "build:website": "turbo run build --filter=website",
+    "dev:studio": "turbo run dev --filter=studio",
+    "build:studio": "turbo run build --filter=studio",
+    "deploy:studio": "turbo run deploy --filter=studio",
+    "cms:schema:extract": "turbo run schema:extract --filter=studio",
+    "cms:typegen": "turbo run typegen --filter=studio",
+    "cms:validate": "turbo run validate --filter=studio",
+    "test": "turbo run test",
+    "lint": "turbo run lint"
+  }
+}

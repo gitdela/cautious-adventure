@@ -1,0 +1,35 @@
+@import "@workspace/ui/globals.css";
+
+/* Fonts come from the ui package theme: Verdana (brand face, system font)
+   and IBM Plex Mono (spec/data readouts). */
+@theme inline {
+  --font-sans: Verdana, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+:root {
+  --blueprint-image: url("/brand/flow-sweep.svg");
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.home-quote {
+  background-image:
+    linear-gradient(rgba(11, 36, 66, 0.72), rgba(11, 36, 66, 0.72)),
+    url("/images/home/refinery-wide.png");
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+}
+
+body {
+  font-family: var(--font-sans);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

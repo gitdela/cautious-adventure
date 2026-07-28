@@ -1,0 +1,31 @@
+{
+  "name": "studio",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "sanity dev",
+    "build": "sanity build",
+    "deploy": "sanity deploy",
+    "start": "sanity start",
+    "schema:extract": "sanity schema extract --enforce-required-fields --path ../../packages/cms/src/generated/schema.json",
+    "typegen": "sanity typegen generate",
+    "validate": "sanity documents validate -y",
+    "seed:generate": "bun run seed/generate.ts",
+    "seed:dev": "sanity dataset import seed/seed.ndjson --dataset development --replace"
+  },
+  "dependencies": {
+    "@sanity/vision": "6.5.0",
+    "@workspace/cms": "workspace:*",
+    "@workspace/config": "workspace:*",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "sanity": "6.5.0",
+    "styled-components": "^6.1.15"
+  },
+  "devDependencies": {
+    "@sanity/cli": "6.5.0",
+    "@types/react": "^19.2.14",
+    "typescript": "~6.0.2"
+  }
+}

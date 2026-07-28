@@ -1,0 +1,35 @@
+# dependencies
+node_modules/
+
+# turbo
+.turbo/
+
+# builds
+dist/
+.next/
+out/
+build/
+
+# sanity
+apps/studio/.sanity/
+
+# env — only the committed *.example templates are tracked
+.env
+.env.*
+!.env.example
+
+# AI assistant files — local guidance, not part of the shipped repo
+CLAUDE.md
+AGENTS.md
+.claude/
+SCAFFOLD_PLAN.md
+
+# misc
+.DS_Store
+*.pem
+*.log
+*.tsbuildinfo
+next-env.d.ts
+
+# vercel
+.vercel
