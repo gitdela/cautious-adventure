@@ -4,7 +4,7 @@ import Link from "next/link";
 import { cn } from "@workspace/ui/lib/utils";
 
 const sizeClasses = {
-  mobile: "h-[46px]",
+  mobile: "h-[54px]",
   desktop: "h-[55px]",
   footer: "h-[clamp(44px,5vw,56px)]",
 };

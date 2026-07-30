@@ -1,10 +1,10 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import { Button } from "@workspace/ui/components/button";
 import { Card } from "@workspace/ui/components/card";
 import {
   Eyebrow,
-  LogoStrip,
   PhotoTile,
   Seal,
   SectionHeading,
@@ -17,6 +17,7 @@ import {
 
 import { HomeContactForm } from "./home-contact-form";
 import { HomePriceBoard } from "./home-price-board";
+import { lubricantProducts } from "./lubricants/lubricants-data";
 
 const services: Array<{
   icon: StationIconName;
@@ -25,44 +26,51 @@ const services: Array<{
   image: string;
   imagePosition?: string;
 }> = [
-  {
-    icon: "pump",
-    title: "Petrol & Diesel",
-    description: "Clean, full-quantity fuel at 115+ stations across Ghana.",
-    image: "/images/home/fuel-pump.webp",
-  },
-  {
-    icon: "fuel-drop",
-    title: "Platinum Lubricants",
-    description: "11 Syntec® formulated lubricants for every engine type.",
-    image: "/images/home/lubricants-range.png",
-  },
-  {
-    icon: "fullcare",
-    title: "FullCare",
-    description: "Complete lube bay servicing at PETROSOL stations.",
-    image: "/images/home/fullcare.webp",
-  },
-  {
-    icon: "tanker",
-    title: "Fuel Delivery",
-    description: "Direct-to-location fuel delivery for homes and businesses.",
-    image: "/images/home/fuel-delivery.webp",
-  },
-  {
-    icon: "jerrycan",
-    title: "Bulk Supply",
-    description: "Corporate & industrial bulk petroleum supply solutions.",
-    image: "/images/home/refinery-tanks.png",
-  },
-  {
-    icon: "shop",
-    title: "Shop",
-    description: "Purchase PETROSOL products online and in-station.",
-    image: "/images/home/shop.webp",
-    imagePosition: "object-cover object-[center_12%]",
-  },
-];
+    {
+      icon: "pump",
+      title: "Petrol & Diesel",
+      description: "Clean, full-quantity fuel at 115+ stations across Ghana.",
+      image: "/images/home/fuel-pump.webp",
+    },
+    {
+      icon: "fuel-drop",
+      title: "Platinum Lubricants",
+      description: "11 Syntec® formulated lubricants for every engine type.",
+      image: "/images/home/lubricants-range.png",
+    },
+    {
+      icon: "fullcare",
+      title: "FullCare",
+      description: "Complete lube bay servicing at PETROSOL stations.",
+      image: "/images/home/fullcare.webp",
+    },
+    {
+      icon: "tanker",
+      title: "Fuel Delivery",
+      description: "Direct-to-location fuel delivery for homes and businesses.",
+      image: "/images/home/fuel-delivery.webp",
+    },
+    {
+      icon: "jerrycan",
+      title: "Bulk Supply",
+      description: "Corporate & industrial bulk petroleum supply solutions.",
+      image: "/images/home/refinery-tanks.png",
+    },
+    {
+      icon: "shop",
+      title: "Shop",
+      description: "Purchase PETROSOL products online and in-station.",
+      image: "/images/home/shop.webp",
+      imagePosition: "object-cover object-[center_12%]",
+    },
+  ];
+
+const featuredLubricantIds = ["plus-5w30", "plus-10w40", "ultra-15w40", "atf-6"];
+
+const featuredLubricants = featuredLubricantIds.flatMap((id) => {
+  const product = lubricantProducts.find((entry) => entry.id === id);
+  return product?.image ? [{ ...product, image: product.image }] : [];
+});
 
 const news = [
   {
@@ -262,11 +270,11 @@ function StatBand() {
             To drive innovation and progress in the
           </SectionHeading>
           <div className="mt-12">
-            <Stat value="10%" divider>
+            <Stat value="10%" divider className="items-center">
               lower prices than competitors. Our company is able to keep the price
               of oil and gas at the affordable level.
             </Stat>
-            <Stat value="20%" divider>
+            <Stat value="20%" divider className="items-center">
               reducing greenhouse gas emissions per year. We&apos;re committed to
               minimizing our environmental impact and promoting social
               responsibility.
@@ -289,6 +297,60 @@ function ImageBand() {
       sizes="100vw"
       className="h-[clamp(240px,36vw,520px)] w-full object-cover"
     />
+  );
+}
+
+function ProductsSection() {
+  return (
+    <section id="products" className="ps-blueprint scroll-mt-24 py-[var(--section-y)]">
+      <div className="ps-container">
+        <SectionHeading
+          eyebrow="Our products"
+          highlight="every engine"
+          align="center"
+        >
+          Platinum lubricants for
+        </SectionHeading>
+        <p className="mx-auto mt-6 max-w-[56ch] text-center leading-[1.62]">
+          Eleven Syntec&reg;-formulated lubricants — engine oils, gear and
+          transmission fluids, brake fluid and coolant — blended to
+          international standards and stocked at every PETROSOL station.
+        </p>
+        <div className="mt-16 grid grid-cols-[repeat(auto-fit,minmax(min(100%,240px),1fr))] gap-[var(--gutter)] min-[1100px]:grid-cols-4">
+          {featuredLubricants.map((product) => (
+            <Link key={product.id} href="/lubricants" className="group rounded-lg">
+              <article className="flex h-full flex-col overflow-hidden rounded-lg border border-border bg-background shadow-card transition-[transform,box-shadow] duration-400 ease-[cubic-bezier(.16,1,.3,1)] group-hover:-translate-y-[3px] group-hover:shadow-raised">
+                <div className="relative aspect-[4/3] w-full border-b border-border bg-white">
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    fill
+                    sizes="(max-width: 720px) 100vw, (max-width: 1100px) 50vw, 25vw"
+                    className="object-cover"
+                  />
+                </div>
+                <div className="flex flex-col gap-2 px-6 pt-5 pb-6">
+                  <span className="text-xs font-bold tracking-[0.12em] uppercase text-brand">
+                    {product.category}
+                  </span>
+                  <h3 className="font-display text-base font-semibold text-navy-900 transition-colors group-hover:text-brand">
+                    {product.name}
+                  </h3>
+                  <span className="font-mono text-xs text-muted-foreground">
+                    {product.grade}
+                  </span>
+                </div>
+              </article>
+            </Link>
+          ))}
+        </div>
+        <div className="mt-12 flex justify-center">
+          <Button asChild variant="outline">
+            <Link href="/lubricants">View all lubricants</Link>
+          </Button>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -373,14 +435,14 @@ function HomeSections() {
   return (
     <main>
       <HeroSection />
-      <LogoStrip />
       <AboutSection />
       <ServicesSection />
       <StatBand />
       <ImageBand />
-      <NewsSection />
+      <ProductsSection />
       <QuoteBand />
       <ContactSection />
+      <NewsSection />
     </main>
   );
 }

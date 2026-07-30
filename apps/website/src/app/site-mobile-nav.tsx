@@ -2,21 +2,23 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { RiCloseLine, RiMenuLine } from "@remixicon/react";
-
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@workspace/ui/components/accordion";
-import { Button, buttonVariants } from "@workspace/ui/components/button";
+import { buttonVariants } from "@workspace/ui/components/button";
+import { MenuGlyph } from "@workspace/ui/components/menu-glyph";
 import type { SiteNavItem } from "@workspace/ui/components/site-chrome";
 import { cn } from "@workspace/ui/lib/utils";
 
 import { SiteBrand } from "./site-brand";
 import { socialLinks } from "./site-navigation";
 import { SocialIcon } from "./social-icon";
+
+const menuButtonClassName =
+  "inline-flex size-12 shrink-0 items-center justify-center rounded-full text-brand transition-colors hover:text-brand/80";
 
 function SiteMobileNav({ items }: { items: SiteNavItem[] }) {
   const [open, setOpen] = useState(false);
@@ -44,15 +46,15 @@ function SiteMobileNav({ items }: { items: SiteNavItem[] }) {
     <>
       <div className="flex items-center justify-between px-[var(--container-pad)] py-3">
         <SiteBrand size="mobile" />
-        <Button
-          variant="ghost"
-          size="icon"
+        <button
+          type="button"
           aria-label="Open menu"
           aria-expanded={open}
           onClick={() => setOpen(true)}
+          className={menuButtonClassName}
         >
-          <RiMenuLine />
-        </Button>
+          <MenuGlyph className="size-[30px]" />
+        </button>
       </div>
 
       {open ? (
@@ -64,20 +66,21 @@ function SiteMobileNav({ items }: { items: SiteNavItem[] }) {
         >
           <div className="flex shrink-0 items-center justify-between px-[var(--container-pad)] py-3">
             <SiteBrand size="mobile" />
-            <Button
+            <button
               ref={closeRef}
-              variant="ghost"
-              size="icon"
+              type="button"
               aria-label="Close menu"
+              aria-expanded={open}
               onClick={closeMenu}
+              className={menuButtonClassName}
             >
-              <RiCloseLine />
-            </Button>
+              <MenuGlyph open className="size-[30px]" />
+            </button>
           </div>
 
           <nav
             aria-label="Mobile navigation"
-            className="flex min-h-0 flex-1 flex-col overflow-y-auto px-[var(--container-pad)] pt-4 pb-8"
+            className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-[var(--container-pad)] pt-4 pb-8"
           >
             <Accordion type="single" collapsible className="rounded-none border-0">
               {items.map((item) => {

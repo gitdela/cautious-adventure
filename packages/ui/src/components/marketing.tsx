@@ -182,35 +182,6 @@ function PhotoTile({
   );
 }
 
-const defaultPartners = [
-  "GON",
-  "BOSON",
-  "BROMO",
-  "ABPER",
-  "BARNEY",
-  "ARES",
-  "PIESO",
-  "WAGON",
-];
-
-function LogoStrip({ names = defaultPartners }: { names?: string[] }) {
-  return (
-    <div className="overflow-hidden py-12 [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]">
-      <div className="logo-strip-track flex w-max gap-[72px] pr-[72px]">
-        {[...names, ...names].map((name, index) => (
-          <span
-            key={`${name}-${index}`}
-            aria-hidden={index >= names.length}
-            className="font-display text-[28px] font-bold tracking-[0.02em] whitespace-nowrap text-ink-200"
-          >
-            {name}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 function Seal({ className }: { className?: string }) {
   const pathId = React.useId();
 
@@ -259,4 +230,4 @@ function Seal({ className }: { className?: string }) {
   );
 }
 
-export { Eyebrow, LogoStrip, PhotoTile, Seal, SectionHeading, Stat };
+export { Eyebrow, PhotoTile, Seal, SectionHeading, Stat };
