@@ -141,7 +141,7 @@ function SiteMobileNav({ items }: { items: SiteNavItem[] }) {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={social.label}
-                    className="inline-grid size-11 place-items-center rounded-full border border-border text-navy-900 transition-colors hover:border-brand hover:bg-brand hover:text-white [&_svg]:size-[18px]"
+                    className="inline-grid size-11 place-items-center rounded-full border border-border text-navy-900 transition-colors hover:border-brand hover:bg-brand hover:text-white [&_svg]:size-5"
                   >
                     <SocialIcon name={social.name} />
                   </a>

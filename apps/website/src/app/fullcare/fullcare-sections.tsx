@@ -134,7 +134,7 @@ function FullcareIntro() {
         </div>
         <div className="mt-8">
           <Button asChild>
-            <Link href="/contact">Find a FULLCARE Center</Link>
+            <Link href="/stations">Find a FULLCARE Center</Link>
           </Button>
         </div>
       </div>
@@ -232,7 +232,7 @@ function FullcareCta() {
         </SectionHeading>
         <div className="flex flex-wrap justify-center gap-4">
           <Button asChild>
-            <Link href="/contact">Find a FULLCARE Center</Link>
+            <Link href="/stations">Find a FULLCARE Center</Link>
           </Button>
           <Button asChild variant="outlineInverse">
             <Link href="/lubricants">Explore lubricants</Link>

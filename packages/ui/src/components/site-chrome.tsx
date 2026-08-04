@@ -44,7 +44,7 @@ function SocialStrip({
   className?: string;
 }) {
   return (
-    <div className={cn("flex items-center justify-end gap-5", className)}>
+    <div className={cn("flex items-center justify-end gap-2.5", className)}>
       {socials.map((s) => (
         <a
           key={s.label}
@@ -52,7 +52,7 @@ function SocialStrip({
           target="_blank"
           rel="noopener noreferrer"
           aria-label={s.label}
-          className="inline-flex text-fg-faint transition-colors hover:text-brand [&_svg]:size-[15px]"
+          className="inline-grid size-8 place-items-center rounded-full border border-border text-navy-900 transition-colors hover:border-brand hover:bg-brand hover:text-white [&_svg]:size-4"
         >
           {s.icon}
         </a>

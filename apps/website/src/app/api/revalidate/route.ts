@@ -48,6 +48,10 @@ function tagsForDocument(doc: WebhookDoc): string[] {
       tags.add(cacheTags.type("legalDocument"));
       if (doc.kind) tags.add(cacheTags.legal(doc.kind));
       break;
+    case "pumpPrices":
+      tags.add(cacheTags.type("pumpPrices"));
+      tags.add(cacheTags.pumpPrices());
+      break;
     // Author/category changes ripple into post projections.
     case "author":
     case "category":

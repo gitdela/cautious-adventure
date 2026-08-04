@@ -1,12 +1,5 @@
-"use client";
-
+import type { PumpPriceBoardView } from "@workspace/content";
 import { StationIcon } from "@workspace/ui/components/station-icon";
-
-const prices = [
-  ["Petrol", "₵9.80"],
-  ["Diesel", "₵16.00"],
-  ["Premium", "₵11.20"],
-];
 
 const dateFormatter = new Intl.DateTimeFormat("en-GB", {
   day: "numeric",
@@ -14,8 +7,22 @@ const dateFormatter = new Intl.DateTimeFormat("en-GB", {
   year: "numeric",
 });
 
-function HomePriceBoard() {
-  const today = new Date();
+const priceFormatter = new Intl.NumberFormat("en-GH", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
+/* Schema caps the board at four fuels. */
+const columnClasses = [
+  "grid-cols-1",
+  "grid-cols-1",
+  "grid-cols-2",
+  "grid-cols-3",
+  "grid-cols-4",
+];
+
+function HomePriceBoard({ board }: { board: PumpPriceBoardView }) {
+  const updated = new Date(board.updatedAt);
 
   return (
     <div className="mt-12 max-w-[480px] overflow-hidden rounded-xl bg-surface-inverse shadow-[0_12px_32px_rgba(11,36,66,0.18)]">
@@ -25,14 +32,14 @@ function HomePriceBoard() {
           At the pump today
         </span>
         <time
-          dateTime={today.toISOString().slice(0, 10)}
+          dateTime={board.updatedAt.slice(0, 10)}
           className="shrink-0 text-[11px] text-white/85"
         >
-          {dateFormatter.format(today)}
+          {dateFormatter.format(updated)}
         </time>
       </div>
-      <div className="grid grid-cols-3">
-        {prices.map(([fuel, price], index) => (
+      <div className={`grid ${columnClasses[Math.min(board.prices.length, 4)]}`}>
+        {board.prices.map(({ fuel, amount }, index) => (
           <div
             key={fuel}
             className={index === 0 ? "px-2 py-6 text-center" : "border-l border-white/16 px-2 py-6 text-center"}
@@ -40,8 +47,8 @@ function HomePriceBoard() {
             <p className="text-[13px] tracking-[0.08em] text-white/65 uppercase">
               {fuel}
             </p>
-            <strong className="mt-2 block font-display text-[length:var(--size-display-sm)] leading-none font-bold text-orange-400">
-              {price}
+            <strong className="mt-2 block font-display text-[length:var(--size-display-sm)] leading-none font-bold text-white">
+              ₵{priceFormatter.format(amount)}
             </strong>
             <p className="mt-1 text-[11px] text-white/50">GHS / litre</p>
           </div>

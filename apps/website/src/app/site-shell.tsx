@@ -77,8 +77,16 @@ export function SiteShell({ children }: { children: ReactNode }) {
         groups={footerGroups}
         renderLink={renderSiteLink}
         legal={
-          <span>
-            © {new Date().getFullYear()} PETROSOL Ghana PLC. All rights reserved.
+          <span className="inline-flex flex-wrap items-center gap-x-4 gap-y-1">
+            <span>
+              © {new Date().getFullYear()} PETROSOL PLATINUM ENERGY PLC. All rights reserved.
+            </span>
+            <Link href="/privacy" className="transition-colors hover:text-white">
+              Privacy
+            </Link>
+            <Link href="/terms" className="transition-colors hover:text-white">
+              Terms
+            </Link>
           </span>
         }
         tagline="energizing dreams!"

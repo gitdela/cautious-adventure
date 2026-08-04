@@ -7,3 +7,4 @@
 export * from './posts'
 export * from './legal'
 export * from './pages'
+export * from './pumpPrices'

@@ -21,7 +21,7 @@ const buttonVariants = cva(
         station:
           "bg-leaf-500 text-white hover:bg-leaf-600 active:bg-leaf-600",
         outline:
-          "border-navy-900 bg-transparent text-navy-900 hover:bg-navy-900 hover:text-white aria-expanded:bg-navy-900 aria-expanded:text-white",
+          "bg-leaf-500 text-white hover:bg-leaf-600 active:bg-leaf-600 aria-expanded:bg-leaf-600",
         outlineInverse:
           "border-white bg-transparent text-white hover:bg-white hover:text-navy-900 aria-expanded:bg-white aria-expanded:text-navy-900",
         secondary:

@@ -230,7 +230,11 @@ function AffiliationsSection() {
         </SectionHeading>
         <div className="mt-12 flex flex-wrap justify-center gap-3">
           {affiliations.map((affiliation) => (
-            <Badge key={affiliation} variant="secondary">
+            <Badge
+              key={affiliation}
+              variant="secondary"
+              className="h-auto max-w-full py-1.5 text-center whitespace-normal"
+            >
               {affiliation}
             </Badge>
           ))}

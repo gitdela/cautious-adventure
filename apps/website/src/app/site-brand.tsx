@@ -25,12 +25,16 @@ function SiteBrand({
       className={cn("inline-flex items-center", className)}
     >
       <Image
-        src={inverse ? "/brand/logo-lockup-inverse.png" : "/brand/logo-lockup.png"}
+        src={inverse ? "/brand/logo-lockup-white.jpg" : "/brand/logo-lockup.png"}
         alt="Petrosol — energizing dreams!"
         width={3862}
         height={1360}
         priority={size !== "footer"}
-        className={cn("w-auto object-contain", sizeClasses[size])}
+        className={cn(
+          "w-auto object-contain",
+          sizeClasses[size],
+          inverse && "rounded-full",
+        )}
       />
     </Link>
   );

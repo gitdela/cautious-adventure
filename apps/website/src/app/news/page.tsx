@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+import { getAllPosts } from "@/lib/sanity/data";
+
 import { NewsSections } from "./news-sections";
 
 export const metadata: Metadata = {
@@ -9,6 +11,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/news" },
 };
 
-export default function NewsPage() {
-  return <NewsSections />;
+export default async function NewsPage() {
+  const posts = await getAllPosts();
+  return <NewsSections posts={posts} />;
 }

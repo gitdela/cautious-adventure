@@ -1,21 +1,22 @@
+import {
+  RiFacebookFill,
+  RiInstagramFill,
+  RiLinkedinFill,
+  RiTwitterXFill,
+} from "@remixicon/react";
+
 import type { SocialName } from "./site-navigation";
 
-const socialPaths: Record<SocialName, string> = {
-  facebook:
-    "M13.5 9H16l.4-3h-2.9V4.6c0-.9.3-1.5 1.6-1.5H16V.4C15.7.4 14.7.3 13.6.3c-2.4 0-4 1.4-4 4.1V6H7v3h2.6v9h3.9V9z",
-  x: "M13.9 8.1 21 0h-1.9l-6.1 7-4.9-7H2l7.4 10.6L2 18h1.9l6.5-7.4 5.2 7.4H22l-8.1-9.9zm-2.3 2.6-.8-1.1L4.6 1.4h2.6l4.8 6.8.8 1.1 6.3 8.9h-2.6l-5-7.5z",
-  instagram:
-    "M9 1.8c2.3 0 2.6 0 3.5.1.9 0 1.4.2 1.7.3.4.2.7.4 1 .7.3.3.5.6.7 1 .1.3.3.8.3 1.7.1.9.1 1.2.1 3.5s0 2.6-.1 3.5c0 .9-.2 1.4-.3 1.7-.2.4-.4.7-.7 1-.3.3-.6.5-1 .7-.3.1-.8.3-1.7.3-.9.1-1.2.1-3.5.1s-2.6 0-3.5-.1c-.9 0-1.4-.2-1.7-.3-.4-.2-.7-.4-1-.7-.3-.3-.5-.6-.7-1-.1-.3-.3-.8-.3-1.7C0 11.6 0 11.3 0 9s0-2.7.1-3.6c0-1 .2-1.6.4-2.2.2-.6.6-1.1 1.1-1.6C2.1 1.1 2.6.8 3.2.5 3.8.3 4.4.1 5.4.1 6.3 0 6.6 0 9 0v1.8zm0 2.6A4.6 4.6 0 1 0 9 13.6 4.6 4.6 0 0 0 9 4.4zm0 7.6a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm5.9-7.8a1.1 1.1 0 1 1-2.2 0 1.1 1.1 0 0 1 2.2 0z",
-  linkedin:
-    "M4 6H0v12h4V6zM2 4.2A2.1 2.1 0 1 0 2 0a2.1 2.1 0 0 0 0 4.2zM18 11.4c0-3.4-1.8-5-4.2-5-1.9 0-2.8 1.1-3.3 1.8V6H6.5v12h4v-6c0-1.6.3-3.1 2.3-3.1 1.9 0 2 1.8 2 3.2V18h4v-6.6z",
+const socialIcons: Record<SocialName, typeof RiFacebookFill> = {
+  facebook: RiFacebookFill,
+  x: RiTwitterXFill,
+  instagram: RiInstagramFill,
+  linkedin: RiLinkedinFill,
 };
 
 function SocialIcon({ name }: { name: SocialName }) {
-  return (
-    <svg viewBox="0 0 22 20" aria-hidden="true" fill="currentColor">
-      <path d={socialPaths[name]} transform="translate(2,1)" />
-    </svg>
-  );
+  const Icon = socialIcons[name];
+  return <Icon aria-hidden="true" />;
 }
 
 export { SocialIcon };

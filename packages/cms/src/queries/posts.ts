@@ -28,6 +28,22 @@ export const postListQuery = defineQuery(`
   }
 `)
 
+// Explicitly-curated home slots: only posts with a featuredRank, best first.
+export const featuredPostsQuery = defineQuery(`
+  *[${PUBLISHED} && defined(featuredRank)] | order(featuredRank asc) [0...3] {
+    _id,
+    title,
+    "slug": slug.current,
+    excerpt,
+    publishedAt,
+    updatedAt,
+    coverImage,
+    featuredRank,
+    "author": author->{ name, "slug": slug.current, avatar },
+    "category": category->{ title, "slug": slug.current }
+  }
+`)
+
 export const postCountQuery = defineQuery(`count(*[${PUBLISHED}])`)
 
 export const postBySlugQuery = defineQuery(`

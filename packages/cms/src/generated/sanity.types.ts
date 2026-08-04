@@ -15,6 +15,20 @@
 export declare const internalGroqTypeReferenceTo: unique symbol;
 
 // Source: ../../packages/cms/src/generated/schema.json
+export type PumpPrices = {
+  _id: string;
+  _type: "pumpPrices";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  prices: Array<{
+    fuel: string;
+    price: number;
+    _type: "fuelPrice";
+    _key: string;
+  }>;
+};
+
 export type LegalDocumentReference = {
   _ref: string;
   _type: "reference";
@@ -354,6 +368,7 @@ export type Geopoint = {
 };
 
 export type AllSanitySchemaTypes =
+  | PumpPrices
   | LegalDocumentReference
   | LegalDocument
   | SanityImageAssetReference
@@ -530,6 +545,43 @@ export type PostListQueryResult = Array<{
 }>;
 
 // Source: ../../packages/cms/src/queries/posts.ts
+// Variable: featuredPostsQuery
+// Query: *[_type == "post" && defined(slug.current) && publishedAt <= now() && defined(featuredRank)] | order(featuredRank asc) [0...3] {    _id,    title,    "slug": slug.current,    excerpt,    publishedAt,    updatedAt,    coverImage,    featuredRank,    "author": author->{ name, "slug": slug.current, avatar },    "category": category->{ title, "slug": slug.current }  }
+export type FeaturedPostsQueryResult = Array<{
+  _id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  publishedAt: string;
+  updatedAt: string | null;
+  coverImage: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt: string;
+    _type: "image";
+  } | null;
+  featuredRank: number | null;
+  author: {
+    name: string;
+    slug: string;
+    avatar: {
+      asset?: SanityImageAssetReference;
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt: string;
+      _type: "image";
+    } | null;
+  };
+  category: {
+    title: string;
+    slug: string;
+  } | null;
+}>;
+
+// Source: ../../packages/cms/src/queries/posts.ts
 // Variable: postCountQuery
 // Query: count(*[_type == "post" && defined(slug.current) && publishedAt <= now()])
 export type PostCountQueryResult = number;
@@ -581,6 +633,18 @@ export type PostSlugsQueryResult = Array<{
   slug: string;
 }>;
 
+// Source: ../../packages/cms/src/queries/pumpPrices.ts
+// Variable: pumpPricesQuery
+// Query: *[_type == "pumpPrices"][0] {    _id,    _updatedAt,    prices[] { fuel, price }  }
+export type PumpPricesQueryResult = {
+  _id: string;
+  _updatedAt: string;
+  prices: Array<{
+    fuel: string;
+    price: number;
+  }>;
+} | null;
+
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
@@ -591,8 +655,10 @@ declare module "@sanity/client" {
     '\n  *[_type == "page" && slug.current == $slug][0] {\n    _id,\n    title,\n    "slug": slug.current,\n    sections,\n    seo\n  }\n': PageBySlugQueryResult;
     '\n  *[_type == "page" && defined(slug.current)]{ "slug": slug.current }\n': PageSlugsQueryResult;
     '\n  *[_type == "post" && defined(slug.current) && publishedAt <= now()] | order(publishedAt desc) [$start...$end] {\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    publishedAt,\n    updatedAt,\n    coverImage,\n    featuredRank,\n    "author": author->{ name, "slug": slug.current, avatar },\n    "category": category->{ title, "slug": slug.current }\n  }\n': PostListQueryResult;
+    '\n  *[_type == "post" && defined(slug.current) && publishedAt <= now() && defined(featuredRank)] | order(featuredRank asc) [0...3] {\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    publishedAt,\n    updatedAt,\n    coverImage,\n    featuredRank,\n    "author": author->{ name, "slug": slug.current, avatar },\n    "category": category->{ title, "slug": slug.current }\n  }\n': FeaturedPostsQueryResult;
     'count(*[_type == "post" && defined(slug.current) && publishedAt <= now()])': PostCountQueryResult;
     '\n  *[_type == "post" && defined(slug.current) && publishedAt <= now() && slug.current == $slug][0] {\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    publishedAt,\n    updatedAt,\n    coverImage,\n    body,\n    "author": author->{ name, "slug": slug.current, avatar, bio, links },\n    "category": category->{ title, "slug": slug.current },\n    seo\n  }\n': PostBySlugQueryResult;
     '\n  *[_type == "post" && defined(slug.current) && publishedAt <= now()]{ "slug": slug.current }\n': PostSlugsQueryResult;
+    '\n  *[_type == "pumpPrices"][0] {\n    _id,\n    _updatedAt,\n    prices[] { fuel, price }\n  }\n': PumpPricesQueryResult;
   }
 }

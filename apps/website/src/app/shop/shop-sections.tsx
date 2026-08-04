@@ -87,7 +87,7 @@ function ShopIntro() {
         </div>
         <div className="mt-8">
           <Button asChild>
-            <Link href="/contact">Find a shop near you</Link>
+            <Link href="/stations">Find a shop near you</Link>
           </Button>
         </div>
       </div>
@@ -161,7 +161,7 @@ function ShopCta() {
         </SectionHeading>
         <div className="flex flex-wrap justify-center gap-4">
           <Button asChild>
-            <Link href="/contact">Find a shop near you</Link>
+            <Link href="/stations">Find a shop near you</Link>
           </Button>
           <Button asChild variant="outlineInverse">
             <Link href="/fullcare">Explore FullCare</Link>

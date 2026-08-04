@@ -25,6 +25,16 @@ export const deskStructure: StructureResolver = (S) =>
 
       S.documentTypeListItem('page').title('Company pages'),
 
+      // Singleton: the home-hero price board edits one pinned document.
+      S.listItem()
+        .title('Pump prices')
+        .child(
+          S.document()
+            .schemaType('pumpPrices')
+            .documentId('pumpPrices')
+            .title('Pump prices'),
+        ),
+
       S.divider(),
 
       S.listItem()

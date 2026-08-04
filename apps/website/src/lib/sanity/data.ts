@@ -1,17 +1,20 @@
 import "server-only";
 
 import {
+  featuredPostsQuery,
   legalByKindAndVersionQuery,
   legalCurrentByKindQuery,
   legalKindVersionsQuery,
   pageBySlugQuery,
   pageSlugsQuery,
   postBySlugQuery,
+  pumpPricesQuery,
   postCountQuery,
   postListQuery,
   postSlugsQuery,
 } from "@workspace/cms/queries";
 import type {
+  FeaturedPostsQueryResult,
   LegalByKindAndVersionQueryResult,
   LegalCurrentByKindQueryResult,
   LegalKindVersionsQueryResult,
@@ -21,6 +24,7 @@ import type {
   PostCountQueryResult,
   PostListQueryResult,
   PostSlugsQueryResult,
+  PumpPricesQueryResult,
 } from "@workspace/cms/types";
 
 import {
@@ -28,21 +32,25 @@ import {
   toBlogSummary,
   toCompanyPage,
   toLegalView,
+  toPumpPriceBoard,
 } from "@workspace/content/mappers";
 
-import { sanityFetch, sanityFetchPublished } from "./fetch";
+import { sanityFetch, sanityFetchLive, sanityFetchPublished } from "./fetch";
 import { cacheTags } from "./tags";
 
 export const BLOG_PAGE_SIZE = 12;
 
 // --- Blog ---
+// Post reads are uncached by design (like pump prices): there is no
+// revalidation webhook, so a publish must be visible on the next request.
+// Slug/count reads keep the cached published path — they run in build-time
+// contexts (sitemap) where the live fetch's request scope doesn't exist.
 export async function getBlogPosts(page = 1) {
   const start = Math.max(0, (page - 1) * BLOG_PAGE_SIZE);
   const end = start + BLOG_PAGE_SIZE;
-  const result = await sanityFetch<PostListQueryResult>({
+  const result = await sanityFetchLive<PostListQueryResult>({
     query: postListQuery,
     params: { start, end },
-    tags: [cacheTags.postList(), cacheTags.type("post")],
   });
   return (result ?? []).map(toBlogSummary);
 }
@@ -55,11 +63,30 @@ export async function getBlogPostCount() {
   return count ?? 0;
 }
 
+/** Editor-curated home slots: posts with a featuredRank, best-ranked first. */
+export async function getFeaturedPosts() {
+  const result = await sanityFetchLive<FeaturedPostsQueryResult>({
+    query: featuredPostsQuery,
+  });
+  return (result ?? []).map(toBlogSummary);
+}
+
+/**
+ * Full post list for the /news listing, which filters/paginates client-side.
+ * Capped defensively; revisit server-side pagination well before 200 posts.
+ */
+export async function getAllPosts() {
+  const result = await sanityFetchLive<PostListQueryResult>({
+    query: postListQuery,
+    params: { start: 0, end: 200 },
+  });
+  return (result ?? []).map(toBlogSummary);
+}
+
 export async function getBlogPost(slug: string) {
-  const result = await sanityFetch<PostBySlugQueryResult>({
+  const result = await sanityFetchLive<PostBySlugQueryResult>({
     query: postBySlugQuery,
     params: { slug },
-    tags: [cacheTags.postSlug(slug), cacheTags.type("post")],
   });
   return result ? toBlogFull(result) : null;
 }
@@ -102,6 +129,16 @@ export async function getLegalVersions(kind: string) {
   return (result ?? [])
     .map((v) => v.version)
     .filter((v): v is string => typeof v === "string" && v.length > 0);
+}
+
+// --- Pump prices (home hero board) ---
+// Uncached by design: prices must reflect a Studio publish on the next request,
+// and there is no revalidation webhook to purge a cached entry.
+export async function getPumpPrices() {
+  const result = await sanityFetchLive<PumpPricesQueryResult>({
+    query: pumpPricesQuery,
+  });
+  return result ? toPumpPriceBoard(result) : null;
 }
 
 // --- Company page ---

@@ -1,8 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import {
+  formatDate,
+  type BlogPostSummary,
+  type PumpPriceBoardView,
+} from "@workspace/content";
+
 import { Button } from "@workspace/ui/components/button";
 import { Card } from "@workspace/ui/components/card";
+import { ImagePlaceholder } from "@workspace/ui/components/image-placeholder";
 import {
   Eyebrow,
   PhotoTile,
@@ -15,6 +22,8 @@ import {
   type StationIconName,
 } from "@workspace/ui/components/station-icon";
 
+import { contentAdapters } from "@/lib/content-adapters";
+
 import { HomeContactForm } from "./home-contact-form";
 import { HomePriceBoard } from "./home-price-board";
 import { lubricantProducts } from "./lubricants/lubricants-data";
@@ -24,6 +33,7 @@ const services: Array<{
   title: string;
   description: string;
   image: string;
+  href: string;
   imagePosition?: string;
 }> = [
     {
@@ -31,36 +41,42 @@ const services: Array<{
       title: "Petrol & Diesel",
       description: "Clean, full-quantity fuel at 115+ stations across Ghana.",
       image: "/images/home/fuel-pump.webp",
+      href: "/fuel",
     },
     {
       icon: "fuel-drop",
       title: "Platinum Lubricants",
       description: "11 Syntec® formulated lubricants for every engine type.",
       image: "/images/home/lubricants-range.png",
+      href: "/lubricants",
     },
     {
       icon: "fullcare",
       title: "FullCare",
       description: "Complete lube bay servicing at PETROSOL stations.",
       image: "/images/home/fullcare.webp",
+      href: "/fullcare",
     },
     {
       icon: "tanker",
       title: "Fuel Delivery",
       description: "Direct-to-location fuel delivery for homes and businesses.",
       image: "/images/home/fuel-delivery.webp",
+      href: "/fuel-delivery",
     },
     {
       icon: "jerrycan",
       title: "Bulk Supply",
       description: "Corporate & industrial bulk petroleum supply solutions.",
       image: "/images/home/refinery-tanks.png",
+      href: "/fuel",
     },
     {
       icon: "shop",
       title: "Shop",
       description: "Purchase PETROSOL products online and in-station.",
       image: "/images/home/shop.webp",
+      href: "/shop",
       imagePosition: "object-cover object-[center_12%]",
     },
   ];
@@ -72,38 +88,21 @@ const featuredLubricants = featuredLubricantIds.flatMap((id) => {
   return product?.image ? [{ ...product, image: product.image }] : [];
 });
 
-const news = [
-  {
-    image: "/images/home/pipes-blue-sky.png",
-    date: "July 2026",
-    title: "Petrosol expands its lubricants range with new fully synthetic engine oils",
-  },
-  {
-    image: "/images/home/offshore-rig-ocean.png",
-    date: "June 2026",
-    title: "Fuel delivery service now covers three more regions",
-  },
-  {
-    image: "/images/home/platform-yellow-rails.png",
-    date: "May 2026",
-    title: "Our CSR programme brings science labs to five more schools",
-  },
-];
 
-function HeroSection() {
+function HeroSection({ priceBoard }: { priceBoard: PumpPriceBoardView | null }) {
   return (
     <section className="ps-blueprint -mt-[118px] bg-muted pt-[calc(118px+clamp(36px,4.4vw,56px))] pb-[clamp(56px,7.5vw,96px)]">
       <div className="ps-container grid grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))] items-center gap-[clamp(48px,6.25vw,80px)]">
         <div>
           <Eyebrow>Efficiency meets reliability</Eyebrow>
           <h1 className="mt-5 max-w-[12ch] font-display text-[length:var(--size-display-xl)] leading-[1.06] font-bold tracking-[-0.02em] text-navy-900">
-            Your energy solutions provider
+            Your Energy Solutions Provider
           </h1>
           <p className="mt-6 max-w-[46ch] text-[15px] leading-[1.62]">
             Whether you&apos;re looking for high-quality gasoline or innovative
             solutions to power your home or business, we&apos;ve got you covered.
           </p>
-          <HomePriceBoard />
+          {priceBoard ? <HomePriceBoard board={priceBoard} /> : null}
         </div>
 
         <div className="grid grid-cols-2 items-start gap-[var(--gutter)]">
@@ -169,8 +168,8 @@ function AboutSection() {
   return (
     <section className="ps-container grid grid-cols-[repeat(auto-fit,minmax(min(100%,400px),1fr))] items-center gap-[clamp(48px,6.25vw,80px)] pt-10 pb-[var(--section-y)]">
       <div>
-        <SectionHeading eyebrow="About us" highlight="values">
-          Learn about our history, mission, and
+        <SectionHeading eyebrow="About us" highlight="Values">
+          Learn About Our History, Mission, And
         </SectionHeading>
         <p className="mt-6 max-w-[50ch] leading-[1.62]">
           At Petrosol, we&apos;re committed to delivering excellence in the oil
@@ -181,7 +180,7 @@ function AboutSection() {
           new ways to improve our operations.
         </p>
         <Button asChild variant="outline" className="mt-8">
-          <a href="#services">Discover more</a>
+          <Link href="/about">Discover more</Link>
         </Button>
       </div>
 
@@ -219,14 +218,14 @@ function ServicesSection() {
       <div className="ps-container">
         <SectionHeading
           eyebrow="Our services"
-          highlight="services we offer"
+          highlight="Services We Offer"
           align="center"
         >
-          Discover the range of
+          Discover The Range Of
         </SectionHeading>
         <div className="mt-16 grid grid-cols-[repeat(auto-fit,minmax(min(100%,264px),1fr))] gap-[var(--gutter)] min-[1100px]:grid-cols-3">
           {services.map((service) => (
-            <a key={service.title} href="#contact" className="group rounded-xl">
+            <Link key={service.title} href={service.href} className="group rounded-xl">
               <Card className="h-full items-center gap-0 overflow-hidden bg-navy-700 py-0 text-center transition-[transform,box-shadow] duration-400 ease-[cubic-bezier(.16,1,.3,1)] group-hover:-translate-y-[3px] group-hover:shadow-raised">
                 <div className="relative aspect-video w-full overflow-hidden">
                   <Image
@@ -253,7 +252,7 @@ function ServicesSection() {
                   </span>
                 </div>
               </Card>
-            </a>
+            </Link>
           ))}
         </div>
       </div>
@@ -266,8 +265,8 @@ function StatBand() {
     <section className="ps-blueprint bg-muted">
       <div className="rounded-tr-[120px] bg-surface-inverse py-[var(--section-y)]">
         <div className="ps-container">
-          <SectionHeading tone="light" highlight="energy industry">
-            To drive innovation and progress in the
+          <SectionHeading tone="light" highlight="Energy Industry">
+            To Drive Innovation And Progress In The
           </SectionHeading>
           <div className="mt-12">
             <Stat value="10%" divider className="items-center">
@@ -306,10 +305,10 @@ function ProductsSection() {
       <div className="ps-container">
         <SectionHeading
           eyebrow="Our products"
-          highlight="every engine"
+          highlight="Every Engine"
           align="center"
         >
-          Platinum lubricants for
+          Platinum Lubricants For
         </SectionHeading>
         <p className="mx-auto mt-6 max-w-[56ch] text-center leading-[1.62]">
           Eleven Syntec&reg;-formulated lubricants — engine oils, gear and
@@ -354,31 +353,49 @@ function ProductsSection() {
   );
 }
 
-function NewsSection() {
+function NewsSection({ posts }: { posts: BlogPostSummary[] }) {
+  if (posts.length === 0) return null;
+
+  const { Image: CmsImage } = contentAdapters;
+
   return (
     <section className="bg-muted py-[var(--section-y-tight)]">
       <div className="ps-container">
-        <SectionHeading eyebrow="Media" highlight="latest news" align="center">
-          Catch up on our
+        <SectionHeading eyebrow="Media" highlight="Latest News" align="center">
+          Catch Up On Our
         </SectionHeading>
         <div className="mt-16 grid grid-cols-[repeat(auto-fit,minmax(min(100%,264px),1fr))] gap-[var(--gutter)] min-[1100px]:grid-cols-3">
-          {news.map((item) => (
-            <article key={item.title}>
-              <PhotoTile
-                ratio="news"
-                image={
-                  <Image
-                    src={item.image}
-                    alt={item.title}
-                    fill
-                    sizes="(max-width: 720px) 100vw, (max-width: 1100px) 50vw, 33vw"
-                  />
-                }
-              />
-              <p className="mt-5 text-[13px] text-muted-foreground">{item.date}</p>
-              <h3 className="mt-2 font-display text-base leading-[1.4] font-bold text-navy-900">
-                {item.title}
-              </h3>
+          {posts.slice(0, 3).map((post) => (
+            <article key={post.slug}>
+              <Link href={`/news/${post.slug}`} className="group block rounded-xl">
+                <PhotoTile
+                  ratio="og"
+                  image={
+                    post.coverImage ? (
+                      <CmsImage
+                        source={post.coverImage}
+                        alt={post.coverImage.alt ?? post.title}
+                        width={1200}
+                        height={630}
+                        sizes="(max-width: 720px) 100vw, (max-width: 1100px) 50vw, 33vw"
+                      />
+                    ) : (
+                      <ImagePlaceholder
+                        label={`Drop a photo — ${post.title.slice(0, 40)}…`}
+                      />
+                    )
+                  }
+                />
+                <time
+                  dateTime={post.publishedAt}
+                  className="mt-5 block text-[13px] text-muted-foreground"
+                >
+                  {formatDate(post.publishedAt)}
+                </time>
+                <h3 className="mt-2 font-display text-base leading-[1.4] font-bold text-navy-900 transition-colors group-hover:text-brand">
+                  {post.title}
+                </h3>
+              </Link>
             </article>
           ))}
         </div>
@@ -392,37 +409,50 @@ function QuoteBand() {
     <section className="home-quote py-[calc(var(--section-y)*1.5)]">
       <div className="mx-auto max-w-[980px] px-[var(--container-pad)] text-center">
         <h2 className="font-display text-[length:var(--size-display-lg)] leading-[1.08] font-bold tracking-[-0.02em] text-white">
-          We&apos;re proud to be a useful and <span className="swash">valuable partner</span>{" "}
-          to our customers and communities
+          We&apos;re Proud To Be A Useful And <span className="swash">Valuable Partner</span>{" "}
+          To Our Customers And Communities
         </h2>
       </div>
     </section>
   );
 }
 
-const contactChannels = [
-  ["Write to us", "info@petrosol.example"],
-  ["Call us", "(234) 567.890.11 · MON–FRI 9AM–6PM"],
-  ["Visit us", "Head office, Airport West, Accra"],
-];
-
 function ContactSection() {
+  const detailClassName =
+    "mt-2 block text-[13px] text-muted-foreground transition-colors hover:text-brand";
+
   return (
     <section id="contact" className="ps-blueprint scroll-mt-24 py-[var(--section-y)]">
       <div className="ps-container grid grid-cols-[repeat(auto-fit,minmax(min(100%,400px),1fr))] items-start gap-[clamp(48px,6.25vw,80px)]">
         <div>
-          <SectionHeading eyebrow="Contact us" highlight="brighter future">
-            We&apos;re excited to work with you to create a
+          <SectionHeading eyebrow="Contact us" highlight="Brighter Future">
+            We&apos;re Excited To Work With You To Create A
           </SectionHeading>
           <div className="mt-12 flex flex-col gap-8">
-            {contactChannels.map(([title, detail]) => (
-              <div key={title}>
-                <h3 className="font-display text-base font-bold text-navy-900">
-                  {title}
-                </h3>
-                <p className="mt-2 text-[13px] text-muted-foreground">{detail}</p>
-              </div>
-            ))}
+            <div>
+              <h3 className="font-display text-base font-bold text-navy-900">
+                Write to us
+              </h3>
+              <a href="mailto:info@petrosol.com.gh" className={detailClassName}>
+                info@petrosol.com.gh
+              </a>
+            </div>
+            <div>
+              <h3 className="font-display text-base font-bold text-navy-900">
+                Call us
+              </h3>
+              <a href="tel:+233362196538" className={detailClassName}>
+                +233 (0)362 196 538 · MON–FRI 9AM–6PM
+              </a>
+            </div>
+            <div>
+              <h3 className="font-display text-base font-bold text-navy-900">
+                Visit us
+              </h3>
+              <p className="mt-2 text-[13px] text-muted-foreground">
+                Head office, Airport West, Accra
+              </p>
+            </div>
           </div>
         </div>
         <HomeContactForm />
@@ -431,10 +461,16 @@ function ContactSection() {
   );
 }
 
-function HomeSections() {
+function HomeSections({
+  priceBoard,
+  featuredPosts,
+}: {
+  priceBoard: PumpPriceBoardView | null;
+  featuredPosts: BlogPostSummary[];
+}) {
   return (
     <main>
-      <HeroSection />
+      <HeroSection priceBoard={priceBoard} />
       <AboutSection />
       <ServicesSection />
       <StatBand />
@@ -442,7 +478,7 @@ function HomeSections() {
       <ProductsSection />
       <QuoteBand />
       <ContactSection />
-      <NewsSection />
+      <NewsSection posts={featuredPosts} />
     </main>
   );
 }

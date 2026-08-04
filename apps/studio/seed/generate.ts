@@ -173,6 +173,17 @@ const docs: Doc[] = [
       'Placeholder terms of service seeded for development. Not real terms.',
     ]),
   },
+
+  // --- Pump prices (home hero board, singleton) ---
+  {
+    _id: 'pumpPrices',
+    _type: 'pumpPrices',
+    prices: [
+      { _type: 'fuelPrice', _key: 'petrol', fuel: 'Petrol', price: 9.8 },
+      { _type: 'fuelPrice', _key: 'diesel', fuel: 'Diesel', price: 16 },
+      { _type: 'fuelPrice', _key: 'premium', fuel: 'Premium', price: 11.2 },
+    ],
+  },
 ]
 
 const ndjson = docs.map((d) => JSON.stringify(d)).join('\n') + '\n'

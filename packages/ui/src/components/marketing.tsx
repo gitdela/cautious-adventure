@@ -146,6 +146,9 @@ const photoRatios = {
   square: "aspect-square",
   portrait: "aspect-[3/4]",
   news: "aspect-[4/3]",
+  /* Open Graph standard (1200×630) — for images authored with baked-in text
+     that must render uncropped. */
+  og: "aspect-[1200/630]",
 };
 
 function PhotoTile({

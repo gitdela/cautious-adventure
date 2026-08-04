@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import type { BlogPostSummary } from "@workspace/content";
 import { Button } from "@workspace/ui/components/button";
 import { SectionHeading } from "@workspace/ui/components/marketing";
 import { PageHeader } from "@workspace/ui/components/page-header";
@@ -49,11 +50,11 @@ function NewsCta() {
   );
 }
 
-function NewsSections() {
+function NewsSections({ posts }: { posts: BlogPostSummary[] }) {
   return (
     <main>
       <NewsPageHeader />
-      <NewsListing />
+      <NewsListing posts={posts} />
       <NewsCta />
     </main>
   );

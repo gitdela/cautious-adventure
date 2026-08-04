@@ -7,6 +7,7 @@ import type {
   PageBySlugQueryResult,
   PostBySlugQueryResult,
   PostListQueryResult,
+  PumpPricesQueryResult,
 } from "@workspace/cms/types";
 
 import type { CompanyPageSection } from "./components/company-page";
@@ -16,6 +17,7 @@ import type {
   ContentImageValue,
   LegalDocumentView,
   PortableTextBlock,
+  PumpPriceBoardView,
 } from "./types";
 
 /**
@@ -93,6 +95,19 @@ export function toLegalView(d: LegalLike): LegalDocumentView {
     jurisdiction: d.jurisdiction ?? null,
     body: (d.body ?? []) as unknown as PortableTextBlock[],
   };
+}
+
+// --- Pump prices (home hero board) ---
+export function toPumpPriceBoard(
+  p: NonNullable<PumpPricesQueryResult>,
+): PumpPriceBoardView | null {
+  const prices = (p.prices ?? []).flatMap((row) =>
+    row.fuel && typeof row.price === "number"
+      ? [{ fuel: row.fuel, amount: row.price }]
+      : [],
+  );
+  if (prices.length === 0) return null;
+  return { updatedAt: assertIsoDate(p._updatedAt), prices };
 }
 
 // --- Company page ---

@@ -11,6 +11,7 @@ export const cacheTags = {
 
   page: (slug: string) => `sanity:page:${slug}`,
   legal: (kind: string) => `sanity:legal:${kind}`,
+  pumpPrices: () => "sanity:pumpPrices",
 
   /** Type-wide tag, used as a delete/slug-change safety net. */
   type: (type: string) => `sanity:type:${type}`,

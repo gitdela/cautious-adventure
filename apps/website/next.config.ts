@@ -3,6 +3,13 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   transpilePackages: ["@workspace/ui", "@workspace/cms", "@workspace/content"],
+  // /news is the single Sanity-backed article surface; /blog was retired.
+  async redirects() {
+    return [
+      { source: "/blog", destination: "/news", permanent: true },
+      { source: "/blog/:slug", destination: "/news/:slug", permanent: true },
+    ];
+  },
   images: {
     remotePatterns: [
       {

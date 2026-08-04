@@ -42,6 +42,18 @@ export type FaqItem = {
   answer: PortableTextBlock[]
 }
 
+export type PumpPriceView = {
+  fuel: string
+  /** GHS per litre. */
+  amount: number
+}
+
+export type PumpPriceBoardView = {
+  /** ISO datetime of the last publish — shown as the board's date. */
+  updatedAt: string
+  prices: PumpPriceView[]
+}
+
 export type LegalDocumentView = {
   documentKind: string
   title: string

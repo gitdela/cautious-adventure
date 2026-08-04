@@ -175,6 +175,7 @@ export function BlogPostView({
   adapters,
   blogHref = '/blog',
   basePath = '/blog',
+  listLabel = 'Blog',
   shareUrl = '',
 }: {
   post: BlogPostFull
@@ -182,6 +183,8 @@ export function BlogPostView({
   adapters: ContentAdapters
   blogHref?: string
   basePath?: string
+  /** Breadcrumb label for the listing the post belongs to. */
+  listLabel?: string
   shareUrl?: string
 }) {
   const { Link } = adapters
@@ -198,7 +201,7 @@ export function BlogPostView({
       <div className="pt-8 lg:pt-12">
         <nav className="flex items-center gap-2 text-[12.5px] text-muted-foreground/70">
           <Link href={blogHref} className="transition-colors hover:text-foreground">
-            Blog
+            {listLabel}
           </Link>
           <RiArrowRightSLine className="size-[14px]" />
           {topic ? (
@@ -244,16 +247,17 @@ export function BlogPostView({
         </div>
       </header>
 
-      {/* Hero media — blog image spec §2.3: 16:9 cover capped at the header
-          measure (760px), left-aligned, so a 1600×900 cover never crops. */}
+      {/* Hero media — covers are authored at the Open Graph standard
+          (1200×630, often with baked-in text), so the frame matches that
+          ratio exactly and the image renders uncropped. */}
       <section className="pt-8 lg:pt-10">
         <CoverImage
           image={post.coverImage}
           label={topic}
           adapters={adapters}
-          className="aspect-[16/9] w-full max-w-[760px]"
-          width={1600}
-          height={900}
+          className="aspect-[1200/630] w-full max-w-[760px]"
+          width={1200}
+          height={630}
           priority
         />
       </section>
