@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+import { resolveTurnstileSiteKey } from "@workspace/config/env";
+
 import { ContactSections } from "./contact-sections";
 
 export const metadata: Metadata = {
@@ -10,5 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default function ContactPage() {
-  return <ContactSections />;
+  // Env resolved in the server component and injected as a plain string, so the
+  // client form never reads process.env itself.
+  return <ContactSections turnstileSiteKey={resolveTurnstileSiteKey(process.env)} />;
 }

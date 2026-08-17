@@ -13,7 +13,7 @@ import {
 
 import { Button } from "@workspace/ui/components/button";
 import { SectionHeading } from "@workspace/ui/components/marketing";
-import { PageHeader } from "@workspace/ui/components/page-header";
+import { MosaicPageHeader } from "../mosaic-page-header";
 import { ServiceCard } from "@workspace/ui/components/service-card";
 import { StationIcon } from "@workspace/ui/components/station-icon";
 
@@ -62,17 +62,8 @@ const enquiryTeams = [
 
 function ContactPageHeader() {
   return (
-    <PageHeader
+    <MosaicPageHeader
       title="Contact Us"
-      background={
-        <Image
-          src="/images/home/refinery-wide.png"
-          alt="Petroleum refinery infrastructure"
-          fill
-          priority
-          sizes="100vw"
-        />
-      }
       breadcrumbs={
         <SiteBreadcrumbs
           items={[
@@ -170,10 +161,10 @@ function OfficeDetails() {
   );
 }
 
-function ContactMain() {
+function ContactMain({ turnstileSiteKey }: { turnstileSiteKey: string }) {
   return (
     <section className="ps-container grid grid-cols-1 items-start gap-[clamp(48px,6.25vw,80px)] pt-[var(--section-y)] pb-[var(--section-y-tight)] min-[841px]:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
-      <ContactMessageForm />
+      <ContactMessageForm siteKey={turnstileSiteKey} />
       <OfficeDetails />
     </section>
   );
@@ -231,8 +222,8 @@ function StationCta() {
   return (
     <section className="relative isolate overflow-hidden py-[var(--section-y)]">
       <Image
-        src="/images/home/pipes-blue-sky.png"
-        alt="Petrosol fuel infrastructure beneath a blue sky"
+        src="/images/home/pipes-blue-sky.webp"
+        alt="PETROSOL fuel infrastructure beneath a blue sky"
         fill
         sizes="100vw"
         className="-z-20 object-cover"
@@ -260,11 +251,11 @@ function StationCta() {
   );
 }
 
-function ContactSections() {
+function ContactSections({ turnstileSiteKey }: { turnstileSiteKey: string }) {
   return (
     <main>
       <ContactPageHeader />
-      <ContactMain />
+      <ContactMain turnstileSiteKey={turnstileSiteKey} />
       <MapEmbed />
       <EnquiriesGrid />
       <StationCta />
