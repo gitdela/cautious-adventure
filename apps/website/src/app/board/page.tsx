@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+import { getTeamMembers } from "@/lib/sanity/data";
+
 import { BoardSections } from "./board-sections";
 
 export const metadata: Metadata = {
@@ -9,6 +11,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/board" },
 };
 
-export default function BoardPage() {
-  return <BoardSections />;
+export default async function BoardPage() {
+  const members = await getTeamMembers("board");
+
+  return <BoardSections members={members} />;
 }

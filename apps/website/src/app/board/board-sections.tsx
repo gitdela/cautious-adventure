@@ -1,21 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { ContentEmpty, type TeamMemberSummary } from "@workspace/content";
 import { Button } from "@workspace/ui/components/button";
 import { SectionHeading } from "@workspace/ui/components/marketing";
-import { PageHeader } from "@workspace/ui/components/page-header";
-import { PersonCard } from "@workspace/ui/components/person-card";
+import { MosaicPageHeader } from "../mosaic-page-header";
+import { cn } from "@workspace/ui/lib/utils";
 
 import { SiteBreadcrumbs } from "../site-breadcrumbs";
+import { TeamCard, isFeaturedFor, splitNameForHeadline } from "../team-card";
 
-const boardMembers = [
-  ["Robert Kingsley Yeboah Esq.", "Board Secretary"],
-  ["Michael Bozumbil", "Board Member"],
-  ["Lawrencia Himans", "Board Member"],
-  ["Linda Bozumbil", "Board Member"],
-  ["William Ntim-Boadu", "Board Member"],
-];
-
+// Directors come from Sanity. These commitments are page copy, not records.
 const governanceCommitments = [
   [
     "Regulatory compliance",
@@ -37,17 +32,8 @@ const governanceCommitments = [
 
 function BoardPageHeader() {
   return (
-    <PageHeader
+    <MosaicPageHeader
       title="Board of Directors"
-      background={
-        <Image
-          src="/images/home/offshore-rig-ocean.png"
-          alt="Offshore petroleum platform at sea"
-          fill
-          priority
-          sizes="100vw"
-        />
-      }
       breadcrumbs={
         <SiteBreadcrumbs
           items={[
@@ -61,55 +47,63 @@ function BoardPageHeader() {
   );
 }
 
-function ChairmanFeature() {
+/**
+ * The Chairman, rendered from the CMS — the same record his profile page uses,
+ * so the copy here and there cannot drift. `shortBio` carries the paragraphs;
+ * blank lines separate them.
+ */
+function ChairmanFeature({ member }: { member: TeamMemberSummary }) {
+  const { lead, last } = splitNameForHeadline(member.name);
+  const paragraphs = (member.shortBio ?? "").split(/\n{2,}/).filter(Boolean);
+
   return (
     <section className="ps-container grid grid-cols-1 items-stretch gap-[clamp(48px,6.25vw,80px)] py-[var(--section-y)] min-[841px]:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
       <div>
-        <SectionHeading eyebrow="Corporate leadership" highlight="Acheampong">
-          Daniel
+        <SectionHeading eyebrow="Corporate leadership" highlight={last}>
+          {lead}
         </SectionHeading>
         <div className="mt-6 flex max-w-[58ch] flex-col gap-5">
-          <p>
-            Daniel Acheampong serves as the Board Chairman of PETROSOL Platinum
-            Energy, providing strategic oversight and governance leadership to
-            the company&apos;s long-term direction. With extensive experience in
-            corporate governance and Ghana&apos;s downstream petroleum sector, he
-            brings institutional credibility to the board.
-          </p>
-          <p>
-            His leadership philosophy centres on accountability, transparency
-            and building durable commercial organisations that can withstand the
-            demands of a competitive energy market. He has been instrumental in
-            shaping PETROSOL&apos;s governance framework since its founding.
-          </p>
-          <p>
-            Under his chairmanship, the company has pursued ISO certification
-            across quality, environment and safety management systems &mdash; a
-            commitment that reflects the board&apos;s view that operational excellence
-            is a prerequisite for sustained brand trust.
-          </p>
+          {paragraphs.map((paragraph) => (
+            <p key={paragraph.slice(0, 32)}>{paragraph}</p>
+          ))}
         </div>
-        <blockquote className="mt-7 max-w-[46ch] border-t border-border pt-5 font-display text-[clamp(18px,2vw,24px)] leading-normal font-bold text-navy-900">
-          &ldquo;We do not build petroleum companies for the next quarter. We build
-          them for the next generation of Ghanaians who deserve reliable energy
-          and <span className="swash">honest commerce</span>.&rdquo;
-        </blockquote>
+        {member.quote ? (
+          <blockquote className="mt-7 max-w-[46ch] border-t border-border pt-5 font-display text-[clamp(18px,2vw,24px)] leading-[1.5] font-bold text-navy-900">
+            &ldquo;
+            <QuoteText quote={member.quote} emphasise="honest commerce" />
+            &rdquo;
+          </blockquote>
+        ) : null}
         <Button asChild variant="outline" className="mt-8">
           <Link href="/leadership">View leadership team</Link>
         </Button>
       </div>
 
-      <PersonCard
-        name="Daniel Acheampong"
-        role="Board Chairman"
-        className="h-full w-full"
-        mediaClassName="min-h-[400px] flex-1 aspect-auto"
-      />
+      {/* `fill` stretches the tile to the copy column's height. */}
+      <TeamCard member={member} fill />
     </section>
   );
 }
 
-function BoardGrid() {
+/**
+ * Wraps a phrase in the brand swash without the quote itself carrying markup —
+ * the text comes from a plain CMS field. Degrades to plain text if the phrase
+ * is edited away.
+ */
+function QuoteText({ quote, emphasise }: { quote: string; emphasise: string }) {
+  const at = quote.indexOf(emphasise);
+  if (at === -1) return <>{quote}</>;
+
+  return (
+    <>
+      {quote.slice(0, at)}
+      <span className="swash">{emphasise}</span>
+      {quote.slice(at + emphasise.length)}
+    </>
+  );
+}
+
+function BoardGrid({ members }: { members: TeamMemberSummary[] }) {
   return (
     <section className="ps-blueprint rounded-tr-[120px] bg-surface-inverse py-[var(--section-y)]">
       <div className="ps-container">
@@ -120,26 +114,34 @@ function BoardGrid() {
         >
           Independent
         </SectionHeading>
-        <div className="mt-12 grid grid-cols-1 gap-[var(--gutter)] sm:grid-cols-2 min-[1000px]:grid-cols-6">
-          {boardMembers.map(([name, role], index) => {
-            const isWide = index >= 3;
-
-            return (
-              <PersonCard
-                key={name}
-                name={name}
-                role={role}
+        {members.length > 0 ? (
+          // Bento: six columns, every tile spanning two, so five tiles land as
+          // two over three — the Board Secretary and CEO on top, the three
+          // Board Members beneath. The first tile starts at column 2, which
+          // centres that top pair over the full-width row below it. Below 880px
+          // it collapses to two columns with the first tile spanning both.
+          <div className="mt-12 grid grid-cols-2 gap-[var(--gutter)] min-[881px]:grid-cols-6">
+            {members.map((member, index) => (
+              <TeamCard
+                key={member.id}
+                member={member}
                 tone="dark"
-                className={
-                  isWide
-                    ? "min-[1000px]:col-span-3"
-                    : "min-[1000px]:col-span-2"
-                }
-                mediaClassName={isWide ? "aspect-video" : undefined}
+                className={cn(
+                  index === 0 ? "col-span-2" : "col-span-1",
+                  "min-[881px]:col-span-2",
+                  index === 0 && "min-[881px]:col-start-2",
+                )}
               />
-            );
-          })}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="mt-12">
+            <ContentEmpty
+              title="No directors yet"
+              description="Board profiles will appear here once they are published."
+            />
+          </div>
+        )}
       </div>
     </section>
   );
@@ -173,7 +175,7 @@ function GovernanceCta() {
   return (
     <section className="relative isolate overflow-hidden py-[var(--section-y)]">
       <Image
-        src="/images/board/gauges.png"
+        src="/images/board/gauges.webp"
         alt="Industrial pressure gauges and valves"
         fill
         sizes="100vw"
@@ -191,7 +193,7 @@ function GovernanceCta() {
         </SectionHeading>
         <div className="flex flex-wrap justify-center gap-4">
           <Button asChild>
-            <Link href="/#contact">Contact us</Link>
+            <Link href="/contact">Contact us</Link>
           </Button>
           <Button asChild variant="outlineInverse">
             <Link href="/leadership">View leadership team</Link>
@@ -202,12 +204,20 @@ function GovernanceCta() {
   );
 }
 
-function BoardSections() {
+function BoardSections({ members }: { members: TeamMemberSummary[] }) {
+  // The Chairman headlines the page; the rest fill the bento. `isFeaturedFor`
+  // rather than `featured` alone, because the CEO is featured on leadership and
+  // also appears in this list.
+  const chairman = members.find((member) => isFeaturedFor(member, "board"));
+  const directors = chairman
+    ? members.filter((member) => member.id !== chairman.id)
+    : members;
+
   return (
     <main>
       <BoardPageHeader />
-      <ChairmanFeature />
-      <BoardGrid />
+      {chairman ? <ChairmanFeature member={chairman} /> : null}
+      <BoardGrid members={directors} />
       <GovernanceSection />
       <GovernanceCta />
     </main>

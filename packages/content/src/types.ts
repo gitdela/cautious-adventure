@@ -21,6 +21,38 @@ export type CategoryRef = {
   slug?: string | null
 }
 
+/**
+ * A person on the Leadership or Board page. The summary is what the listing
+ * grids render; `TeamMemberFull` adds the long bio and is fetched only by the
+ * individual profile page, since it is the heaviest field.
+ */
+export type TeamMemberSummary = {
+  id: string
+  slug: string
+  name: string
+  role: string
+  /**
+   * Which pages this person appears on. Present on the summary because a
+   * listing page needs it to tell its OWN featured person from someone who is
+   * featured on the other page — the CEO sits in both groups.
+   */
+  groups: string[]
+  photo?: ContentImageValue | null
+  shortBio?: string | null
+  /** Rendered as a pull quote. Chairman only, at time of writing. */
+  quote?: string | null
+  featured: boolean
+}
+
+export type TeamMemberFull = TeamMemberSummary & {
+  /**
+   * Optional second image for the profile page. Absent for most people — the
+   * page should fall back to the headshot rather than assume it exists.
+   */
+  coverPhoto?: ContentImageValue | null
+  bio: PortableTextBlock[]
+}
+
 export type BlogPostSummary = {
   slug: string
   title: string

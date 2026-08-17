@@ -34,6 +34,170 @@ function ref(id: string) {
   return { _type: 'reference', _ref: id }
 }
 
+/**
+ * Leadership and board, carried over verbatim from the arrays that previously
+ * lived in the page components. `slugify` keeps ids and slugs deterministic so
+ * re-seeding is idempotent.
+ */
+/**
+ * Slug rule per the leadership spec: lowercase, drop honorifics, strip
+ * non-letters, spaces to hyphens. "Robert Kingsley Yeboah Esq." →
+ * `robert-kingsley-yeboah`.
+ */
+function slugify(name: string) {
+  return name
+    .toLowerCase()
+    .replace(/\besq\.?\b/g, '')
+    .replace(/[^a-z]+/g, '-')
+    .replace(/^-|-$/g, '')
+}
+
+function teamMember(
+  groups: Array<'leadership' | 'board'>,
+  order: number,
+  name: string,
+  role: string,
+  bioParas: string[],
+  opts: { featured?: boolean; shortBio?: string; quote?: string } = {},
+): Doc {
+  const slug = slugify(name)
+  return {
+    _id: `team-${slug}`,
+    _type: 'teamMember',
+    name,
+    slug: { _type: 'slug', current: slug },
+    role,
+    groups,
+    order,
+    featured: opts.featured ?? false,
+    ...(opts.shortBio ? { shortBio: opts.shortBio } : {}),
+    ...(opts.quote ? { quote: opts.quote } : {}),
+    bio: body(`team-${slug}`, bioParas),
+  }
+}
+
+/**
+ * Role-based draft bio. The spec is explicit that only the CEO's and the
+ * Chairman's biographies are final — everyone else gets a description of the
+ * remit, never invented personal history. The DRAFT marker is deliberate: it
+ * should be obvious in Studio that this needs replacing.
+ */
+function draftBio(name: string, remit: string): string[] {
+  return [
+    `${name} leads ${remit} at PETROSOL Platinum Energy, working with the senior team to hold the standards the company sets for itself across Ghana's downstream petroleum sector.`,
+    'DRAFT — this biography describes the role rather than the person. Replace it with a supplied biography before launch.',
+  ]
+}
+
+// One document per person. The CEO carries both groups rather than appearing
+// twice — two documents would mean two profile pages and two photos for one
+// human. `order` is shared across groups, which is why the numbers interleave.
+// The CEO's and the Chairman's bios are final — they are the same copy the
+// Leadership and Board feature blocks carry. Everyone else is a role-based
+// draft, flagged as such.
+const CEO_BIO = [
+  "Michael Bozumbil serves as the Chief Executive Officer of PETROSOL Platinum Energy PLC, leading the company's strategic direction and operational excellence across Ghana's petroleum downstream sector.",
+  "Under his leadership, PETROSOL has grown to operate over 115 fuel stations nationwide, achieved triple ISO certification, and established itself as one of Ghana's premier privately-owned Oil Marketing Companies — with a reputation for clean fuel in full quantity and service excellence.",
+  "His vision of being a model of excellence in the global energy space continues to drive PETROSOL's expansion and its commitment to energizing the dreams of Ghanaians.",
+]
+
+const CHAIRMAN_BIO = [
+  "Daniel Acheampong serves as the Board Chairman of PETROSOL Platinum Energy, providing strategic oversight and governance leadership to the company's long-term direction. With extensive experience in corporate governance and Ghana's downstream petroleum sector, he brings institutional credibility to the board.",
+  "His leadership philosophy centres on accountability, transparency and building durable commercial organisations that can withstand the demands of a competitive energy market. He has been instrumental in shaping PETROSOL's governance framework since its founding.",
+  "Under his chairmanship, the company has pursued ISO certification across quality, environment and safety management systems — a commitment that reflects the board's view that operational excellence is a prerequisite for sustained brand trust.",
+]
+
+const teamMembers: Doc[] = [
+  teamMember(
+    ['leadership', 'board'],
+    0,
+    'Michael Bozumbil',
+    'Chief Executive Officer',
+    CEO_BIO,
+    {
+      featured: true,
+      // The leadership page renders this as the preview beside his portrait.
+      // Blank lines separate paragraphs.
+      shortBio: CEO_BIO.join('\n\n'),
+    },
+  ),
+  teamMember(
+    ['leadership'],
+    1,
+    'Joseph Yaribil',
+    'Head, Compliance and Supply Chain',
+    draftBio('Joseph Yaribil', 'compliance and supply chain'),
+  ),
+  teamMember(
+    ['leadership'],
+    2,
+    'Philip Boamah Assampong',
+    'Head, Marketing & Ag. Commercial Business Manager',
+    draftBio('Philip Boamah Assampong', 'marketing and commercial business'),
+  ),
+  teamMember(
+    ['leadership'],
+    3,
+    'Rita Afful',
+    'Human Resources Manager',
+    draftBio('Rita Afful', 'human resources'),
+  ),
+  teamMember(
+    ['leadership'],
+    4,
+    'Michael Affum Oseikoh',
+    'Head, Finance and Planning',
+    draftBio('Michael Affum Oseikoh', 'finance and planning'),
+  ),
+  teamMember(
+    ['leadership'],
+    5,
+    'Oko Kwei Odai',
+    'Head, Projects, Technology and Maintenance',
+    draftBio('Oko Kwei Odai', 'projects, technology and maintenance'),
+  ),
+  teamMember(
+    ['leadership'],
+    6,
+    'Isaac Debezor',
+    'Head, Risk and Internal Audit',
+    draftBio('Isaac Debezor', 'risk and internal audit'),
+  ),
+
+  teamMember(['board'], 10, 'Daniel Acheampong', 'Board Chairman', CHAIRMAN_BIO, {
+    quote:
+      'We do not build petroleum companies for the next quarter. We build them for the next generation of Ghanaians who deserve reliable energy and honest commerce.',
+  }),
+  teamMember(
+    ['board'],
+    11,
+    'Robert Kingsley Yeboah Esq.',
+    'Board Secretary',
+    draftBio('Robert Kingsley Yeboah', 'the board secretariat'),
+  ),
+  teamMember(
+    ['board'],
+    12,
+    'Lawrencia Himans',
+    'Board Member',
+    draftBio('Lawrencia Himans', 'board oversight'),
+  ),
+  teamMember(
+    ['board'],
+    13,
+    'Linda Bozumbil',
+    'Board Member',
+    draftBio('Linda Bozumbil', 'board oversight'),
+  ),
+  teamMember(
+    ['board'],
+    14,
+    'William Ntim-Boadu',
+    'Board Member',
+    draftBio('William Ntim-Boadu', 'board oversight'),
+  ),
+]
+
 const docs: Doc[] = [
   // --- Authors ---
   {
@@ -71,14 +235,14 @@ const docs: Doc[] = [
   {
     _id: 'post-hello-petrosol',
     _type: 'post',
-    title: 'Hello, Petrosol',
+    title: 'Hello, PETROSOL',
     slug: { _type: 'slug', current: 'hello-petrosol' },
-    excerpt: 'What Petrosol is, why we are building it, and what comes next.',
+    excerpt: 'What PETROSOL is, why we are building it, and what comes next.',
     author: ref('author-alex'),
     category: ref('category-product'),
     publishedAt: '2026-07-01T09:00:00Z',
     body: [
-      heading('p1-h1', 'Why Petrosol'),
+      heading('p1-h1', 'Why PETROSOL'),
       ...body('p1a', [
         'This is placeholder copy seeded into the development dataset so the blog surface renders end to end.',
         'Replace it with a real introduction in Sanity Studio.',
@@ -94,7 +258,7 @@ const docs: Doc[] = [
     _type: 'post',
     title: 'How we work',
     slug: { _type: 'slug', current: 'how-we-work' },
-    excerpt: 'A short look at how the Petrosol team ships.',
+    excerpt: 'A short look at how the PETROSOL team ships.',
     author: ref('author-jordan'),
     category: ref('category-industry'),
     publishedAt: '2026-07-10T09:00:00Z',
@@ -110,13 +274,13 @@ const docs: Doc[] = [
   {
     _id: 'page-about',
     _type: 'page',
-    title: 'About Petrosol',
+    title: 'About PETROSOL',
     slug: { _type: 'slug', current: 'about' },
     sections: [
       {
         _type: 'heroSection',
         _key: 'about-hero',
-        heading: 'About Petrosol',
+        heading: 'About PETROSOL',
         subheading: 'Placeholder positioning line — replace in Studio.',
       },
       {
@@ -184,6 +348,12 @@ const docs: Doc[] = [
       { _type: 'fuelPrice', _key: 'premium', fuel: 'Premium', price: 11.2 },
     ],
   },
+
+  // --- Team (Leadership + Board) ---
+  // Names and roles carry over from the hardcoded arrays these replaced, so
+  // the dev dataset matches what the pages used to show. Bios are placeholder
+  // prose, and no photos are seeded — those are uploaded through Studio.
+  ...teamMembers,
 ]
 
 const ndjson = docs.map((d) => JSON.stringify(d)).join('\n') + '\n'

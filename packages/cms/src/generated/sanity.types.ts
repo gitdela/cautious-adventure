@@ -15,6 +15,99 @@
 export declare const internalGroqTypeReferenceTo: unique symbol;
 
 // Source: ../../packages/cms/src/generated/schema.json
+export type SanityImageAssetReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+};
+
+export type TeamMember = {
+  _id: string;
+  _type: "teamMember";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name: string;
+  slug: Slug;
+  role: string;
+  groups: Array<string>;
+  order: number;
+  featured?: boolean;
+  photo?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt: string;
+    _type: "image";
+  };
+  coverPhoto?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+  shortBio?: string;
+  quote?: string;
+  bio?: BlockContent;
+};
+
+export type BlockContent = Array<
+  | {
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal" | "h2" | "h3" | "h4" | "blockquote";
+      listItem?: "bullet" | "number";
+      markDefs?: Array<{
+        href: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }
+  | {
+      asset?: SanityImageAssetReference;
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt: string;
+      caption?: string;
+      _type: "image";
+      _key: string;
+    }
+>;
+
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top: number;
+  bottom: number;
+  left: number;
+  right: number;
+};
+
+export type SanityImageHotspot = {
+  _type: "sanity.imageHotspot";
+  x: number;
+  y: number;
+  height: number;
+  width: number;
+};
+
+export type Slug = {
+  _type: "slug";
+  current: string;
+  source?: string;
+};
+
 export type PumpPrices = {
   _id: string;
   _type: "pumpPrices";
@@ -57,13 +150,6 @@ export type LegalDocument = {
   seo?: Seo;
 };
 
-export type SanityImageAssetReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-};
-
 export type Seo = {
   _type: "seo";
   metaTitle?: string;
@@ -77,43 +163,6 @@ export type Seo = {
     _type: "image";
   };
   noIndex?: boolean;
-};
-
-export type BlockContent = Array<
-  | {
-      children?: Array<{
-        marks?: Array<string>;
-        text?: string;
-        _type: "span";
-        _key: string;
-      }>;
-      style?: "normal" | "h2" | "h3" | "h4" | "blockquote";
-      listItem?: "bullet" | "number";
-      markDefs?: Array<{
-        href: string;
-        _type: "link";
-        _key: string;
-      }>;
-      level?: number;
-      _type: "block";
-      _key: string;
-    }
-  | {
-      asset?: SanityImageAssetReference;
-      media?: unknown;
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      alt: string;
-      caption?: string;
-      _type: "image";
-      _key: string;
-    }
->;
-
-export type Slug = {
-  _type: "slug";
-  current: string;
-  source?: string;
 };
 
 export type AuthorReference = {
@@ -187,22 +236,6 @@ export type Page = {
       }
   >;
   seo?: Seo;
-};
-
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top: number;
-  bottom: number;
-  left: number;
-  right: number;
-};
-
-export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x: number;
-  y: number;
-  height: number;
-  width: number;
 };
 
 export type CategoryReference = {
@@ -368,17 +401,18 @@ export type Geopoint = {
 };
 
 export type AllSanitySchemaTypes =
+  | SanityImageAssetReference
+  | TeamMember
+  | BlockContent
+  | SanityImageCrop
+  | SanityImageHotspot
+  | Slug
   | PumpPrices
   | LegalDocumentReference
   | LegalDocument
-  | SanityImageAssetReference
   | Seo
-  | BlockContent
-  | Slug
   | AuthorReference
   | Page
-  | SanityImageCrop
-  | SanityImageHotspot
   | CategoryReference
   | Post
   | Category
@@ -645,6 +679,64 @@ export type PumpPricesQueryResult = {
   }>;
 } | null;
 
+// Source: ../../packages/cms/src/queries/team.ts
+// Variable: teamMembersByGroupQuery
+// Query: *[_type == "teamMember" && $group in groups] | order(order asc) {    _id,    name,    "slug": slug.current,    role,    groups,    photo,    shortBio,    quote,    featured  }
+export type TeamMembersByGroupQueryResult = Array<{
+  _id: string;
+  name: string;
+  slug: string;
+  role: string;
+  groups: Array<string>;
+  photo: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt: string;
+    _type: "image";
+  } | null;
+  shortBio: string | null;
+  quote: string | null;
+  featured: boolean | null;
+}>;
+
+// Source: ../../packages/cms/src/queries/team.ts
+// Variable: teamMemberBySlugQuery
+// Query: *[_type == "teamMember" && slug.current == $slug][0] {    _id,    name,    "slug": slug.current,    role,    groups,    photo,    coverPhoto,    shortBio,    quote,    featured,    bio  }
+export type TeamMemberBySlugQueryResult = {
+  _id: string;
+  name: string;
+  slug: string;
+  role: string;
+  groups: Array<string>;
+  photo: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt: string;
+    _type: "image";
+  } | null;
+  coverPhoto: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  } | null;
+  shortBio: string | null;
+  quote: string | null;
+  featured: boolean | null;
+  bio: BlockContent | null;
+} | null;
+
+// Source: ../../packages/cms/src/queries/team.ts
+// Variable: teamMemberSlugsQuery
+// Query: *[_type == "teamMember" && defined(slug.current)].slug.current
+export type TeamMemberSlugsQueryResult = Array<string>;
+
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
@@ -660,5 +752,8 @@ declare module "@sanity/client" {
     '\n  *[_type == "post" && defined(slug.current) && publishedAt <= now() && slug.current == $slug][0] {\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    publishedAt,\n    updatedAt,\n    coverImage,\n    body,\n    "author": author->{ name, "slug": slug.current, avatar, bio, links },\n    "category": category->{ title, "slug": slug.current },\n    seo\n  }\n': PostBySlugQueryResult;
     '\n  *[_type == "post" && defined(slug.current) && publishedAt <= now()]{ "slug": slug.current }\n': PostSlugsQueryResult;
     '\n  *[_type == "pumpPrices"][0] {\n    _id,\n    _updatedAt,\n    prices[] { fuel, price }\n  }\n': PumpPricesQueryResult;
+    '\n  *[_type == "teamMember" && $group in groups] | order(order asc) {\n    _id,\n    name,\n    "slug": slug.current,\n    role,\n    groups,\n    photo,\n    shortBio,\n    quote,\n    featured\n  }\n': TeamMembersByGroupQueryResult;
+    '\n  *[_type == "teamMember" && slug.current == $slug][0] {\n    _id,\n    name,\n    "slug": slug.current,\n    role,\n    groups,\n    photo,\n    coverPhoto,\n    shortBio,\n    quote,\n    featured,\n    bio\n  }\n': TeamMemberBySlugQueryResult;
+    '\n  *[_type == "teamMember" && defined(slug.current)].slug.current\n': TeamMemberSlugsQueryResult;
   }
 }

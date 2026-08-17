@@ -12,6 +12,9 @@ import {
   postCountQuery,
   postListQuery,
   postSlugsQuery,
+  teamMemberBySlugQuery,
+  teamMemberSlugsQuery,
+  teamMembersByGroupQuery,
 } from "@workspace/cms/queries";
 import type {
   FeaturedPostsQueryResult,
@@ -25,6 +28,9 @@ import type {
   PostListQueryResult,
   PostSlugsQueryResult,
   PumpPricesQueryResult,
+  TeamMemberBySlugQueryResult,
+  TeamMemberSlugsQueryResult,
+  TeamMembersByGroupQueryResult,
 } from "@workspace/cms/types";
 
 import {
@@ -33,6 +39,8 @@ import {
   toCompanyPage,
   toLegalView,
   toPumpPriceBoard,
+  toTeamMemberFull,
+  toTeamMemberSummary,
 } from "@workspace/content/mappers";
 
 import { sanityFetch, sanityFetchLive, sanityFetchPublished } from "./fetch";
@@ -159,4 +167,38 @@ export async function getPageSlugs(): Promise<string[]> {
   return (result ?? [])
     .map((r) => r.slug)
     .filter((s): s is string => typeof s === "string" && s.length > 0);
+}
+
+// --- Team (Leadership / Board) ---
+// Live reads, like posts and pump prices: there is no revalidation webhook in
+// this repo, so a cached read would leave a corrected job title invisible until
+// its TTL expired. These are two low-traffic pages, so the per-view cost is
+// cheap in exchange for edits landing on the next request.
+export type TeamGroup = "leadership" | "board";
+
+export async function getTeamMembers(group: TeamGroup) {
+  const result = await sanityFetchLive<TeamMembersByGroupQueryResult>({
+    query: teamMembersByGroupQuery,
+    params: { group },
+  });
+  return (result ?? []).map(toTeamMemberSummary);
+}
+
+export async function getTeamMember(slug: string) {
+  const result = await sanityFetchLive<TeamMemberBySlugQueryResult>({
+    query: teamMemberBySlugQuery,
+    params: { slug },
+  });
+  return result ? toTeamMemberFull(result) : null;
+}
+
+/** For `generateStaticParams` on the profile route. */
+export async function getTeamMemberSlugs(): Promise<string[]> {
+  const result = await sanityFetchPublished<TeamMemberSlugsQueryResult>({
+    query: teamMemberSlugsQuery,
+    tags: [cacheTags.type("teamMember")],
+  });
+  return (result ?? []).filter(
+    (s): s is string => typeof s === "string" && s.length > 0,
+  );
 }

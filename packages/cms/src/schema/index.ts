@@ -8,6 +8,7 @@ import { postType } from './documents/post'
 import { pageType } from './documents/page'
 import { legalDocumentType } from './documents/legalDocument'
 import { pumpPricesType } from './documents/pumpPrices'
+import { teamMemberType } from './documents/teamMember'
 
 /**
  * The single schema registry. Imported by Studio (`sanity.config.ts`) and by
@@ -28,6 +29,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   pageType,
   legalDocumentType,
   pumpPricesType,
+  teamMemberType,
 ]
 
 export {
@@ -39,4 +41,5 @@ export {
   pageType,
   legalDocumentType,
   pumpPricesType,
+  teamMemberType,
 }

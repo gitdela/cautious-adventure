@@ -8,6 +8,8 @@ import type {
   PostBySlugQueryResult,
   PostListQueryResult,
   PumpPricesQueryResult,
+  TeamMemberBySlugQueryResult,
+  TeamMembersByGroupQueryResult,
 } from "@workspace/cms/types";
 
 import type { CompanyPageSection } from "./components/company-page";
@@ -18,6 +20,8 @@ import type {
   LegalDocumentView,
   PortableTextBlock,
   PumpPriceBoardView,
+  TeamMemberFull,
+  TeamMemberSummary,
 } from "./types";
 
 /**
@@ -118,5 +122,38 @@ export function toCompanyPage(p: NonNullable<PageBySlugQueryResult>): {
   return {
     title: p.title,
     sections: (p.sections ?? []) as unknown as CompanyPageSection[],
+  };
+}
+
+// --- Team members ---
+type TeamMemberListItem = TeamMembersByGroupQueryResult[number];
+
+/**
+ * The slug is asserted rather than passed through: it is the profile page's
+ * URL, so a member saved without one must fail loudly here instead of
+ * rendering a link to nowhere.
+ */
+export function toTeamMemberSummary(m: TeamMemberListItem): TeamMemberSummary {
+  return {
+    id: m._id,
+    slug: assertSlug(m.slug),
+    name: m.name,
+    role: m.role,
+    groups: m.groups ?? [],
+    photo: m.photo ?? null,
+    shortBio: m.shortBio ?? null,
+    quote: m.quote ?? null,
+    // `featured` is optional in the schema; absent means "not featured".
+    featured: m.featured === true,
+  };
+}
+
+export function toTeamMemberFull(
+  m: NonNullable<TeamMemberBySlugQueryResult>,
+): TeamMemberFull {
+  return {
+    ...toTeamMemberSummary(m),
+    coverPhoto: m.coverPhoto ?? null,
+    bio: (m.bio ?? []) as unknown as PortableTextBlock[],
   };
 }
