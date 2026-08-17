@@ -5,7 +5,7 @@ import { RiShieldCheckLine } from "@remixicon/react";
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import { PhotoTile, SectionHeading } from "@workspace/ui/components/marketing";
-import { PageHeader } from "@workspace/ui/components/page-header";
+import { MosaicPageHeader } from "../mosaic-page-header";
 import {
   StationChip,
   type StationIconName,
@@ -40,17 +40,8 @@ const merchandisingPoints: Array<{
 
 function ShopPageHeader() {
   return (
-    <PageHeader
+    <MosaicPageHeader
       title="Shop"
-      background={
-        <Image
-          src="/images/about/plant-silos-wide.png"
-          alt="PETROSOL plant silos"
-          fill
-          priority
-          sizes="100vw"
-        />
-      }
       breadcrumbs={
         <SiteBreadcrumbs
           items={[
@@ -143,7 +134,7 @@ function ShopCta() {
   return (
     <section className="relative isolate overflow-hidden py-[var(--section-y)]">
       <Image
-        src="/images/fuel/pumpjack-sky-wide.png"
+        src="/images/fuel/pumpjack-sky-wide.webp"
         alt="Oil pumpjack beneath a blue sky"
         fill
         sizes="100vw"

@@ -49,7 +49,7 @@ export function CoverImage({
       )}
     >
       <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground/40">
-        {label ?? 'Petrosol'}
+        {label ?? 'PETROSOL'}
       </span>
     </div>
   )

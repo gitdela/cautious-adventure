@@ -10,7 +10,7 @@ import {
   SectionHeading,
   Stat,
 } from "@workspace/ui/components/marketing";
-import { PageHeader } from "@workspace/ui/components/page-header";
+import { MosaicPageHeader } from "../mosaic-page-header";
 import { ServiceCard } from "@workspace/ui/components/service-card";
 import { StationIcon } from "@workspace/ui/components/station-icon";
 
@@ -45,17 +45,8 @@ const integrityPoints = [
 
 function FuelPageHeader() {
   return (
-    <PageHeader
+    <MosaicPageHeader
       title="Fuel"
-      background={
-        <Image
-          src="/images/fuel/pumpjack-sky-wide.png"
-          alt="Oil pumpjack beneath a blue sky"
-          fill
-          priority
-          sizes="100vw"
-        />
-      }
       breadcrumbs={
         <SiteBreadcrumbs
           items={[
@@ -171,7 +162,7 @@ function DieselSection() {
       eyebrow="Gasoil / Automotive Gasoil"
       heading="Low sulfur diesel, protected"
       highlight="every step"
-      imageSrc="/images/home/refinery-tanks.png"
+      imageSrc="/images/home/refinery-tanks.webp"
       imageAlt="Petroleum storage tanks"
       flip
     >
@@ -240,7 +231,7 @@ function IntegritySplit() {
         ratio="news"
         image={
           <Image
-            src="/images/board/gauges.png"
+            src="/images/board/gauges.webp"
             alt="Calibrated industrial pump gauges"
             fill
             sizes="(max-width: 840px) 100vw, 50vw"
@@ -255,7 +246,7 @@ function BulkCta() {
   return (
     <section className="relative isolate overflow-hidden py-[var(--section-y)]">
       <Image
-        src="/images/about/plant-silos-wide.png"
+        src="/images/about/plant-silos-wide.webp"
         alt="PETROSOL bulk energy infrastructure"
         fill
         sizes="100vw"

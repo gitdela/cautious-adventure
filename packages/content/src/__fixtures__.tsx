@@ -62,7 +62,7 @@ export const richBody: PortableTextBlock[] = [
 export const samplePosts: BlogPostSummary[] = [
   {
     slug: 'getting-started',
-    title: 'Getting started with Petrosol',
+    title: 'Getting started with PETROSOL',
     excerpt: 'A short walk through your first steps.',
     publishedAt: '2026-05-10T09:00:00Z',
     category: { title: 'Product', slug: 'product' },

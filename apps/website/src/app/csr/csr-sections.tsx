@@ -68,7 +68,7 @@ function CsrHero() {
   return (
     <section className="relative isolate flex h-[clamp(340px,44vw,560px)] items-end overflow-hidden">
       <Image
-        src="/images/home/surveyor-hivis.png"
+        src="/images/home/surveyor-hivis.webp"
         alt="PETROSOL community programme in the field"
         fill
         priority
@@ -184,7 +184,7 @@ function CsrCta() {
         ratio="news"
         image={
           <Image
-            src="/images/home/platform-yellow-rails.png"
+            src="/images/home/platform-yellow-rails.webp"
             alt="PETROSOL team in the community"
             fill
             sizes="(max-width: 840px) 100vw, 50vw"

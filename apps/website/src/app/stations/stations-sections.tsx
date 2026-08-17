@@ -3,14 +3,14 @@ import { RiMailLine } from "@remixicon/react";
 
 import { Button } from "@workspace/ui/components/button";
 import { SectionHeading } from "@workspace/ui/components/marketing";
-import { PageHeader } from "@workspace/ui/components/page-header";
+import { MosaicPageHeader } from "../mosaic-page-header";
 
 import { SiteBreadcrumbs } from "../site-breadcrumbs";
 import { StationsDirectory } from "./stations-directory";
 
 function StationsPageHeader() {
   return (
-    <PageHeader
+    <MosaicPageHeader
       title="Find a Station"
       breadcrumbs={
         <SiteBreadcrumbs

@@ -13,6 +13,7 @@ import { MenuGlyph } from "@workspace/ui/components/menu-glyph";
 import type { SiteNavItem } from "@workspace/ui/components/site-chrome";
 import { cn } from "@workspace/ui/lib/utils";
 
+import { SiteBrandAuto } from "./header-tone";
 import { SiteBrand } from "./site-brand";
 import { socialLinks } from "./site-navigation";
 import { SocialIcon } from "./social-icon";
@@ -45,7 +46,7 @@ function SiteMobileNav({ items }: { items: SiteNavItem[] }) {
   return (
     <>
       <div className="flex items-center justify-between px-[var(--container-pad)] py-3">
-        <SiteBrand size="mobile" />
+        <SiteBrandAuto size="mobile" />
         <button
           type="button"
           aria-label="Open menu"

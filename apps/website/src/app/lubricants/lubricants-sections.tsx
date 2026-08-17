@@ -1,11 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
 import { RiShieldCheckLine } from "@remixicon/react";
 
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import { SectionHeading } from "@workspace/ui/components/marketing";
-import { PageHeader } from "@workspace/ui/components/page-header";
+import { MosaicPageHeader } from "../mosaic-page-header";
 
 import { SiteBreadcrumbs } from "../site-breadcrumbs";
 
@@ -13,17 +12,8 @@ import { LubricantsCatalogue } from "./lubricants-catalogue";
 
 function LubricantsPageHeader() {
   return (
-    <PageHeader
+    <MosaicPageHeader
       title="Lubricants"
-      background={
-        <Image
-          src="/images/lubricants/pipeline-valves.png"
-          alt="Industrial pipeline and valve infrastructure"
-          fill
-          priority
-          sizes="100vw"
-        />
-      }
       breadcrumbs={
         <SiteBreadcrumbs
           items={[

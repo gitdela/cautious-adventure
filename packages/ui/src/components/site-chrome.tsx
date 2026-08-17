@@ -4,7 +4,7 @@ import { RiArrowDownSLine } from "@remixicon/react";
 import { cn } from "@workspace/ui/lib/utils";
 
 /**
- * Petrosol site chrome (DS NavBar + Footer, per the design handoff's
+ * PETROSOL site chrome (DS NavBar + Footer, per the design handoff's
  * SiteChrome.jsx). Framework-agnostic: apps own routing via `renderLink`, and
  * inject brand artwork / CTA / socials as slots.
  *
@@ -52,7 +52,11 @@ function SocialStrip({
           target="_blank"
           rel="noopener noreferrer"
           aria-label={s.label}
-          className="inline-grid size-8 place-items-center rounded-full border border-border text-navy-900 transition-colors hover:border-brand hover:bg-brand hover:text-white [&_svg]:size-4"
+          className={cn(
+            "inline-grid size-8 place-items-center rounded-full border border-border text-navy-900 transition-colors hover:border-brand hover:bg-brand hover:text-white [&_svg]:size-4",
+            // `border-border` is near-black at 8% — invisible over media.
+            "group-data-[tone=overlay]/tone:border-white/16 group-data-[tone=overlay]/tone:text-white/55",
+          )}
         >
           {s.icon}
         </a>
@@ -84,13 +88,26 @@ function SiteHeader({
   mobileNav,
   className,
 }: SiteHeaderProps) {
+  // `tone=overlay` (set by an ancestor, e.g. on a full-bleed video hero) lifts
+  // the chrome out of flow and flips it to white-on-media. The dropdown panel
+  // stays a light card in both tones, so only its trigger changes.
   const topLinkClassName =
-    "inline-flex items-center gap-1 whitespace-nowrap font-display text-[clamp(13px,1.15vw,15px)] font-bold tracking-[-0.01em] text-navy-900 transition-colors hover:text-brand";
+    "inline-flex items-center gap-1 whitespace-nowrap font-display text-[clamp(13px,1.15vw,15px)] font-bold tracking-[-0.01em] text-navy-900 transition-colors hover:text-brand group-data-[tone=overlay]/tone:text-white group-data-[tone=overlay]/tone:hover:text-brand";
   const dropLinkClassName =
     "block rounded-[10px] px-3.5 py-[11px] text-sm font-bold whitespace-nowrap text-navy-900 transition-colors hover:bg-card hover:text-brand";
 
   return (
-    <div className={cn("ps-blueprint relative z-40 bg-muted", className)}>
+    <div
+      className={cn(
+        "ps-blueprint relative z-40 bg-muted",
+        // Overlay lifts the chrome out of flow entirely so it reserves no
+        // height. The spec's -118px bottom margin assumed a 118px header; this
+        // one measures 127px, and the 9px difference showed as a white strip
+        // above the hero. Going absolute is immune to that drift.
+        "group-data-[tone=overlay]/tone:absolute group-data-[tone=overlay]/tone:inset-x-0 group-data-[tone=overlay]/tone:top-0 group-data-[tone=overlay]/tone:bg-transparent group-data-[tone=overlay]/tone:[background-image:none]",
+        className,
+      )}
+    >
       {/* Desktop — two tiers, hidden below 960px */}
       <header className="mx-auto hidden w-full max-w-[1280px] items-center gap-12 px-[var(--container-pad)] py-4 min-[961px]:flex">
         <div className="shrink-0">{brand}</div>
@@ -98,7 +115,10 @@ function SiteHeader({
         <div className="flex min-w-0 flex-1 flex-col gap-3">
           {/* Tier 1 — utility social strip */}
           {socials.length > 0 ? (
-            <SocialStrip socials={socials} className="border-b border-border pb-3" />
+            <SocialStrip
+              socials={socials}
+              className="border-b border-border pb-3 group-data-[tone=overlay]/tone:border-white/16"
+            />
           ) : null}
 
           {/* Tier 2 — nav links + CTA */}

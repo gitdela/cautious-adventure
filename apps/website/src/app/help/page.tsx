@@ -6,7 +6,7 @@ import { contentAdapters } from "@/lib/content-adapters";
 
 export const metadata: Metadata = {
   title: "Help center",
-  description: "Answers to common questions about Petrosol.",
+  description: "Answers to common questions about PETROSOL.",
   alternates: { canonical: "/help" },
 };
 
@@ -29,7 +29,7 @@ function answer(id: string, text: string): PortableTextBlock[] {
 
 const faqs: FaqItem[] = [
   {
-    question: "What is Petrosol?",
+    question: "What is PETROSOL?",
     answer: answer("faq-what", "Placeholder answer describing the product."),
   },
   {

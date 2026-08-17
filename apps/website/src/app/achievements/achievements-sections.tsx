@@ -2,49 +2,45 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "@workspace/ui/components/button";
-import { ImagePlaceholder } from "@workspace/ui/components/image-placeholder";
 import { SectionHeading, Stat } from "@workspace/ui/components/marketing";
-import { PageHeader } from "@workspace/ui/components/page-header";
 
 import { SiteBreadcrumbs } from "../site-breadcrumbs";
 import {
   achievementStats,
   awardCategories,
   awardsTimeline,
-  recentAwards,
+  latestAward,
 } from "./achievements-data";
 
-function AchievementsPageHeader() {
-  return (
-    <PageHeader
-      title="Our Achievements"
-      background={
-        <Image
-          src="/images/achievements/pumpjack-sunset.png"
-          alt="Oil pumpjack at sunset"
-          fill
-          priority
-          sizes="100vw"
-        />
-      }
-      breadcrumbs={
-        <SiteBreadcrumbs
-          items={[
-            { label: "Home", href: "/" },
-            { label: "Company" },
-            { label: "Our Achievements" },
-          ]}
-        />
-      }
-    />
-  );
-}
-
+/**
+ * Opening band. This page has no `PageHeader`, so this section carries the
+ * mosaic, the breadcrumbs and the page's `h1` — all three of which the header
+ * band used to provide.
+ */
 function DecadeBand() {
   return (
-    <section className="bg-surface-inverse py-[var(--section-y)]">
+    <section className="relative isolate overflow-hidden bg-surface-inverse py-[var(--section-y)]">
+      {/* Same banner treatment as the page headers; `bg-surface-inverse` above
+          stays as the fallback beneath it. */}
+      <div className="absolute inset-0 -z-20 bg-navy-850 bg-[url('/images/header-mosaic-plain.svg')] bg-cover bg-right bg-no-repeat" />
       <div className="ps-container">
-        <SectionHeading eyebrow="Since 2016" tone="light" highlight="excellence">
+        {/* SiteBreadcrumbs takes only `items`; the spacing lives on a wrapper.
+            Its white/78 links already assume a dark field, which this is. */}
+        <div className="mb-8">
+          <SiteBreadcrumbs
+            items={[
+              { label: "Home", href: "/" },
+              { label: "Company" },
+              { label: "Our Achievements" },
+            ]}
+          />
+        </div>
+        <SectionHeading
+          as="h1"
+          eyebrow="Since 2016"
+          tone="light"
+          highlight="excellence"
+        >
           A decade of
         </SectionHeading>
         <p className="mt-6 max-w-[58ch] text-white/78">
@@ -68,55 +64,172 @@ function DecadeBand() {
   );
 }
 
+/**
+ * The latest win, and only that one. Other awards belong to the timeline —
+ * a second list here would compete with it and go stale.
+ */
 function RecentAwards() {
-  const [featured, ...otherAwards] = recentAwards;
-
   return (
     <section className="py-[var(--section-y)]">
       <div className="ps-container">
         <SectionHeading eyebrow="Most recent" highlight="recognition">
-          2025 awards &
+          Our latest
         </SectionHeading>
-        <div className="mt-12 grid grid-cols-1 items-stretch gap-[clamp(24px,3vw,48px)] min-[841px]:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
-          <figure className="relative m-0 min-h-[340px] overflow-hidden rounded-2xl sm:min-h-[420px]">
-            <ImagePlaceholder label={`Drop a photo — ${featured[1]}`} />
-            <figcaption className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-b from-transparent to-navy-900/85 px-8 pt-14 pb-6">
-              <p className="font-mono text-[11px] font-semibold tracking-[0.14em] text-orange-300">
-                {featured[0]} · {featured[2]}
-              </p>
-              <h3 className="mt-2 font-display text-[length:var(--size-display-sm)] leading-[1.15] font-bold tracking-[-0.02em] text-white">
-                {featured[1]}
-              </h3>
-            </figcaption>
+        {/* Photo first in source order, so the single-column stack below 841px
+            leads with it rather than the copy. */}
+        <div className="mt-12 grid grid-cols-1 items-center gap-[clamp(24px,3vw,48px)] min-[841px]:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
+          {/* `relative` anchors the filled image.
+              On one column the frame takes the photo's own 3:2 ratio, so the
+              whole shot is visible — a fixed 420px height against a ~328px
+              phone width would crop roughly half the frame away, losing people
+              at both edges. From 841px the layout is side by side and the
+              min-height takes over, keeping the photo column from collapsing
+              when the copy beside it is shorter. */}
+          <figure className="relative m-0 aspect-[3/2] overflow-hidden rounded-2xl min-[841px]:aspect-auto min-[841px]:min-h-[420px]">
+            <Image
+              src="/images/achievements/award-handover.webp"
+              alt="PETROSOL receiving an award on stage at the Twelfth Ghana Oil and Gas Awards"
+              fill
+              sizes="(max-width: 840px) 100vw, 640px"
+              className="object-cover"
+            />
           </figure>
 
-          <div className="flex flex-col justify-between gap-4">
-            {otherAwards.map(([year, title, organization], index) => (
-              <article
-                key={title}
-                className={
-                  index === 0
-                    ? "flex items-center gap-5"
-                    : "flex items-center gap-5 border-t border-border pt-4"
-                }
-              >
-                <div className="size-24 shrink-0 overflow-hidden rounded-xl">
-                  <ImagePlaceholder />
-                </div>
-                <div className="min-w-0">
-                  <p className="font-mono text-[11px] font-semibold tracking-[0.1em] text-brand">
-                    {year}
-                  </p>
-                  <h3 className="mt-0.5 font-display text-base leading-[1.35] font-bold text-navy-900">
-                    {title}
-                  </h3>
-                  <p className="mt-0.5 text-[13px] text-muted-foreground">
-                    {organization}
-                  </p>
-                </div>
-              </article>
-            ))}
+          <div>
+            <p className="font-mono text-[12px] font-semibold tracking-[0.14em] text-brand">
+              {latestAward.kicker}
+            </p>
+            <h3 className="mt-3 font-display text-[length:var(--size-display-sm)] leading-[1.15] font-bold tracking-[-0.02em] text-pretty text-navy-900">
+              {latestAward.title}
+            </h3>
+            <p className="mt-5 max-w-[52ch]">{latestAward.description}</p>
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/**
+ * Mixed portrait and landscape. Frames are sized by height with width left to
+ * follow each photo's own ratio, so nothing is cropped — forcing a portrait
+ * into a landscape frame shows only its middle ~44% and reliably cuts faces.
+ * Intrinsic `width`/`height` are what let the browser reserve the right space
+ * before the image loads.
+ */
+/**
+ * Ordered landscape · portrait · landscape · portrait · landscape, so the two
+ * narrow portrait frames never sit side by side. The set also has to read well
+ * across the loop seam — the last entry runs straight into the first, so both
+ * ends are landscape. It additionally keeps the two red-carpet shots, which
+ * share a backdrop, from being neighbours.
+ */
+const marqueePhotos = [
+  {
+    src: "/images/achievements/gala-guests.webp",
+    alt: "PETROSOL guests seated at the Ghana Oil and Gas Awards dinner",
+    width: 2000,
+    height: 1333,
+  },
+  {
+    src: "/images/achievements/gala-guest-seated.webp",
+    alt: "A PETROSOL colleague at the awards dinner table",
+    width: 1333,
+    height: 2000,
+  },
+  {
+    src: "/images/achievements/team-red-carpet.webp",
+    alt: "The PETROSOL team with their trophy on the awards red carpet",
+    width: 2000,
+    height: 1333,
+  },
+  {
+    src: "/images/achievements/gala-applause.webp",
+    alt: "A PETROSOL colleague applauding during the awards ceremony",
+    width: 1333,
+    height: 2000,
+  },
+  {
+    src: "/images/achievements/red-carpet-trio.webp",
+    alt: "Three PETROSOL colleagues at the Twelfth Ghana Oil and Gas Awards backdrop",
+    width: 2000,
+    height: 1333,
+  },
+];
+
+type MarqueePhoto = (typeof marqueePhotos)[number];
+
+function MarqueeFrame({ photo }: { photo: MarqueePhoto }) {
+  return (
+    // Spacing as padding on the item rather than a gap on the track — see the
+    // note on `.ps-marquee-track` in the design-system stylesheet.
+    <figure className="m-0 shrink-0 pr-[var(--gutter)]">
+      {/* Height is fixed, width follows the photo's own ratio — landscapes come
+          out wide, portraits narrow, and neither is cropped. */}
+      {/* Heights are the original frame's, converted: it was
+          `w-[clamp(220px,26vw,340px)]` at 3:2, i.e. these exact heights. */}
+      <div className="h-[clamp(147px,17.3vw,227px)] overflow-hidden rounded-2xl">
+        <Image
+          src={photo.src}
+          alt={photo.alt}
+          width={photo.width}
+          height={photo.height}
+          sizes="(max-width: 800px) 30vw, 340px"
+          className="h-full w-auto"
+        />
+      </div>
+    </figure>
+  );
+}
+
+/**
+ * Full-bleed scrolling photo strip between the latest award and the category
+ * band. Vertical rhythm comes from the neighbouring sections, so this one adds
+ * no padding of its own.
+ */
+/**
+ * How many times the photo set repeats within ONE half of the track.
+ *
+ * A half narrower than the viewport leaves a visible empty run before the loop
+ * restarts. At the frame height above a set is only ~1.4k wide, so three
+ * repeats are needed to put a half near 4.3k and stay clear of ultrawide
+ * screens. Raise this if the set shrinks or the frames grow.
+ */
+const MARQUEE_REPEATS = 3;
+
+const marqueeHalf = Array.from({ length: MARQUEE_REPEATS }, () => marqueePhotos).flat();
+
+/**
+ * Space above the strip comes from `RecentAwards`' bottom padding. Space below
+ * has to be its own: the next section is tinted (`bg-muted`), so its top
+ * padding sits inside the tint and the coloured block would otherwise butt
+ * straight up against the photos.
+ */
+function PhotoMarquee() {
+  return (
+    <section
+      aria-label="Award photography"
+      // Below 841px this is a scroll container the reader drags; above it the
+      // track animates itself and must not be scrollable. `tabIndex` because a
+      // region that only responds to swipe is unreachable by keyboard.
+      tabIndex={0}
+      className="overflow-x-auto pb-[var(--section-y-tight)] [-ms-overflow-style:none] [scrollbar-width:none] min-[841px]:overflow-hidden [&::-webkit-scrollbar]:hidden"
+    >
+      <div className="ps-marquee-track flex w-max">
+        {/* Only the first pass is exposed; every repeat after it is the same
+            three photos and would just be announced over and over. */}
+        {marqueePhotos.map((photo) => (
+          <MarqueeFrame key={photo.src} photo={photo} />
+        ))}
+        {/* The repeats exist only to feed the animation. Hidden below 841px so
+            a reader dragging the strip sees the five photos once, not six
+            copies of them. */}
+        <div aria-hidden="true" className="hidden min-[841px]:flex">
+          {[...marqueeHalf.slice(marqueePhotos.length), ...marqueeHalf].map(
+            (photo, index) => (
+              <MarqueeFrame key={`${photo.src}-${index}`} photo={photo} />
+            ),
+          )}
         </div>
       </div>
     </section>
@@ -144,6 +257,77 @@ function CategoryBand() {
               tone="default"
               className="min-w-[130px] text-left"
             />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/**
+ * Award moments, each a photo with the award inscribed over it. These are older
+ * wins — the latest has its own section above — so the inscription is what
+ * identifies them. Add an entry here and the row lays itself out.
+ */
+type Moment = {
+  photo: { src: string; alt: string };
+  title: string;
+  source: string;
+};
+
+const moments: Moment[] = [
+  {
+    photo: {
+      src: "/images/achievements/energy-business-leadership.webp",
+      alt: "PETROSOL leaders on stage with the Energy Business Leadership Award citation and trophy",
+    },
+    title: "Energy Business Leadership Award",
+    source: "Ghana Energy Awards, 2025",
+  },
+  {
+    photo: {
+      src: "/images/achievements/ceo-of-the-year.webp",
+      alt: "PETROSOL CEO Michael Bozumbil receiving his award citation on stage",
+    },
+    title: "CEO of the Year — Downstream Petroleum",
+    source: "Michael Bozumbil · OMC Award, 9th CEO Summit, 2025",
+  },
+];
+
+/**
+ * Three photo frames directly above the timeline. Deliberately no heading —
+ * the row is a visual breath between the category band and the record.
+ */
+function Moments() {
+  return (
+    // No bottom padding: the timeline section below supplies that gap.
+    <section className="pt-[var(--section-y-tight)]">
+      <div className="ps-container">
+        {/* Two equal columns, stacking below the layout breakpoint. */}
+        <div className="grid grid-cols-1 gap-[var(--gutter)] min-[841px]:grid-cols-2">
+          {moments.map((moment) => (
+            <figure
+              key={moment.photo.src}
+              className="relative m-0 aspect-[4/3] overflow-hidden rounded-2xl"
+            >
+              <Image
+                src={moment.photo.src}
+                alt={moment.photo.alt}
+                fill
+                sizes="(max-width: 840px) 100vw, 620px"
+                className="object-cover"
+              />
+              {/* The gradient is what keeps the inscription legible whatever
+                  the photo does underneath it. */}
+              <figcaption className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-b from-transparent to-navy-900/88 px-6 pt-16 pb-5">
+                <h3 className="font-display text-[17px] leading-[1.3] font-bold text-pretty text-white">
+                  {moment.title}
+                </h3>
+                <p className="mt-1 font-mono text-[12px] tracking-[0.06em] text-orange-300">
+                  {moment.source}
+                </p>
+              </figcaption>
+            </figure>
           ))}
         </div>
       </div>
@@ -209,7 +393,7 @@ function AwardsTimeline() {
                   {year}
                 </h3>
                 <span className="relative top-[-4px] flex-1 border-b border-dashed border-border" />
-                <span className="font-mono text-[11px] tracking-[0.14em] text-fg-faint uppercase">
+                <span className="font-mono text-[12px] tracking-[0.14em] text-fg-faint uppercase">
                   {String(awards.length).padStart(2, "0")} award
                   {awards.length > 1 ? "s" : ""}
                 </span>
@@ -234,7 +418,7 @@ function AwardsTimeline() {
                     <h4 className="font-display text-base leading-[1.4] font-bold text-navy-900">
                       {title}
                     </h4>
-                    <p className="mt-1 font-mono text-[11px] tracking-[0.06em] text-muted-foreground">
+                    <p className="mt-1 font-mono text-[12px] tracking-[0.06em] text-muted-foreground">
                       {organization}
                     </p>
                   </div>
@@ -263,8 +447,8 @@ function StoryCta() {
   return (
     <section className="relative isolate overflow-hidden py-[var(--section-y)]">
       <Image
-        src="/images/home/platform-yellow-rails.png"
-        alt="Petrosol platform with yellow safety rails"
+        src="/images/home/platform-yellow-rails.webp"
+        alt="PETROSOL platform with yellow safety rails"
         fill
         sizes="100vw"
         className="-z-20 object-cover"
@@ -284,7 +468,7 @@ function StoryCta() {
             <Link href="/about">About PETROSOL</Link>
           </Button>
           <Button asChild variant="outlineInverse">
-            <Link href="/#contact">Contact us</Link>
+            <Link href="/contact">Contact us</Link>
           </Button>
         </div>
       </div>
@@ -295,10 +479,11 @@ function StoryCta() {
 function AchievementsSections() {
   return (
     <main>
-      <AchievementsPageHeader />
       <DecadeBand />
       <RecentAwards />
+      <PhotoMarquee />
       <CategoryBand />
+      <Moments />
       <AwardsTimeline />
       <StoryCta />
     </main>

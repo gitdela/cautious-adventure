@@ -9,7 +9,7 @@ import {
   SectionHeading,
   Stat,
 } from "@workspace/ui/components/marketing";
-import { PageHeader } from "@workspace/ui/components/page-header";
+import { MosaicPageHeader } from "../mosaic-page-header";
 import {
   StationChip,
   type StationIconName,
@@ -71,17 +71,8 @@ const steps = [
 
 function DeliveryPageHeader() {
   return (
-    <PageHeader
+    <MosaicPageHeader
       title="Fuel Delivery Service"
-      background={
-        <Image
-          src="/images/home/pipes-blue-sky.png"
-          alt="Fuel pipelines against a blue sky"
-          fill
-          priority
-          sizes="100vw"
-        />
-      }
       breadcrumbs={
         <SiteBreadcrumbs
           items={[
@@ -219,7 +210,7 @@ function DeliveryCta() {
   return (
     <section className="relative isolate overflow-hidden py-[var(--section-y)]">
       <Image
-        src="/images/home/refinery-tanks.png"
+        src="/images/home/refinery-tanks.webp"
         alt="Petroleum storage tanks"
         fill
         sizes="100vw"

@@ -2,14 +2,14 @@ import Link from "next/link";
 
 import { Button } from "@workspace/ui/components/button";
 import { SectionHeading } from "@workspace/ui/components/marketing";
-import { PageHeader } from "@workspace/ui/components/page-header";
+import { MosaicPageHeader } from "../mosaic-page-header";
 
 import { SiteBreadcrumbs } from "../site-breadcrumbs";
 import { GalleryGrid } from "./gallery-grid";
 
 function GalleryPageHeader() {
   return (
-    <PageHeader
+    <MosaicPageHeader
       title="Gallery"
       breadcrumbs={
         <SiteBreadcrumbs

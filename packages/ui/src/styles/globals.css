@@ -1,4 +1,4 @@
-/* Petrosol theme — mapped from the Petrosol Design System tokens
+/* PETROSOL theme — mapped from the PETROSOL Design System tokens
    (design handoff: "Petrosol Website/_ds/petrosol-design-system-…/tokens").
    Brand face is Verdana (system font — nothing to load); IBM Plex Mono covers
    spec/data readouts. Light-only: the DS has no dark theme — navy bands are
@@ -23,7 +23,7 @@
   --font-display: Verdana, sans-serif;
   --font-heading: var(--font-sans);
 
-  /* ── Petrosol base ramps (from tokens/colors.css) ────────────────────── */
+  /* ── PETROSOL base ramps (from tokens/colors.css) ────────────────────── */
   /* Orange — brand primary (logo #f58326) */
   --color-orange-50:  #fef4ea;
   --color-orange-100: #fde2c6;
@@ -46,6 +46,8 @@
   --color-navy-600: #0d3b61;
   --color-navy-700: #0a3050;
   --color-navy-800: #08263f;
+  /* Field behind the inner-page header mosaic — sits between 800 and 900. */
+  --color-navy-850: #052236;
   --color-navy-900: #041a2d;
 
   /* Leaf — brand green (logo #6bb445), success + rare accents only */
@@ -124,9 +126,9 @@
   --color-surface-slate: var(--surface-slate);
   --color-surface-inverse-card: var(--surface-inverse-card);
 
-  /* Petrosol radius scale (DS: xs 6 · sm 10 · fields 16 · cards 20 ·
+  /* PETROSOL radius scale (DS: xs 6 · sm 10 · fields 16 · cards 20 ·
      photos 24 · panels 32 · pill). Mapped onto Tailwind's ladder so vendored
-     shadcn components land on the right Petrosol step (rounded-4xl = pill). */
+     shadcn components land on the right PETROSOL step (rounded-4xl = pill). */
   --radius-xs: 4px;
   --radius-sm: 6px;
   --radius-md: 10px;
@@ -147,7 +149,7 @@
 :root {
   --radius: 16px;
 
-  /* Fluid marketing layout scale from the Petrosol handoff. */
+  /* Fluid marketing layout scale from the PETROSOL handoff. */
   --container-max: 1280px;
   --container-pad: clamp(20px, 5vw, 64px);
   --section-y: clamp(56px, 9.4vw, 120px);
@@ -370,6 +372,38 @@
 
 .live-dot {
   animation: brand-pulse 1.8s ease-in-out infinite;
+}
+
+/* Continuously scrolling photo strip. The track is two identical halves, so
+   translating exactly -50% lands the second half where the first began and the
+   loop is seamless.
+   Two invariants, both easy to break:
+   1. Spacing lives on the items, never a flex `gap` — a gap makes the second
+      half one gap wider than the first and the seam visibly jumps.
+   2. Each half must be at least as wide as the widest viewport, or the strip
+      runs out of content and trails empty space before looping. Repeat the
+      item set as many times as needed; do not rely on the set alone being wide
+      enough. */
+@keyframes ps-marquee {
+  to { transform: translateX(-50%); }
+}
+
+/* Auto-scroll is a desktop-only behaviour. Below the layout breakpoint the
+   strip is a plain horizontal scroller the reader drags themselves — the
+   markup hides the duplicate passes there so they are not scrolling through
+   the same photos repeatedly. */
+@media (min-width: 841px) {
+  .ps-marquee-track {
+    /* Duration scales with track length — a longer track needs proportionally
+       longer to keep the same apparent speed. */
+    animation: ps-marquee var(--marquee-duration, 120s) linear infinite;
+  }
+}
+
+/* Auto-scrolling content is a vestibular trigger, and there is no control to
+   stop it — so it simply does not move for anyone who asked for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  .ps-marquee-track { animation: none; }
 }
 
 /* Screen-swap entrance — gated so content never strands invisible */

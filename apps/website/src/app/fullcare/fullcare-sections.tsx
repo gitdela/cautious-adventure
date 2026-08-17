@@ -12,7 +12,7 @@ import {
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import { PhotoTile, SectionHeading } from "@workspace/ui/components/marketing";
-import { PageHeader } from "@workspace/ui/components/page-header";
+import { MosaicPageHeader } from "../mosaic-page-header";
 import { StationIcon } from "@workspace/ui/components/station-icon";
 
 import { SiteBreadcrumbs } from "../site-breadcrumbs";
@@ -83,17 +83,8 @@ const steps = [
 
 function FullcarePageHeader() {
   return (
-    <PageHeader
+    <MosaicPageHeader
       title="FullCare"
-      background={
-        <Image
-          src="/images/about/hero-inspection.png"
-          alt="Technician inspecting a vehicle"
-          fill
-          priority
-          sizes="100vw"
-        />
-      }
       breadcrumbs={
         <SiteBreadcrumbs
           items={[
@@ -112,7 +103,7 @@ function FullcareIntro() {
     <section className="ps-container grid grid-cols-1 items-center gap-[clamp(40px,5vw,80px)] py-[var(--section-y-tight)] min-[841px]:grid-cols-2">
       <div>
         <SectionHeading
-          eyebrow="Petrosol FullCare"
+          eyebrow="PETROSOL FullCare"
           highlight="total peace of mind"
         >
           All-round vehicle servicing for
@@ -214,7 +205,7 @@ function FullcareCta() {
   return (
     <section className="relative isolate overflow-hidden py-[var(--section-y)]">
       <Image
-        src="/images/about/worker-platform.png"
+        src="/images/about/worker-platform.webp"
         alt="PETROSOL worker on an industrial platform"
         fill
         sizes="100vw"

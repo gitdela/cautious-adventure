@@ -3,14 +3,14 @@ import Link from "next/link";
 import type { BlogPostSummary } from "@workspace/content";
 import { Button } from "@workspace/ui/components/button";
 import { SectionHeading } from "@workspace/ui/components/marketing";
-import { PageHeader } from "@workspace/ui/components/page-header";
+import { MosaicPageHeader } from "../mosaic-page-header";
 
 import { SiteBreadcrumbs } from "../site-breadcrumbs";
 import { NewsListing } from "./news-listing";
 
 function NewsPageHeader() {
   return (
-    <PageHeader
+    <MosaicPageHeader
       title="News"
       breadcrumbs={
         <SiteBreadcrumbs

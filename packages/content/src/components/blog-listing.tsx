@@ -45,7 +45,7 @@ export function BlogListing({
         {emptyState ?? (
           <ContentEmpty
             title="No posts yet"
-            description="New writing from the Petrosol team will show up here."
+            description="New writing from the PETROSOL team will show up here."
           />
         )}
       </>

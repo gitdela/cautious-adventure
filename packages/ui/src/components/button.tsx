@@ -5,7 +5,7 @@ import { Slot } from "radix-ui"
 import { cn } from "@workspace/ui/lib/utils"
 
 /**
- * Petrosol button (DS Button): always a pill, Verdana bold, sentence-case
+ * PETROSOL button (DS Button): always a pill, Verdana bold, sentence-case
  * labels. Primary is the brand orange and darkens one ramp step on hover and
  * another on press; press also scales to .97. Outline inverts to solid ink on
  * hover. The orange glow (`shadow-button`) is opt-in via className — the DS

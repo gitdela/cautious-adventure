@@ -292,7 +292,7 @@ export function BlogPostView({
                   </div>
                   <p className="mt-1.5 max-w-md text-[13px] leading-relaxed text-muted-foreground">
                     {post.author.bio ??
-                      'Part of the Petrosol team.'}
+                      'Part of the PETROSOL team.'}
                   </p>
                 </div>
               </div>

@@ -24,7 +24,7 @@ import {
 
 import { contentAdapters } from "@/lib/content-adapters";
 
-import { HomeContactForm } from "./home-contact-form";
+import { HeroVideo } from "./hero-video";
 import { HomePriceBoard } from "./home-price-board";
 import { lubricantProducts } from "./lubricants/lubricants-data";
 
@@ -44,13 +44,6 @@ const services: Array<{
       href: "/fuel",
     },
     {
-      icon: "fuel-drop",
-      title: "Platinum Lubricants",
-      description: "11 Syntec® formulated lubricants for every engine type.",
-      image: "/images/home/lubricants-range.png",
-      href: "/lubricants",
-    },
-    {
       icon: "fullcare",
       title: "FullCare",
       description: "Complete lube bay servicing at PETROSOL stations.",
@@ -63,13 +56,6 @@ const services: Array<{
       description: "Direct-to-location fuel delivery for homes and businesses.",
       image: "/images/home/fuel-delivery.webp",
       href: "/fuel-delivery",
-    },
-    {
-      icon: "jerrycan",
-      title: "Bulk Supply",
-      description: "Corporate & industrial bulk petroleum supply solutions.",
-      image: "/images/home/refinery-tanks.png",
-      href: "/fuel",
     },
     {
       icon: "shop",
@@ -91,73 +77,41 @@ const featuredLubricants = featuredLubricantIds.flatMap((id) => {
 
 function HeroSection({ priceBoard }: { priceBoard: PumpPriceBoardView | null }) {
   return (
-    <section className="ps-blueprint -mt-[118px] bg-muted pt-[calc(118px+clamp(36px,4.4vw,56px))] pb-[clamp(56px,7.5vw,96px)]">
-      <div className="ps-container grid grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))] items-center gap-[clamp(48px,6.25vw,80px)]">
-        <div>
-          <Eyebrow>Efficiency meets reliability</Eyebrow>
-          <h1 className="mt-5 max-w-[12ch] font-display text-[length:var(--size-display-xl)] leading-[1.06] font-bold tracking-[-0.02em] text-navy-900">
-            Your Energy Solutions Provider
-          </h1>
-          <p className="mt-6 max-w-[46ch] text-[15px] leading-[1.62]">
-            Whether you&apos;re looking for high-quality gasoline or innovative
-            solutions to power your home or business, we&apos;ve got you covered.
-          </p>
-          {priceBoard ? <HomePriceBoard board={priceBoard} /> : null}
-        </div>
+    // `isolate` scopes the negative z-indexes to the band. The header is
+    // absolutely positioned over it, so the top padding has to clear it — and
+    // it measures 78px on the mobile bar against 127px on the desktop tiers.
+    <section className="relative isolate flex min-h-[95svh] flex-col overflow-hidden bg-surface-inverse pt-[calc(78px+32px)] min-[961px]:pt-[calc(127px+40px)]">
+      <div className="absolute inset-0 -z-20">
+        <HeroVideo />
+      </div>
+      {/* The scrim, not the footage, is what guarantees text contrast. The DS
+          gradient runs left-to-right, which only works while the copy occupies
+          the left column — once it goes full width below 961px the right edge
+          is barely tinted, so mobile gets a vertical scrim instead. */}
+      <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(4,18,30,0.78)_0%,rgba(4,18,30,0.58)_45%,rgba(4,18,30,0.84)_100%)] min-[961px]:bg-[linear-gradient(90deg,rgba(4,18,30,0.86)_0%,rgba(4,18,30,0.62)_44%,rgba(4,18,30,0.24)_100%)]" />
 
-        <div className="grid grid-cols-2 items-start gap-[var(--gutter)]">
-          <div className="flex flex-col gap-[var(--gutter)]">
-            <PhotoTile
-              ratio="square"
-              image={
-                <Image
-                  src="/images/home/fuel-delivery.webp"
-                  alt="Petrosol fuel delivery tanker fleet"
-                  fill
-                  priority
-                  sizes="(max-width: 960px) 45vw, 22vw"
-                />
-              }
-            />
-            <PhotoTile
-              ratio="square"
-              image={
-                <Image
-                  src="/images/home/fuel-pump.webp"
-                  alt="Refuelling with Petrosol Super at the pump"
-                  fill
-                  priority
-                  sizes="(max-width: 960px) 45vw, 22vw"
-                />
-              }
-            />
+      <div className="relative flex flex-1 items-center pb-12">
+        <div className="ps-container grid w-full grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))] items-center gap-x-20 gap-y-14 min-[961px]:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
+          <div>
+            {/* <Eyebrow tone="light">Efficiency meets reliability</Eyebrow> */}
+            <h1 className="mt-5 max-w-[14ch] font-display text-[clamp(34px,3.6vw,var(--size-display-xl))] leading-[1.06] font-bold tracking-[-0.02em] text-pretty text-white">
+              Your energy solutions provider
+            </h1>
+            <p className="mt-6 max-w-[46ch] text-[15px] leading-[1.62] text-white/85">
+              Whether you&apos;re looking for high-quality gasoline or innovative
+              solutions to power your home or business, we&apos;ve got you covered.
+            </p>
+            <div className="mt-10 flex flex-wrap gap-4">
+              <Button asChild>
+                <Link href="/contact">Contact us</Link>
+              </Button>
+              <Button asChild variant="outlineInverse">
+                <Link href="#services">Discover more</Link>
+              </Button>
+            </div>
           </div>
-          <div className="flex flex-col gap-[var(--gutter)]">
-            <PhotoTile
-              ratio="square"
-              className="mt-12"
-              image={
-                <Image
-                  src="/images/home/fullcare.webp"
-                  alt="FullCare technician servicing an engine"
-                  fill
-                  priority
-                  sizes="(max-width: 960px) 45vw, 22vw"
-                />
-              }
-            />
-            <PhotoTile
-              ratio="square"
-              image={
-                <Image
-                  src="/images/home/fuel-delivery.webp"
-                  alt="Petrosol fuel delivery tanker fleet"
-                  fill
-                  sizes="(max-width: 960px) 45vw, 22vw"
-                />
-              }
-            />
-          </div>
+
+          {priceBoard ? <HomePriceBoard board={priceBoard} /> : null}
         </div>
       </div>
     </section>
@@ -166,13 +120,16 @@ function HeroSection({ priceBoard }: { priceBoard: PumpPriceBoardView | null }) 
 
 function AboutSection() {
   return (
-    <section className="ps-container grid grid-cols-[repeat(auto-fit,minmax(min(100%,400px),1fr))] items-center gap-[clamp(48px,6.25vw,80px)] pt-10 pb-[var(--section-y)]">
+    // The photo column carries more weight than the copy once they sit side by
+    // side, so it takes the larger share — below 961px they stack and auto-fit
+    // governs again.
+    <section className="ps-container grid grid-cols-[repeat(auto-fit,minmax(min(100%,400px),1fr))] items-center gap-[clamp(48px,6.25vw,80px)] py-[var(--section-y)] min-[961px]:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
       <div>
-        <SectionHeading eyebrow="About us" highlight="Values">
-          Learn About Our History, Mission, And
+        <SectionHeading eyebrow="About us" highlight="Platinum OMC.">
+          Ghana&apos;s Premier
         </SectionHeading>
         <p className="mt-6 max-w-[50ch] leading-[1.62]">
-          At Petrosol, we&apos;re committed to delivering excellence in the oil
+          At PETROSOL, we&apos;re committed to delivering excellence in the oil
           industry. With our state-of-the-art technology and advanced processes,
           we&apos;re able to provide innovative solutions to meet the evolving needs
           of our clients worldwide. We pride ourselves on our commitment to
@@ -188,10 +145,10 @@ function AboutSection() {
         <PhotoTile
           image={
             <Image
-              src="/images/home/surveyor-hivis.png"
-              alt="Site surveyor"
+              src="/images/home/petrosol-station-staff.webp"
+              alt="PETROSOL station attendants on the forecourt"
               fill
-              sizes="(max-width: 960px) 45vw, 22vw"
+              sizes="(max-width: 960px) 45vw, 24vw"
             />
           }
         />
@@ -199,10 +156,10 @@ function AboutSection() {
           className="mt-16"
           image={
             <Image
-              src="/images/home/offshore-platform.png"
-              alt="Offshore platform"
+              src="/images/home/fuel-pump.webp"
+              alt="Refuelling at a PETROSOL pump"
               fill
-              sizes="(max-width: 960px) 45vw, 22vw"
+              sizes="(max-width: 960px) 45vw, 24vw"
             />
           }
         />
@@ -214,7 +171,7 @@ function AboutSection() {
 
 function ServicesSection() {
   return (
-    <section id="services" className="ps-blueprint scroll-mt-24 bg-muted py-[var(--section-y)]">
+    <section id="services" className="ps-blueprint scroll-mt-[92px] bg-muted py-[var(--section-y)]">
       <div className="ps-container">
         <SectionHeading
           eyebrow="Our services"
@@ -223,7 +180,10 @@ function ServicesSection() {
         >
           Discover The Range Of
         </SectionHeading>
-        <div className="mt-16 grid grid-cols-[repeat(auto-fit,minmax(min(100%,264px),1fr))] gap-[var(--gutter)] min-[1100px]:grid-cols-3">
+        {/* All four cards on one row at desktop. The counts are pinned rather
+            than auto-fit so they step 1 → 2 → 4 and never land on three, which
+            would strand the fourth card on a row of its own. */}
+        <div className="mt-16 grid grid-cols-1 gap-[var(--gutter)] min-[720px]:grid-cols-2 min-[1100px]:grid-cols-4">
           {services.map((service) => (
             <Link key={service.title} href={service.href} className="group rounded-xl">
               <Card className="h-full items-center gap-0 overflow-hidden bg-navy-700 py-0 text-center transition-[transform,box-shadow] duration-400 ease-[cubic-bezier(.16,1,.3,1)] group-hover:-translate-y-[3px] group-hover:shadow-raised">
@@ -232,7 +192,7 @@ function ServicesSection() {
                     src={service.image}
                     alt={service.title}
                     fill
-                    sizes="(max-width: 720px) 100vw, (max-width: 1100px) 50vw, 33vw"
+                    sizes="(max-width: 720px) 100vw, (max-width: 1100px) 50vw, 25vw"
                     className={service.imagePosition ?? "object-cover"}
                   />
                 </div>
@@ -288,13 +248,17 @@ function StatBand() {
 
 function ImageBand() {
   return (
+    // The band is far wider than the source (2.8:1 against 1.45:1), so only
+    // about half the height survives the crop. The canopy and its branding sit
+    // high in this frame, so the window is anchored near the middle: it keeps
+    // the fascia and the pumps while dropping the blank sky above.
     <Image
-      src="/images/home/refinery-wide.png"
-      alt="Engineer inspecting a refinery"
-      width={1400}
-      height={474}
+      src="/images/home/station-canopy-wide.webp"
+      alt="PETROSOL station canopy and pump islands"
+      width={2000}
+      height={1382}
       sizes="100vw"
-      className="h-[clamp(240px,36vw,520px)] w-full object-cover"
+      className="h-[clamp(240px,36vw,520px)] w-full object-cover object-[center_80%]"
     />
   );
 }
@@ -417,50 +381,6 @@ function QuoteBand() {
   );
 }
 
-function ContactSection() {
-  const detailClassName =
-    "mt-2 block text-[13px] text-muted-foreground transition-colors hover:text-brand";
-
-  return (
-    <section id="contact" className="ps-blueprint scroll-mt-24 py-[var(--section-y)]">
-      <div className="ps-container grid grid-cols-[repeat(auto-fit,minmax(min(100%,400px),1fr))] items-start gap-[clamp(48px,6.25vw,80px)]">
-        <div>
-          <SectionHeading eyebrow="Contact us" highlight="Brighter Future">
-            We&apos;re Excited To Work With You To Create A
-          </SectionHeading>
-          <div className="mt-12 flex flex-col gap-8">
-            <div>
-              <h3 className="font-display text-base font-bold text-navy-900">
-                Write to us
-              </h3>
-              <a href="mailto:info@petrosol.com.gh" className={detailClassName}>
-                info@petrosol.com.gh
-              </a>
-            </div>
-            <div>
-              <h3 className="font-display text-base font-bold text-navy-900">
-                Call us
-              </h3>
-              <a href="tel:+233362196538" className={detailClassName}>
-                +233 (0)362 196 538 · MON–FRI 9AM–6PM
-              </a>
-            </div>
-            <div>
-              <h3 className="font-display text-base font-bold text-navy-900">
-                Visit us
-              </h3>
-              <p className="mt-2 text-[13px] text-muted-foreground">
-                Head office, Airport West, Accra
-              </p>
-            </div>
-          </div>
-        </div>
-        <HomeContactForm />
-      </div>
-    </section>
-  );
-}
-
 function HomeSections({
   priceBoard,
   featuredPosts,
@@ -477,7 +397,6 @@ function HomeSections({
       <ImageBand />
       <ProductsSection />
       <QuoteBand />
-      <ContactSection />
       <NewsSection posts={featuredPosts} />
     </main>
   );
