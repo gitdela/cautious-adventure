@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: { absolute: "Contact Us — PETROSOL" },
   description:
     "Contact PETROSOL Platinum Energy for product, service, station, career, media, and corporate enquiries in Ghana.",
-  alternates: { canonical: "/contact" },
+  alternates: { canonical: "/contact-us" },
 };
 
 export default function ContactPage() {

@@ -1,10 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import { ContentEmpty, type TeamMemberSummary } from "@workspace/content";
 import { Button } from "@workspace/ui/components/button";
 import { SectionHeading } from "@workspace/ui/components/marketing";
 import { MosaicPageHeader } from "../mosaic-page-header";
+import { MosaicCtaBand } from "../mosaic-cta-band";
 import { cn } from "@workspace/ui/lib/utils";
 
 import { SiteBreadcrumbs } from "../site-breadcrumbs";
@@ -38,7 +38,7 @@ function BoardPageHeader() {
         <SiteBreadcrumbs
           items={[
             { label: "Home", href: "/" },
-            { label: "Company" },
+            { label: "About" },
             { label: "Board of Directors" },
           ]}
         />
@@ -75,7 +75,7 @@ function ChairmanFeature({ member }: { member: TeamMemberSummary }) {
           </blockquote>
         ) : null}
         <Button asChild variant="outline" className="mt-8">
-          <Link href="/leadership">View leadership team</Link>
+          <Link href="/leadership-team">View leadership team</Link>
         </Button>
       </div>
 
@@ -173,34 +173,24 @@ function GovernanceSection() {
 
 function GovernanceCta() {
   return (
-    <section className="relative isolate overflow-hidden py-[var(--section-y)]">
-      <Image
-        src="/images/board/gauges.webp"
-        alt="Industrial pressure gauges and valves"
-        fill
-        sizes="100vw"
-        className="-z-20 object-cover"
-      />
-      <div className="absolute inset-0 -z-10 bg-navy-900/72" />
-      <div className="mx-auto flex max-w-[860px] flex-col items-center gap-8 px-[var(--container-pad)]">
-        <SectionHeading
-          eyebrow="Get in touch"
-          tone="light"
-          align="center"
-          highlight="corporate governance?"
-        >
-          Questions about our
-        </SectionHeading>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Button asChild>
-            <Link href="/contact">Contact us</Link>
-          </Button>
-          <Button asChild variant="outlineInverse">
-            <Link href="/leadership">View leadership team</Link>
-          </Button>
-        </div>
+    <MosaicCtaBand>
+      <SectionHeading
+        eyebrow="Get in touch"
+        tone="light"
+        align="center"
+        highlight="corporate governance?"
+      >
+        Questions about our
+      </SectionHeading>
+      <div className="flex flex-wrap justify-center gap-4">
+        <Button asChild>
+          <Link href="/contact-us">Contact us</Link>
+        </Button>
+        <Button asChild variant="outlineInverse">
+          <Link href="/leadership-team">View leadership team</Link>
+        </Button>
       </div>
-    </section>
+    </MosaicCtaBand>
   );
 }
 

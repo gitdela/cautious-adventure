@@ -45,17 +45,32 @@ function SiteMobileNav({ items }: { items: SiteNavItem[] }) {
 
   return (
     <>
-      <div className="flex items-center justify-between px-[var(--container-pad)] py-3">
+      <div className="flex items-center justify-between gap-3 px-[var(--container-pad)] py-3">
         <SiteBrandAuto size="mobile" />
-        <button
-          type="button"
-          aria-label="Open menu"
-          aria-expanded={open}
-          onClick={() => setOpen(true)}
-          className={menuButtonClassName}
-        >
-          <MenuGlyph className="size-[30px]" />
-        </button>
+        <div className="flex items-center gap-2">
+          {/* Once the desktop nav collapses, the station CTA would otherwise be
+              two taps away inside the menu. Tablets have the width to keep it
+              on the bar; phones (≤600px) don't, so they fall back to the menu's
+              full-width copy of it. */}
+          <Link
+            href="/find-a-station"
+            className={cn(
+              buttonVariants({ variant: "station", size: "sm" }),
+              "hidden min-[601px]:inline-flex",
+            )}
+          >
+            Find Our Station
+          </Link>
+          <button
+            type="button"
+            aria-label="Open menu"
+            aria-expanded={open}
+            onClick={() => setOpen(true)}
+            className={menuButtonClassName}
+          >
+            <MenuGlyph className="size-[30px]" />
+          </button>
+        </div>
       </div>
 
       {open ? (
@@ -125,7 +140,7 @@ function SiteMobileNav({ items }: { items: SiteNavItem[] }) {
             </Accordion>
 
             <Link
-              href="/stations"
+              href="/find-a-station"
               onClick={closeMenu}
               className={cn(buttonVariants({ variant: "station" }), "mt-7 w-full")}
             >

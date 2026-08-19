@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+import { getLubricantCategories, getLubricantProducts } from "@/lib/sanity/data";
+
 import { LubricantsSections } from "./lubricants-sections";
 
 export const metadata: Metadata = {
@@ -9,6 +11,11 @@ export const metadata: Metadata = {
   alternates: { canonical: "/lubricants" },
 };
 
-export default function LubricantsPage() {
-  return <LubricantsSections />;
+export default async function LubricantsPage() {
+  const [products, categories] = await Promise.all([
+    getLubricantProducts(),
+    getLubricantCategories(),
+  ]);
+
+  return <LubricantsSections products={products} categories={categories} />;
 }

@@ -62,7 +62,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
           mobileNav={<SiteMobileNav items={navigationItems} />}
           action={
             <Button asChild size="sm" variant="station">
-              <Link href="/stations">Find Our Station</Link>
+              <Link href="/find-a-station">Find a Station</Link>
             </Button>
           }
         />

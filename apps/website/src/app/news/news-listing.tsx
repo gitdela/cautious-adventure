@@ -26,7 +26,7 @@ function pillState(active: boolean) {
 }
 
 function tagOf(post: BlogPostSummary) {
-  return post.category?.title ?? "News";
+  return post.category?.title ?? "Blog";
 }
 
 function ArticleMeta({ post }: { post: BlogPostSummary }) {
@@ -73,7 +73,7 @@ function FeaturedCarousel({ slides }: { slides: BlogPostSummary[] }) {
             <div className="flex flex-col gap-4 p-[clamp(24px,3vw,40px)]">
               <ArticleMeta post={post} />
               <Link
-                href={`/news/${post.slug}`}
+                href={`/blog/${post.slug}`}
                 className="font-display text-[length:var(--size-display-sm)] leading-[1.18] font-bold tracking-[-0.02em] text-navy-900 transition-colors hover:text-brand"
               >
                 {post.title}
@@ -109,7 +109,7 @@ function NewsCard({ post }: { post: BlogPostSummary }) {
         <ImagePlaceholder label={`Drop a photo — ${post.title.slice(0, 40)}…`} />
       </div>
       <Link
-        href={`/news/${post.slug}`}
+        href={`/blog/${post.slug}`}
         className="flex flex-1 flex-col gap-3 p-[var(--card-pad)]"
       >
         <ArticleMeta post={post} />
@@ -154,8 +154,8 @@ function NewsListing({ posts }: { posts: BlogPostSummary[] }) {
     <section className="ps-blueprint bg-muted pt-[var(--section-y-tight)] pb-[var(--section-y)]">
       <div className="ps-container flex flex-col gap-[var(--gutter)]">
         <div className="mb-5 flex flex-wrap items-end justify-between gap-6">
-          <SectionHeading eyebrow="Media · Newsroom" highlight="the network">
-            News from across
+          <SectionHeading eyebrow="PETROSOL blog" highlight="the network">
+            Stories from across
           </SectionHeading>
           <span className="pb-2 font-mono text-[12px] tracking-[0.14em] text-muted-foreground uppercase">
             Updated {formatDate(posts[0]?.publishedAt)}
@@ -164,7 +164,7 @@ function NewsListing({ posts }: { posts: BlogPostSummary[] }) {
 
         <FeaturedCarousel slides={featured} />
 
-        <div className="mt-6 flex flex-wrap gap-3" role="group" aria-label="Filter news by tag">
+        <div className="mt-6 flex flex-wrap gap-3" role="group" aria-label="Filter blog by tag">
           {tags.map((item) => (
             <button
               key={item}
@@ -186,7 +186,7 @@ function NewsListing({ posts }: { posts: BlogPostSummary[] }) {
 
         {pages > 1 ? (
           <nav
-            aria-label="News pages"
+            aria-label="Blog pages"
             className="mt-6 flex items-center justify-center gap-3"
           >
             <button

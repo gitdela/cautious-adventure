@@ -11,7 +11,7 @@ import { cn } from "@workspace/ui/lib/utils";
  */
 const sizeClasses = {
   mobile: "h-[54px]",
-  desktop: "h-[78px]",
+  desktop: "h-[72px]",
   footer: "h-[clamp(44px,5vw,56px)]",
 };
 

@@ -8,8 +8,8 @@ import { cn } from "@workspace/ui/lib/utils";
  * SiteChrome.jsx). Framework-agnostic: apps own routing via `renderLink`, and
  * inject brand artwork / CTA / socials as slots.
  *
- * Header is two-tier: logo left spanning both tiers; a hairlined social strip
- * on top; nav links + CTA below. Items with `children` open a white dropdown
+ * Header is two-tier: logo left spanning both tiers; a hairlined utility strip
+ * on top carrying the CTA and socials; nav links below. Items with `children` open a white dropdown
  * panel — CSS-only (hover / focus-within), so the desktop header stays a
  * server component. The mobile menu (below 960px) is the separate client
  * component in `site-nav-mobile.tsx`.
@@ -113,15 +113,18 @@ function SiteHeader({
         <div className="shrink-0">{brand}</div>
 
         <div className="flex min-w-0 flex-1 flex-col gap-3">
-          {/* Tier 1 — utility social strip */}
-          {socials.length > 0 ? (
-            <SocialStrip
-              socials={socials}
-              className="border-b border-border pb-3 group-data-[tone=overlay]/tone:border-white/16"
-            />
+          {/* Tier 1 — utility strip: the CTA sits beside the socials rather
+              than on the nav tier. With five nav items the button was the
+              straw that pushed "Contact Us" onto a second line; up here it
+              costs the nav nothing and the strip had spare width to give. */}
+          {action || socials.length > 0 ? (
+            <div className="flex items-center justify-end gap-5 border-b border-border pb-3 group-data-[tone=overlay]/tone:border-white/16">
+              {socials.length > 0 ? <SocialStrip socials={socials} /> : null}
+              {action ? <div className="shrink-0">{action}</div> : null}
+            </div>
           ) : null}
 
-          {/* Tier 2 — nav links + CTA */}
+          {/* Tier 2 — nav links */}
           <div className="flex items-center gap-6">
             {desktopNav ?? (
               <nav
@@ -157,7 +160,6 @@ function SiteHeader({
                 )}
               </nav>
             )}
-            {action ? <div className="shrink-0">{action}</div> : null}
           </div>
         </div>
       </header>
@@ -199,9 +201,8 @@ function SiteFooter({
   return (
     <footer className={cn("bg-surface-inverse", className)}>
       <div className="mx-auto w-full max-w-[1280px] px-[var(--container-pad)] pt-20 pb-6">
-        <div className="grid grid-cols-[repeat(2,minmax(120px,1fr))] gap-x-8 gap-y-10 min-[561px]:grid-cols-[repeat(3,minmax(120px,1fr))] min-[1101px]:grid-cols-[minmax(220px,1.4fr)_repeat(5,minmax(120px,1fr))]">
-          {/* Brand column — spans the full row until the widest layout */}
-          <div className="col-span-full min-[1101px]:col-span-1">
+        <div className="grid gap-y-12 min-[1101px]:grid-cols-[minmax(220px,0.8fr)_minmax(0,2.2fr)] min-[1101px]:gap-x-[clamp(64px,8vw,120px)]">
+          <div>
             {brand}
             {summary ? (
               <p className="mt-5 max-w-[30ch] text-[13px] leading-relaxed text-white/72">
@@ -215,20 +216,22 @@ function SiteFooter({
             ) : null}
           </div>
 
-          {groups.map((group) => (
-            <section key={group.title} className="min-w-[120px]">
-              <h2 className="mb-4 font-display text-xs font-bold tracking-[0.14em] text-brand uppercase">
-                {group.title}
-              </h2>
-              <nav className="flex flex-col gap-3">
-                {group.items.map((item) => (
-                  <React.Fragment key={item.href}>
-                    {renderLink(item, linkClassName)}
-                  </React.Fragment>
-                ))}
-              </nav>
-            </section>
-          ))}
+          <div className="grid grid-cols-2 gap-x-8 gap-y-10 min-[641px]:grid-cols-3 min-[1101px]:gap-x-12 min-[1101px]:gap-y-12">
+            {groups.map((group) => (
+              <section key={group.title} className="min-w-0">
+                <h2 className="mb-4 font-display text-xs font-bold tracking-[0.14em] text-brand uppercase">
+                  {group.title}
+                </h2>
+                <nav className="flex flex-col gap-3">
+                  {group.items.map((item) => (
+                    <React.Fragment key={item.href}>
+                      {renderLink(item, linkClassName)}
+                    </React.Fragment>
+                  ))}
+                </nav>
+              </section>
+            ))}
+          </div>
         </div>
 
         <div className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-white/16 pt-6 text-xs text-white/55">

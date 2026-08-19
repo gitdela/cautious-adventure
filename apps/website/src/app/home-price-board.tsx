@@ -1,17 +1,10 @@
-import type { PumpPriceBoardView } from "@workspace/content";
+import {
+  formatCedis,
+  formatPumpDate,
+  type PumpPriceBoardView,
+} from "@workspace/content";
 import { StationIcon } from "@workspace/ui/components/station-icon";
 import { cn } from "@workspace/ui/lib/utils";
-
-const dateFormatter = new Intl.DateTimeFormat("en-GB", {
-  day: "numeric",
-  month: "short",
-  year: "numeric",
-});
-
-const priceFormatter = new Intl.NumberFormat("en-GH", {
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
-});
 
 /**
  * Forecourt price totem — the hero's only pump-price surface.
@@ -21,8 +14,6 @@ const priceFormatter = new Intl.NumberFormat("en-GH", {
  * shadow (both would be sheared off by the clip).
  */
 function HomePriceBoard({ board }: { board: PumpPriceBoardView }) {
-  const updated = new Date(board.updatedAt);
-
   return (
     <div
       role="region"
@@ -52,7 +43,7 @@ function HomePriceBoard({ board }: { board: PumpPriceBoardView }) {
                 shared with the stat blocks and person cards, which should not
                 shrink with the totem. */}
             <span className="font-mono text-[clamp(22px,2.2vw,28px)] leading-none font-semibold tabular-nums text-orange-400">
-              ₵{priceFormatter.format(amount)}
+              {formatCedis(amount)}
             </span>
           </div>
         ))}
@@ -61,7 +52,7 @@ function HomePriceBoard({ board }: { board: PumpPriceBoardView }) {
       <p className="mt-4 text-[12px] text-white/55">
         Effective{" "}
         <time dateTime={board.updatedAt.slice(0, 10)}>
-          {dateFormatter.format(updated)}
+          {formatPumpDate(board.updatedAt)}
         </time>{" "}
         · GHS/litre
       </p>

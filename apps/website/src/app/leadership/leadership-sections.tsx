@@ -1,10 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import { ContentEmpty, type TeamMemberSummary } from "@workspace/content";
 import { Button } from "@workspace/ui/components/button";
 import { SectionHeading, Stat } from "@workspace/ui/components/marketing";
 import { MosaicPageHeader } from "../mosaic-page-header";
+import { MosaicCtaBand } from "../mosaic-cta-band";
 
 import { SiteBreadcrumbs } from "../site-breadcrumbs";
 import { TeamCard, splitNameForHeadline } from "../team-card";
@@ -21,13 +21,13 @@ const leadershipPrinciples = [
 function LeadershipPageHeader() {
   return (
     <MosaicPageHeader
-      title="Leadership"
+      title="Leadership Team"
       breadcrumbs={
         <SiteBreadcrumbs
           items={[
             { label: "Home", href: "/" },
-            { label: "Company" },
-            { label: "Leadership" },
+            { label: "About" },
+            { label: "Leadership Team" },
           ]}
         />
       }
@@ -89,7 +89,7 @@ function CeoFeature({ member }: { member: TeamMemberSummary }) {
           ))}
         </div>
         <Button asChild variant="outline" className="mt-8">
-          <Link href="/achievements">Our achievements</Link>
+          <Link href="/awards-and-recognition">Awards &amp; recognition</Link>
         </Button>
       </div>
     </section>
@@ -152,34 +152,24 @@ function LeadershipPrinciples() {
 
 function CareersCta() {
   return (
-    <section className="relative isolate overflow-hidden py-[var(--section-y)]">
-      <Image
-        src="/images/home/refinery-tanks.webp"
-        alt="PETROSOL refinery tanks"
-        fill
-        sizes="100vw"
-        className="-z-20 object-cover"
-      />
-      <div className="absolute inset-0 -z-10 bg-navy-900/72" />
-      <div className="mx-auto flex max-w-[860px] flex-col items-center gap-8 px-[var(--container-pad)]">
-        <SectionHeading
-          eyebrow="Join our team"
-          tone="light"
-          align="center"
-          highlight="PETROSOL?"
-        >
-          Interested in a career at
-        </SectionHeading>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Button asChild>
-            <Link href="/contact">Contact HR</Link>
-          </Button>
-          <Button asChild variant="outlineInverse">
-            <Link href="/about">About PETROSOL</Link>
-          </Button>
-        </div>
+    <MosaicCtaBand>
+      <SectionHeading
+        eyebrow="Join our team"
+        tone="light"
+        align="center"
+        highlight="PETROSOL?"
+      >
+        Interested in a career at
+      </SectionHeading>
+      <div className="flex flex-wrap justify-center gap-4">
+        <Button asChild>
+          <Link href="/contact-us">Contact HR</Link>
+        </Button>
+        <Button asChild variant="outlineInverse">
+          <Link href="/who-we-are">Who we are</Link>
+        </Button>
       </div>
-    </section>
+    </MosaicCtaBand>
   );
 }
 

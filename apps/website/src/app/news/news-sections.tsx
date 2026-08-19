@@ -11,13 +11,13 @@ import { NewsListing } from "./news-listing";
 function NewsPageHeader() {
   return (
     <MosaicPageHeader
-      title="News"
+      title="Blog"
       breadcrumbs={
         <SiteBreadcrumbs
           items={[
             { label: "Home", href: "/" },
-            { label: "Media" },
-            { label: "News" },
+            { label: "Blog & Events" },
+            { label: "Blog" },
           ]}
         />
       }
@@ -39,10 +39,10 @@ function NewsCta() {
         </SectionHeading>
         <div className="flex flex-wrap justify-center gap-4">
           <Button asChild>
-            <Link href="/contact">Contact us</Link>
+            <Link href="/contact-us">Contact us</Link>
           </Button>
           <Button asChild variant="outlineInverse">
-            <Link href="/gallery">View the gallery</Link>
+            <Link href="/events">View events</Link>
           </Button>
         </div>
       </div>

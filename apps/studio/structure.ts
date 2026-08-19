@@ -23,7 +23,60 @@ export const deskStructure: StructureResolver = (S) =>
             ]),
         ),
 
+      // The other half of Media, alongside the blog. Defaults to display order
+      // because /events renders the list in exactly that sequence.
+      S.listItem()
+        .title('Events')
+        .child(
+          S.documentTypeList('galleryEvent')
+            .title('Events')
+            .defaultOrdering([{ field: 'order', direction: 'asc' }]),
+        ),
+
       S.documentTypeListItem('page').title('Company pages'),
+
+      // Fuel sections and the price board sit together: they are the two halves
+      // of the /fuel page, and the board also drives the home hero.
+      S.listItem()
+        .title('Fuel')
+        .child(
+          S.list()
+            .title('Fuel')
+            .items([
+              S.documentTypeListItem('fuelProduct').title('Products'),
+              // Singleton: one pinned document, edited in place.
+              S.listItem()
+                .title('Pump prices')
+                .child(
+                  S.document()
+                    .schemaType('pumpPrices')
+                    .documentId('pumpPrices')
+                    .title('Pump prices'),
+                ),
+            ]),
+        ),
+
+      S.listItem()
+        .title('Lubricants')
+        .child(
+          S.list()
+            .title('Lubricants')
+            .items([
+              S.documentTypeListItem('lubricantProduct').title('Products'),
+              S.documentTypeListItem('lubricantCategory').title('Categories'),
+            ]),
+        ),
+
+      S.listItem()
+        .title('Stations')
+        .child(
+          S.list()
+            .title('Stations')
+            .items([
+              S.documentTypeListItem('station').title('Stations'),
+              S.documentTypeListItem('stationTerritory').title('Territories'),
+            ]),
+        ),
 
       // Two views over one document type. A person can sit in both groups (the
       // CEO does), so these are filtered lists rather than separate types —
@@ -51,16 +104,6 @@ export const deskStructure: StructureResolver = (S) =>
                     .defaultOrdering([{ field: 'order', direction: 'asc' }]),
                 ),
             ]),
-        ),
-
-      // Singleton: the home-hero price board edits one pinned document.
-      S.listItem()
-        .title('Pump prices')
-        .child(
-          S.document()
-            .schemaType('pumpPrices')
-            .documentId('pumpPrices')
-            .title('Pump prices'),
         ),
 
       S.divider(),

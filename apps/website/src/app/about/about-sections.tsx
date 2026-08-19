@@ -12,6 +12,7 @@ import {
 import { ServiceCard } from "@workspace/ui/components/service-card";
 
 import { MosaicPageHeader } from "../mosaic-page-header";
+import { MosaicCtaBand } from "../mosaic-cta-band";
 import { SiteBreadcrumbs } from "../site-breadcrumbs";
 import { CoreValuesSection } from "./about-core-values";
 import {
@@ -24,10 +25,14 @@ import {
 function AboutPageHeader() {
   return (
     <MosaicPageHeader
-      title="About PETROSOL"
+      title="Who We Are"
       breadcrumbs={
         <SiteBreadcrumbs
-          items={[{ label: "Home", href: "/" }, { label: "Company" }]}
+          items={[
+            { label: "Home", href: "/" },
+            { label: "About" },
+            { label: "Who We Are" },
+          ]}
         />
       }
     />
@@ -225,30 +230,24 @@ function AffiliationsSection() {
 
 function PartnerCta() {
   return (
-    <section className="relative isolate overflow-hidden py-[var(--section-y)]">
-      {/* The page-header banner, flat variant — same navy field and green tile
-          cluster, without the dot texture. No scrim: the mosaic already reads
-          dark enough for white text, and a wash would mute the greens. */}
-      <div className="absolute inset-0 -z-20 bg-navy-850 bg-[url('/images/header-mosaic-plain.svg')] bg-cover bg-right bg-no-repeat" />
-      <div className="mx-auto flex max-w-[860px] flex-col items-center gap-8 px-[var(--container-pad)]">
-        <SectionHeading
-          eyebrow="Work with us"
-          tone="light"
-          highlight="PETROSOL?"
-          align="center"
-        >
-          Ready to partner with
-        </SectionHeading>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Button asChild>
-            <Link href="/contact">Contact us</Link>
-          </Button>
-          <Button asChild variant="outlineInverse">
-            <Link href="/stations">Find a station</Link>
-          </Button>
-        </div>
+    <MosaicCtaBand>
+      <SectionHeading
+        eyebrow="Work with us"
+        tone="light"
+        highlight="PETROSOL?"
+        align="center"
+      >
+        Ready to partner with
+      </SectionHeading>
+      <div className="flex flex-wrap justify-center gap-4">
+        <Button asChild>
+          <Link href="/contact-us">Contact us</Link>
+        </Button>
+        <Button asChild variant="outlineInverse">
+          <Link href="/find-a-station">Find a station</Link>
+        </Button>
       </div>
-    </section>
+    </MosaicCtaBand>
   );
 }
 

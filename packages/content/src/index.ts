@@ -1,7 +1,13 @@
 // Public surface of @workspace/content — framework-neutral presentation.
 export * from './adapters'
 export * from './types'
-export { formatDate, formatReadTime } from './format'
+export {
+  formatCedis,
+  formatDate,
+  formatGrade,
+  formatPumpDate,
+  formatReadTime,
+} from './format'
 
 export { PortableContent, buildPortableComponents } from './portable-content'
 export type { PortableContentProps } from './portable-content'

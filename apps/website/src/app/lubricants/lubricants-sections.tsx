@@ -1,7 +1,9 @@
 import Link from "next/link";
-import { RiShieldCheckLine } from "@remixicon/react";
 
-import { Badge } from "@workspace/ui/components/badge";
+import type {
+  LubricantCategoryView,
+  LubricantProductView,
+} from "@workspace/content";
 import { Button } from "@workspace/ui/components/button";
 import { SectionHeading } from "@workspace/ui/components/marketing";
 import { MosaicPageHeader } from "../mosaic-page-header";
@@ -18,7 +20,7 @@ function LubricantsPageHeader() {
         <SiteBreadcrumbs
           items={[
             { label: "Home", href: "/" },
-            { label: "Products" },
+            { label: "Products & Services" },
             { label: "Lubricants" },
           ]}
         />
@@ -29,7 +31,7 @@ function LubricantsPageHeader() {
 
 function LubricantsIntro() {
   return (
-    <section className="mx-auto flex max-w-[900px] flex-col items-center px-[var(--container-pad)] py-[var(--section-y-tight)] text-center">
+    <section className="mx-auto flex max-w-5xl flex-col items-center px-[var(--container-pad)] py-[var(--section-y-tight)] text-center">
       <SectionHeading
         eyebrow="Our lubricants"
         align="center"
@@ -37,20 +39,12 @@ function LubricantsIntro() {
       >
         Blended from virgin base oils and
       </SectionHeading>
-      <p className="mt-6 max-w-[62ch]">
+      <p className="mt-6 max-w-[72ch]">
         PETROSOL markets best-in-class lubricants, made from group II virgin base
         oils, superior synthetic base oils and Syntec&reg; additives. Every blend is
         designed for longer service life, fuel efficiency, and the lubrication
         requirements of OEMs around the world.
       </p>
-      <div className="mt-8 flex flex-wrap justify-center gap-3">
-        <Badge>Syntec&reg; additive technology</Badge>
-        <Badge variant="secondary">Group II virgin base oils</Badge>
-        <Badge variant="success">
-          <RiShieldCheckLine data-icon="inline-start" />
-          OEM specifications
-        </Badge>
-      </div>
     </section>
   );
 }
@@ -74,7 +68,7 @@ function QualityBand() {
         </p>
         <div className="mt-7 flex flex-wrap items-center gap-6">
           <Button asChild>
-            <Link href="/contact">Enquire about bulk supply</Link>
+            <Link href="/contact-us">Enquire about bulk supply</Link>
           </Button>
           <a
             href="mailto:info@petrosol.com.gh"
@@ -88,12 +82,18 @@ function QualityBand() {
   );
 }
 
-function LubricantsSections() {
+function LubricantsSections({
+  products,
+  categories,
+}: {
+  products: LubricantProductView[];
+  categories: LubricantCategoryView[];
+}) {
   return (
     <main>
       <LubricantsPageHeader />
       <LubricantsIntro />
-      <LubricantsCatalogue />
+      <LubricantsCatalogue products={products} categories={categories} />
       <QualityBand />
     </main>
   );

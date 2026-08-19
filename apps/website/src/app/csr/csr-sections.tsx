@@ -1,6 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import { RiShieldCheckLine } from "@remixicon/react";
+import {
+  RiLeafLine,
+  RiScales3Line,
+  RiShieldCheckLine,
+  RiVerifiedBadgeLine,
+} from "@remixicon/react";
 
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
@@ -10,6 +15,34 @@ import {
   PhotoTile,
   SectionHeading,
 } from "@workspace/ui/components/marketing";
+import { ServiceCard } from "@workspace/ui/components/service-card";
+
+const responsibilityPillars = [
+  {
+    title: "Environmental stewardship",
+    description:
+      "We use resources responsibly, work to reduce waste and follow the environmental controls reflected in our ISO 14001:2015 management system.",
+    icon: RiLeafLine,
+  },
+  {
+    title: "Health and safety",
+    description:
+      "We protect our people, customers and communities through disciplined safety practices supported by our ISO 45001:2018 management system.",
+    icon: RiShieldCheckLine,
+  },
+  {
+    title: "Responsible operations",
+    description:
+      "We operate ethically, comply with applicable standards and use our ISO 9001:2015 quality management system to support consistent delivery.",
+    icon: RiScales3Line,
+  },
+  {
+    title: "Community investment",
+    description:
+      "We support programmes that strengthen healthcare, education, public safety and disaster response in communities across Ghana.",
+    icon: RiVerifiedBadgeLine,
+  },
+];
 
 const csrItems: Array<{
   title: string;
@@ -78,11 +111,38 @@ function CsrHero() {
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-navy-900/25 to-navy-900/78" />
       <div className="ps-container w-full pb-12">
         <Eyebrow tone="light" className="mb-4">
-          Corporate social responsibility
+          Sustainability &amp; community
         </Eyebrow>
         <h1 className="font-display text-[length:var(--size-display-lg)] leading-[1.08] font-bold tracking-[-0.02em] text-white">
-          Energizing dreams, <span className="swash">transforming lives</span>
+          Responsible today, <span className="swash">ready for tomorrow</span>
         </h1>
+      </div>
+    </section>
+  );
+}
+
+function ResponsibilityApproach() {
+  return (
+    <section className="ps-blueprint bg-muted py-[var(--section-y)]">
+      <div className="ps-container">
+        <div className="grid grid-cols-1 gap-8 min-[841px]:grid-cols-[minmax(0,1fr)_minmax(280px,0.7fr)] min-[841px]:items-end">
+          <SectionHeading eyebrow="Our approach" highlight="lasting impact">
+            Responsible energy,
+          </SectionHeading>
+          <p className="max-w-[54ch] min-[841px]:justify-self-end">
+            Sustainability at PETROSOL connects the way we manage our
+            operations with the difference we make beyond them. We consider
+            people, safety, the environment and long-term value in the
+            decisions we take today.
+          </p>
+        </div>
+        <div className="mt-12 grid grid-cols-1 gap-5 min-[561px]:grid-cols-2 min-[1101px]:grid-cols-4">
+          {responsibilityPillars.map(({ title, description, icon: Icon }) => (
+            <ServiceCard key={title} title={title} icon={<Icon />}>
+              {description}
+            </ServiceCard>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -126,13 +186,13 @@ function GraftFeature() {
 
 function CsrGrid() {
   return (
-    <section className="ps-blueprint bg-muted py-[var(--section-y)]">
+    <section className="py-[var(--section-y)]">
       <div className="ps-container">
         <SectionHeading
-          eyebrow="Beyond our core business"
-          highlight="larger society"
+          eyebrow="Community investment"
+          highlight="communities we serve"
         >
-          Our responsibility to the
+          Our commitment to the
         </SectionHeading>
         <div className="mt-14 flex flex-col gap-[clamp(56px,7vw,88px)]">
           {csrItems.map(({ title, description, link, place, placeholder }, index) => (
@@ -202,7 +262,7 @@ function CsrCta() {
         </p>
         <div className="mt-8">
           <Button asChild>
-            <Link href="/contact">Propose a project</Link>
+            <Link href="/contact-us">Propose a project</Link>
           </Button>
         </div>
       </div>
@@ -214,6 +274,7 @@ function CsrSections() {
   return (
     <main>
       <CsrHero />
+      <ResponsibilityApproach />
       <GraftFeature />
       <CsrGrid />
       <CsrCta />

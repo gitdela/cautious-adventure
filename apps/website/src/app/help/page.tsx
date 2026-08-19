@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "Help center",
   description: "Answers to common questions about PETROSOL.",
   alternates: { canonical: "/help" },
+  robots: { index: false, follow: false },
 };
 
 /**

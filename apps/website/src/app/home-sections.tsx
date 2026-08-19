@@ -4,6 +4,7 @@ import Link from "next/link";
 import {
   formatDate,
   type BlogPostSummary,
+  type LubricantProductView,
   type PumpPriceBoardView,
 } from "@workspace/content";
 
@@ -26,7 +27,7 @@ import { contentAdapters } from "@/lib/content-adapters";
 
 import { HeroVideo } from "./hero-video";
 import { HomePriceBoard } from "./home-price-board";
-import { lubricantProducts } from "./lubricants/lubricants-data";
+import { HomeProductsSection } from "./home-products-section";
 
 const services: Array<{
   icon: StationIconName;
@@ -41,14 +42,14 @@ const services: Array<{
       title: "Petrol & Diesel",
       description: "Clean, full-quantity fuel at 115+ stations across Ghana.",
       image: "/images/home/fuel-pump.webp",
-      href: "/fuel",
+      href: "/fuels",
     },
     {
       icon: "fullcare",
       title: "FullCare",
       description: "Complete lube bay servicing at PETROSOL stations.",
       image: "/images/home/fullcare.webp",
-      href: "/fullcare",
+      href: "/fullcare-vehicle-services",
     },
     {
       icon: "tanker",
@@ -62,17 +63,10 @@ const services: Array<{
       title: "Shop",
       description: "Purchase PETROSOL products online and in-station.",
       image: "/images/home/shop.webp",
-      href: "/shop",
+      href: "/shops-and-convenience",
       imagePosition: "object-cover object-[center_12%]",
     },
   ];
-
-const featuredLubricantIds = ["plus-5w30", "plus-10w40", "ultra-15w40", "atf-6"];
-
-const featuredLubricants = featuredLubricantIds.flatMap((id) => {
-  const product = lubricantProducts.find((entry) => entry.id === id);
-  return product?.image ? [{ ...product, image: product.image }] : [];
-});
 
 
 function HeroSection({ priceBoard }: { priceBoard: PumpPriceBoardView | null }) {
@@ -103,7 +97,7 @@ function HeroSection({ priceBoard }: { priceBoard: PumpPriceBoardView | null }) 
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <Button asChild>
-                <Link href="/contact">Contact us</Link>
+                <Link href="/contact-us">Contact us</Link>
               </Button>
               <Button asChild variant="outlineInverse">
                 <Link href="#services">Discover more</Link>
@@ -137,7 +131,7 @@ function AboutSection() {
           new ways to improve our operations.
         </p>
         <Button asChild variant="outline" className="mt-8">
-          <Link href="/about">Discover more</Link>
+          <Link href="/who-we-are">Discover more</Link>
         </Button>
       </div>
 
@@ -263,60 +257,6 @@ function ImageBand() {
   );
 }
 
-function ProductsSection() {
-  return (
-    <section id="products" className="ps-blueprint scroll-mt-24 py-[var(--section-y)]">
-      <div className="ps-container">
-        <SectionHeading
-          eyebrow="Our products"
-          highlight="Every Engine"
-          align="center"
-        >
-          Platinum Lubricants For
-        </SectionHeading>
-        <p className="mx-auto mt-6 max-w-[56ch] text-center leading-[1.62]">
-          Eleven Syntec&reg;-formulated lubricants — engine oils, gear and
-          transmission fluids, brake fluid and coolant — blended to
-          international standards and stocked at every PETROSOL station.
-        </p>
-        <div className="mt-16 grid grid-cols-[repeat(auto-fit,minmax(min(100%,240px),1fr))] gap-[var(--gutter)] min-[1100px]:grid-cols-4">
-          {featuredLubricants.map((product) => (
-            <Link key={product.id} href="/lubricants" className="group rounded-lg">
-              <article className="flex h-full flex-col overflow-hidden rounded-lg border border-border bg-background shadow-card transition-[transform,box-shadow] duration-400 ease-[cubic-bezier(.16,1,.3,1)] group-hover:-translate-y-[3px] group-hover:shadow-raised">
-                <div className="relative aspect-[4/3] w-full border-b border-border bg-white">
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    fill
-                    sizes="(max-width: 720px) 100vw, (max-width: 1100px) 50vw, 25vw"
-                    className="object-cover"
-                  />
-                </div>
-                <div className="flex flex-col gap-2 px-6 pt-5 pb-6">
-                  <span className="text-xs font-bold tracking-[0.12em] uppercase text-brand">
-                    {product.category}
-                  </span>
-                  <h3 className="font-display text-base font-semibold text-navy-900 transition-colors group-hover:text-brand">
-                    {product.name}
-                  </h3>
-                  <span className="font-mono text-xs text-muted-foreground">
-                    {product.grade}
-                  </span>
-                </div>
-              </article>
-            </Link>
-          ))}
-        </div>
-        <div className="mt-12 flex justify-center">
-          <Button asChild variant="outline">
-            <Link href="/lubricants">View all lubricants</Link>
-          </Button>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function NewsSection({ posts }: { posts: BlogPostSummary[] }) {
   if (posts.length === 0) return null;
 
@@ -325,13 +265,13 @@ function NewsSection({ posts }: { posts: BlogPostSummary[] }) {
   return (
     <section className="bg-muted py-[var(--section-y-tight)]">
       <div className="ps-container">
-        <SectionHeading eyebrow="Media" highlight="Latest News" align="center">
+        <SectionHeading eyebrow="Blog" highlight="Latest Stories" align="center">
           Catch Up On Our
         </SectionHeading>
         <div className="mt-16 grid grid-cols-[repeat(auto-fit,minmax(min(100%,264px),1fr))] gap-[var(--gutter)] min-[1100px]:grid-cols-3">
           {posts.slice(0, 3).map((post) => (
             <article key={post.slug}>
-              <Link href={`/news/${post.slug}`} className="group block rounded-xl">
+              <Link href={`/blog/${post.slug}`} className="group block rounded-xl">
                 <PhotoTile
                   ratio="og"
                   image={
@@ -384,9 +324,11 @@ function QuoteBand() {
 function HomeSections({
   priceBoard,
   featuredPosts,
+  lubricants,
 }: {
   priceBoard: PumpPriceBoardView | null;
   featuredPosts: BlogPostSummary[];
+  lubricants: LubricantProductView[];
 }) {
   return (
     <main>
@@ -395,7 +337,7 @@ function HomeSections({
       <ServicesSection />
       <StatBand />
       <ImageBand />
-      <ProductsSection />
+      <HomeProductsSection products={lubricants} />
       <QuoteBand />
       <NewsSection posts={featuredPosts} />
     </main>

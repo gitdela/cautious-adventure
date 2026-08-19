@@ -7,50 +7,84 @@ type SocialName = "facebook" | "x" | "instagram" | "linkedin";
 
 const navigationItems: SiteNavItem[] = [
   {
-    label: "Company",
+    label: "Products & Services",
     children: [
-      { label: "About PETROSOL", href: "/about" },
-      { label: "Our Achievements", href: "/achievements" },
-      { label: "Leadership", href: "/leadership" },
-      { label: "Board of Directors", href: "/board" },
-      { label: "Contact", href: "/contact" },
-    ],
-  },
-  {
-    label: "Products",
-    children: [
+      { label: "Fuels", href: "/fuels" },
       { label: "Lubricants", href: "/lubricants" },
-      { label: "Fuel", href: "/fuel" },
+      { label: "Fuel Delivery", href: "/fuel-delivery" },
     ],
   },
   {
-    label: "Services",
+    label: "At Our Stations",
     children: [
-      { label: "FullCare", href: "/fullcare" },
-      { label: "Fuel Delivery Service", href: "/fuel-delivery" },
-      { label: "Shop", href: "/shop" },
+      { label: "Find a Station", href: "/find-a-station" },
+      { label: "FULLCARE Vehicle Services", href: "/fullcare-vehicle-services" },
+      { label: "Shops & Convenience", href: "/shops-and-convenience" },
     ],
   },
   {
-    label: "Fuel Station",
+    label: "About",
     children: [
-      { label: "Find our Station", href: "/stations" },
-      { label: "CSR", href: "/csr" },
+      { label: "Who We Are", href: "/who-we-are" },
+      { label: "Leadership Team", href: "/leadership-team" },
+      { label: "Board of Directors", href: "/board-of-directors" },
+      { label: "Awards & Recognition", href: "/awards-and-recognition" },
+      { label: "Sustainability & Community", href: "/sustainability-and-community" },
     ],
   },
   {
-    label: "Media",
+    label: "Blog & Events",
     children: [
-      { label: "News", href: "/news" },
-      { label: "Gallery", href: "/gallery" },
+      { label: "Events", href: "/events" },
+      { label: "Blog", href: "/blog" },
+    ],
+  },
+  { label: "Contact Us", href: "/contact-us" },
+];
+
+// The footer supports broader discovery than the task-led primary navigation,
+// so its groups are intentionally maintained separately.
+const footerGroups: SiteFooterGroup[] = [
+  {
+    title: "Company",
+    items: [
+      { label: "Who We Are", href: "/who-we-are" },
+      { label: "Leadership Team", href: "/leadership-team" },
+      { label: "Board of Directors", href: "/board-of-directors" },
+      { label: "Awards & Recognition", href: "/awards-and-recognition" },
+    ],
+  },
+  {
+    title: "Products & Services",
+    items: [
+      { label: "Fuels", href: "/fuels" },
+      { label: "Lubricants", href: "/lubricants" },
+      { label: "Fuel Delivery", href: "/fuel-delivery" },
+    ],
+  },
+  {
+    title: "At Our Stations",
+    items: [
+      { label: "Find a Station", href: "/find-a-station" },
+      { label: "FULLCARE Vehicle Services", href: "/fullcare-vehicle-services" },
+      { label: "Shops & Convenience", href: "/shops-and-convenience" },
+    ],
+  },
+  {
+    title: "Responsibility",
+    items: [
+      { label: "Sustainability & Community", href: "/sustainability-and-community" },
+    ],
+  },
+  {
+    title: "Blog & Events",
+    items: [
+      { label: "Events", href: "/events" },
+      { label: "Blog", href: "/blog" },
+      { label: "Contact Us", href: "/contact-us" },
     ],
   },
 ];
-
-const footerGroups: SiteFooterGroup[] = navigationItems.map((item) => ({
-  title: item.label,
-  items: "children" in item ? item.children : [item],
-}));
 
 const socialLinks: Array<{
   label: string;

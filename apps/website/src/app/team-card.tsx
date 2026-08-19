@@ -12,10 +12,10 @@ import { cn } from "@workspace/ui/lib/utils";
  *
  * NOTE: `teamProfileHref` is the single definition of the profile route. The
  * route itself is being built separately — if it lands somewhere other than
- * `/leadership/[slug]`, this function is the only edit needed.
+ * `/leadership-team/[slug]`, this function is the only edit needed.
  */
 export function teamProfileHref(slug: string) {
-  return `/leadership/${slug}`;
+  return `/leadership-team/${slug}`;
 }
 
 /**

@@ -5,6 +5,7 @@ import { Button } from "@workspace/ui/components/button";
 import { SectionHeading, Stat } from "@workspace/ui/components/marketing";
 
 import { SiteBreadcrumbs } from "../site-breadcrumbs";
+import { MosaicCtaBand } from "../mosaic-cta-band";
 import {
   achievementStats,
   awardCategories,
@@ -30,8 +31,8 @@ function DecadeBand() {
           <SiteBreadcrumbs
             items={[
               { label: "Home", href: "/" },
-              { label: "Company" },
-              { label: "Our Achievements" },
+              { label: "About" },
+              { label: "Awards & Recognition" },
             ]}
           />
         </div>
@@ -445,34 +446,24 @@ function AwardsTimeline() {
 
 function StoryCta() {
   return (
-    <section className="relative isolate overflow-hidden py-[var(--section-y)]">
-      <Image
-        src="/images/home/platform-yellow-rails.webp"
-        alt="PETROSOL platform with yellow safety rails"
-        fill
-        sizes="100vw"
-        className="-z-20 object-cover"
-      />
-      <div className="absolute inset-0 -z-10 bg-navy-900/72" />
-      <div className="mx-auto flex max-w-[860px] flex-col items-center gap-8 px-[var(--container-pad)]">
-        <SectionHeading
-          eyebrow="Our story"
-          tone="light"
-          align="center"
-          highlight="PETROSOL's journey"
-        >
-          Learn more about
-        </SectionHeading>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Button asChild>
-            <Link href="/about">About PETROSOL</Link>
-          </Button>
-          <Button asChild variant="outlineInverse">
-            <Link href="/contact">Contact us</Link>
-          </Button>
-        </div>
+    <MosaicCtaBand>
+      <SectionHeading
+        eyebrow="Our story"
+        tone="light"
+        align="center"
+        highlight="PETROSOL's journey"
+      >
+        Learn more about
+      </SectionHeading>
+      <div className="flex flex-wrap justify-center gap-4">
+        <Button asChild>
+          <Link href="/who-we-are">Who we are</Link>
+        </Button>
+        <Button asChild variant="outlineInverse">
+          <Link href="/contact-us">Contact us</Link>
+        </Button>
       </div>
-    </section>
+    </MosaicCtaBand>
   );
 }
 

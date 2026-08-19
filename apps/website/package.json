@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@mux/mux-background-video": "^0.2.3",
+    "@mux/mux-player-react": "^3.13.2",
     "@remixicon/react": "^4.9.0",
     "@sanity/webhook": "^4.0.4",
     "@tanstack/react-query": "^5.66.8",

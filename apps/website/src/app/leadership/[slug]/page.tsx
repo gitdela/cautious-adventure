@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description:
       member.shortBio ??
       `${member.name}, ${member.role} at PETROSOL Platinum Energy.`,
-    alternates: { canonical: `/leadership/${member.slug}` },
+    alternates: { canonical: `/leadership-team/${member.slug}` },
     openGraph: {
       title: member.name,
       description: `${member.role} at PETROSOL Platinum Energy.`,

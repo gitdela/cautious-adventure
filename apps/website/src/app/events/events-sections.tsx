@@ -1,47 +1,45 @@
 import Link from "next/link";
 
+import type { GalleryEventView } from "@workspace/content";
 import { Button } from "@workspace/ui/components/button";
 import { SectionHeading } from "@workspace/ui/components/marketing";
+
 import { MosaicPageHeader } from "../mosaic-page-header";
-
 import { SiteBreadcrumbs } from "../site-breadcrumbs";
-import { GalleryGrid } from "./gallery-grid";
+import { EventsRows } from "./events-rows";
 
-function GalleryPageHeader() {
+function EventsPageHeader() {
   return (
     <MosaicPageHeader
       title="Gallery"
       breadcrumbs={
         <SiteBreadcrumbs
-          items={[
-            { label: "Home", href: "/" },
-            { label: "Media" },
-            { label: "Gallery" },
-          ]}
+          items={[{ label: "Home", href: "/" }, { label: "Media" }]}
         />
       }
     />
   );
 }
 
-function GalleryCta() {
+function MediaCta() {
   return (
     <section className="rounded-tr-[120px] bg-surface-inverse py-[var(--section-y-tight)]">
-      <div className="mx-auto flex max-w-[860px] flex-col items-center gap-8 px-[var(--container-pad)]">
+      <div className="mx-auto flex max-w-[860px] flex-col items-center gap-10 px-[var(--container-pad)]">
         <SectionHeading
           tone="light"
           align="center"
           eyebrow="Media"
+          size="md"
           highlight="the network"
         >
           More stories from across
         </SectionHeading>
         <div className="flex flex-wrap justify-center gap-4">
           <Button asChild>
-            <Link href="/csr">Our CSR work</Link>
+            <Link href="/sustainability-and-community">Our CSR work</Link>
           </Button>
           <Button asChild variant="outlineInverse">
-            <Link href="/contact">Media enquiries</Link>
+            <Link href="/contact-us">Media enquiries</Link>
           </Button>
         </div>
       </div>
@@ -49,14 +47,14 @@ function GalleryCta() {
   );
 }
 
-function GallerySections() {
+function EventsSections({ events }: { events: GalleryEventView[] }) {
   return (
     <main>
-      <GalleryPageHeader />
-      <GalleryGrid />
-      <GalleryCta />
+      <EventsPageHeader />
+      <EventsRows events={events} />
+      <MediaCta />
     </main>
   );
 }
 
-export { GallerySections };
+export { EventsSections };

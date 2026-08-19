@@ -22,27 +22,19 @@ export type SanityImageAssetReference = {
   [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
 };
 
-export type TeamMember = {
+export type GalleryEvent = {
   _id: string;
-  _type: "teamMember";
+  _type: "galleryEvent";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  name: string;
+  title: string;
   slug: Slug;
-  role: string;
-  groups: Array<string>;
+  kind: "photos" | "story" | "video";
+  stream: "event" | "community";
+  eventDate?: string;
   order: number;
-  featured?: boolean;
-  photo?: {
-    asset?: SanityImageAssetReference;
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt: string;
-    _type: "image";
-  };
-  coverPhoto?: {
+  coverImage?: {
     asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
@@ -50,9 +42,20 @@ export type TeamMember = {
     alt?: string;
     _type: "image";
   };
-  shortBio?: string;
-  quote?: string;
-  bio?: BlockContent;
+  photos?: Array<{
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt: string;
+    _type: "image";
+    _key: string;
+  }>;
+  excerpt?: string;
+  body?: BlockContent;
+  caption?: string;
+  muxPlaybackId?: string;
+  posterTime?: number;
 };
 
 export type BlockContent = Array<
@@ -106,6 +109,140 @@ export type Slug = {
   _type: "slug";
   current: string;
   source?: string;
+};
+
+export type StationTerritoryReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "stationTerritory";
+};
+
+export type Station = {
+  _id: string;
+  _type: "station";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name: string;
+  slug: Slug;
+  territory: StationTerritoryReference;
+  manager: string;
+  phones: Array<string>;
+  amenities?: Array<string>;
+  order: number;
+};
+
+export type StationTerritory = {
+  _id: string;
+  _type: "stationTerritory";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name: string;
+  slug: Slug;
+  order: number;
+};
+
+export type FuelProduct = {
+  _id: string;
+  _type: "fuelProduct";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name: string;
+  slug: Slug;
+  eyebrow: string;
+  heading: string;
+  highlight: string;
+  body: Array<string>;
+  image: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt: string;
+    _type: "image";
+  };
+  order: number;
+};
+
+export type LubricantCategoryReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "lubricantCategory";
+};
+
+export type LubricantProduct = {
+  _id: string;
+  _type: "lubricantProduct";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name: string;
+  slug: Slug;
+  category: LubricantCategoryReference;
+  order: number;
+  featuredOnHome?: boolean;
+  grade: string;
+  standard: string;
+  applications: string;
+  drainInterval?: string;
+  benefits: Array<string>;
+  image?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+};
+
+export type LubricantCategory = {
+  _id: string;
+  _type: "lubricantCategory";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title: string;
+  slug: Slug;
+  order: number;
+  description?: string;
+};
+
+export type TeamMember = {
+  _id: string;
+  _type: "teamMember";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name: string;
+  slug: Slug;
+  role: string;
+  groups: Array<string>;
+  order: number;
+  featured?: boolean;
+  photo?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt: string;
+    _type: "image";
+  };
+  coverPhoto?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+  shortBio?: string;
+  quote?: string;
+  bio?: BlockContent;
 };
 
 export type PumpPrices = {
@@ -402,11 +539,19 @@ export type Geopoint = {
 
 export type AllSanitySchemaTypes =
   | SanityImageAssetReference
-  | TeamMember
+  | GalleryEvent
   | BlockContent
   | SanityImageCrop
   | SanityImageHotspot
   | Slug
+  | StationTerritoryReference
+  | Station
+  | StationTerritory
+  | FuelProduct
+  | LubricantCategoryReference
+  | LubricantProduct
+  | LubricantCategory
+  | TeamMember
   | PumpPrices
   | LegalDocumentReference
   | LegalDocument
@@ -425,6 +570,61 @@ export type AllSanitySchemaTypes =
   | SanityAssetSourceData
   | SanityImageAsset
   | Geopoint;
+
+// Source: ../../packages/cms/src/queries/fuel.ts
+// Variable: fuelProductsQuery
+// Query: *[_type == "fuelProduct"] | order(order asc) {    _id,    name,    "slug": slug.current,    eyebrow,    heading,    highlight,    body,    image  }
+export type FuelProductsQueryResult = Array<{
+  _id: string;
+  name: string;
+  slug: string;
+  eyebrow: string;
+  heading: string;
+  highlight: string;
+  body: Array<string>;
+  image: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt: string;
+    _type: "image";
+  };
+}>;
+
+// Source: ../../packages/cms/src/queries/gallery.ts
+// Variable: galleryEventsQuery
+// Query: *[_type == "galleryEvent"] | order(order asc) {    _id,    title,    "slug": slug.current,    kind,    stream,    eventDate,    coverImage,    photos,    excerpt,    body,    caption,    muxPlaybackId,    posterTime  }
+export type GalleryEventsQueryResult = Array<{
+  _id: string;
+  title: string;
+  slug: string;
+  kind: "photos" | "story" | "video";
+  stream: "community" | "event";
+  eventDate: string | null;
+  coverImage: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  } | null;
+  photos: Array<{
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt: string;
+    _type: "image";
+    _key: string;
+  }> | null;
+  excerpt: string | null;
+  body: BlockContent | null;
+  caption: string | null;
+  muxPlaybackId: string | null;
+  posterTime: number | null;
+}>;
 
 // Source: ../../packages/cms/src/queries/legal.ts
 // Variable: legalCurrentByKindQuery
@@ -467,6 +667,43 @@ export type LegalKindVersionsQueryResult = Array<{
   version: string;
   effectiveAt: string;
   approvalState: "approved" | "draft" | "legal-review" | "superseded";
+}>;
+
+// Source: ../../packages/cms/src/queries/lubricants.ts
+// Variable: lubricantCategoriesQuery
+// Query: *[_type == "lubricantCategory"] | order(order asc) {    _id,    title,    "slug": slug.current,    description  }
+export type LubricantCategoriesQueryResult = Array<{
+  _id: string;
+  title: string;
+  slug: string;
+  description: string | null;
+}>;
+
+// Source: ../../packages/cms/src/queries/lubricants.ts
+// Variable: lubricantProductsQuery
+// Query: *[_type == "lubricantProduct"] | order(order asc) {    _id,    name,    "slug": slug.current,    grade,    standard,    applications,    drainInterval,    benefits,    image,    featuredOnHome,    "category": category->{ title, "slug": slug.current }  }
+export type LubricantProductsQueryResult = Array<{
+  _id: string;
+  name: string;
+  slug: string;
+  grade: string;
+  standard: string;
+  applications: string;
+  drainInterval: string | null;
+  benefits: Array<string>;
+  image: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  } | null;
+  featuredOnHome: boolean | null;
+  category: {
+    title: string;
+    slug: string;
+  };
 }>;
 
 // Source: ../../packages/cms/src/queries/pages.ts
@@ -679,6 +916,31 @@ export type PumpPricesQueryResult = {
   }>;
 } | null;
 
+// Source: ../../packages/cms/src/queries/stations.ts
+// Variable: stationTerritoriesQuery
+// Query: *[_type == "stationTerritory"] | order(order asc) {    _id,    name,    "slug": slug.current  }
+export type StationTerritoriesQueryResult = Array<{
+  _id: string;
+  name: string;
+  slug: string;
+}>;
+
+// Source: ../../packages/cms/src/queries/stations.ts
+// Variable: stationsQuery
+// Query: *[_type == "station"] | order(order asc) {    _id,    name,    "slug": slug.current,    manager,    phones,    amenities,    "territory": territory->{ name, "slug": slug.current }  }
+export type StationsQueryResult = Array<{
+  _id: string;
+  name: string;
+  slug: string;
+  manager: string;
+  phones: Array<string>;
+  amenities: Array<string> | null;
+  territory: {
+    name: string;
+    slug: string;
+  };
+}>;
+
 // Source: ../../packages/cms/src/queries/team.ts
 // Variable: teamMembersByGroupQuery
 // Query: *[_type == "teamMember" && $group in groups] | order(order asc) {    _id,    name,    "slug": slug.current,    role,    groups,    photo,    shortBio,    quote,    featured  }
@@ -741,9 +1003,13 @@ export type TeamMemberSlugsQueryResult = Array<string>;
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
+    '\n  *[_type == "fuelProduct"] | order(order asc) {\n    _id,\n    name,\n    "slug": slug.current,\n    eyebrow,\n    heading,\n    highlight,\n    body,\n    image\n  }\n': FuelProductsQueryResult;
+    '\n  *[_type == "galleryEvent"] | order(order asc) {\n    _id,\n    title,\n    "slug": slug.current,\n    kind,\n    stream,\n    eventDate,\n    coverImage,\n    photos,\n    excerpt,\n    body,\n    caption,\n    muxPlaybackId,\n    posterTime\n  }\n': GalleryEventsQueryResult;
     '\n  *[\n    _type == "legalDocument" &&\n    documentKind == $kind &&\n    approvalState == "approved" &&\n    effectiveAt <= now()\n  ] | order(effectiveAt desc)[0] {\n    _id,\n    documentKind,\n    title,\n    version,\n    "slug": slug.current,\n    effectiveAt,\n    publishedAt,\n    body,\n    jurisdiction,\n    seo\n  }\n': LegalCurrentByKindQueryResult;
     '\n  *[\n    _type == "legalDocument" &&\n    documentKind == $kind &&\n    version == $version\n  ][0] {\n    _id,\n    documentKind,\n    title,\n    version,\n    "slug": slug.current,\n    effectiveAt,\n    publishedAt,\n    approvalState,\n    body,\n    jurisdiction,\n    seo\n  }\n': LegalByKindAndVersionQueryResult;
     '\n  *[_type == "legalDocument" && documentKind == $kind && approvalState in ["approved", "superseded"]]\n    | order(effectiveAt desc) {\n    documentKind,\n    version,\n    effectiveAt,\n    approvalState\n  }\n': LegalKindVersionsQueryResult;
+    '\n  *[_type == "lubricantCategory"] | order(order asc) {\n    _id,\n    title,\n    "slug": slug.current,\n    description\n  }\n': LubricantCategoriesQueryResult;
+    '\n  *[_type == "lubricantProduct"] | order(order asc) {\n    _id,\n    name,\n    "slug": slug.current,\n    grade,\n    standard,\n    applications,\n    drainInterval,\n    benefits,\n    image,\n    featuredOnHome,\n    "category": category->{ title, "slug": slug.current }\n  }\n': LubricantProductsQueryResult;
     '\n  *[_type == "page" && slug.current == $slug][0] {\n    _id,\n    title,\n    "slug": slug.current,\n    sections,\n    seo\n  }\n': PageBySlugQueryResult;
     '\n  *[_type == "page" && defined(slug.current)]{ "slug": slug.current }\n': PageSlugsQueryResult;
     '\n  *[_type == "post" && defined(slug.current) && publishedAt <= now()] | order(publishedAt desc) [$start...$end] {\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    publishedAt,\n    updatedAt,\n    coverImage,\n    featuredRank,\n    "author": author->{ name, "slug": slug.current, avatar },\n    "category": category->{ title, "slug": slug.current }\n  }\n': PostListQueryResult;
@@ -752,6 +1018,8 @@ declare module "@sanity/client" {
     '\n  *[_type == "post" && defined(slug.current) && publishedAt <= now() && slug.current == $slug][0] {\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    publishedAt,\n    updatedAt,\n    coverImage,\n    body,\n    "author": author->{ name, "slug": slug.current, avatar, bio, links },\n    "category": category->{ title, "slug": slug.current },\n    seo\n  }\n': PostBySlugQueryResult;
     '\n  *[_type == "post" && defined(slug.current) && publishedAt <= now()]{ "slug": slug.current }\n': PostSlugsQueryResult;
     '\n  *[_type == "pumpPrices"][0] {\n    _id,\n    _updatedAt,\n    prices[] { fuel, price }\n  }\n': PumpPricesQueryResult;
+    '\n  *[_type == "stationTerritory"] | order(order asc) {\n    _id,\n    name,\n    "slug": slug.current\n  }\n': StationTerritoriesQueryResult;
+    '\n  *[_type == "station"] | order(order asc) {\n    _id,\n    name,\n    "slug": slug.current,\n    manager,\n    phones,\n    amenities,\n    "territory": territory->{ name, "slug": slug.current }\n  }\n': StationsQueryResult;
     '\n  *[_type == "teamMember" && $group in groups] | order(order asc) {\n    _id,\n    name,\n    "slug": slug.current,\n    role,\n    groups,\n    photo,\n    shortBio,\n    quote,\n    featured\n  }\n': TeamMembersByGroupQueryResult;
     '\n  *[_type == "teamMember" && slug.current == $slug][0] {\n    _id,\n    name,\n    "slug": slug.current,\n    role,\n    groups,\n    photo,\n    coverPhoto,\n    shortBio,\n    quote,\n    featured,\n    bio\n  }\n': TeamMemberBySlugQueryResult;
     '\n  *[_type == "teamMember" && defined(slug.current)].slug.current\n': TeamMemberSlugsQueryResult;

@@ -9,18 +9,18 @@ import { cn } from "@workspace/ui/lib/utils";
 /**
  * Floating "chat with us" button, tawk.to style.
  *
- * Not a chat widget — it routes to /contact, where the real message form
+ * Not a chat widget — it routes to /contact-us, where the real message form
  * lives. Client-only because it reads the pathname to hide itself on the
- * contact page (and its sub-routes), where pointing at /contact is noise.
+ * contact page (and its sub-routes), where pointing at /contact-us is noise.
  */
 function ContactFab() {
   const pathname = usePathname();
 
-  if (pathname === "/contact" || pathname.startsWith("/contact/")) return null;
+  if (pathname === "/contact-us" || pathname.startsWith("/contact-us/")) return null;
 
   return (
     <Link
-      href="/contact"
+      href="/contact-us"
       aria-label="Contact us"
       className={cn(
         // `p-4` around a 24px icon gives a 56px circle at rest.

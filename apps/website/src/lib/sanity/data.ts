@@ -2,9 +2,13 @@ import "server-only";
 
 import {
   featuredPostsQuery,
+  fuelProductsQuery,
+  galleryEventsQuery,
   legalByKindAndVersionQuery,
   legalCurrentByKindQuery,
   legalKindVersionsQuery,
+  lubricantCategoriesQuery,
+  lubricantProductsQuery,
   pageBySlugQuery,
   pageSlugsQuery,
   postBySlugQuery,
@@ -12,15 +16,21 @@ import {
   postCountQuery,
   postListQuery,
   postSlugsQuery,
+  stationTerritoriesQuery,
+  stationsQuery,
   teamMemberBySlugQuery,
   teamMemberSlugsQuery,
   teamMembersByGroupQuery,
 } from "@workspace/cms/queries";
 import type {
   FeaturedPostsQueryResult,
+  FuelProductsQueryResult,
+  GalleryEventsQueryResult,
   LegalByKindAndVersionQueryResult,
   LegalCurrentByKindQueryResult,
   LegalKindVersionsQueryResult,
+  LubricantCategoriesQueryResult,
+  LubricantProductsQueryResult,
   PageBySlugQueryResult,
   PageSlugsQueryResult,
   PostBySlugQueryResult,
@@ -28,6 +38,8 @@ import type {
   PostListQueryResult,
   PostSlugsQueryResult,
   PumpPricesQueryResult,
+  StationTerritoriesQueryResult,
+  StationsQueryResult,
   TeamMemberBySlugQueryResult,
   TeamMemberSlugsQueryResult,
   TeamMembersByGroupQueryResult,
@@ -37,8 +49,14 @@ import {
   toBlogFull,
   toBlogSummary,
   toCompanyPage,
+  toFuelProduct,
+  toGalleryEvent,
   toLegalView,
+  toLubricantCategory,
+  toLubricantProduct,
   toPumpPriceBoard,
+  toStation,
+  toStationTerritory,
   toTeamMemberFull,
   toTeamMemberSummary,
 } from "@workspace/content/mappers";
@@ -80,7 +98,7 @@ export async function getFeaturedPosts() {
 }
 
 /**
- * Full post list for the /news listing, which filters/paginates client-side.
+ * Full post list for the /blog listing, which filters/paginates client-side.
  * Capped defensively; revisit server-side pagination well before 200 posts.
  */
 export async function getAllPosts() {
@@ -201,4 +219,63 @@ export async function getTeamMemberSlugs(): Promise<string[]> {
   return (result ?? []).filter(
     (s): s is string => typeof s === "string" && s.length > 0,
   );
+}
+
+// --- Lubricants ---
+// Live reads, for the same reason as the team pages: with no revalidation
+// webhook, a corrected viscosity grade or a new pack shot has to be visible on
+// the next request. One page reading two small document sets — the per-view
+// cost is negligible.
+export async function getLubricantCategories() {
+  const result = await sanityFetchLive<LubricantCategoriesQueryResult>({
+    query: lubricantCategoriesQuery,
+  });
+  return (result ?? []).map(toLubricantCategory);
+}
+
+export async function getLubricantProducts() {
+  const result = await sanityFetchLive<LubricantProductsQueryResult>({
+    query: lubricantProductsQuery,
+  });
+  return (result ?? []).map(toLubricantProduct);
+}
+
+// --- Stations ---
+// Live, like the other product surfaces. A station changing hands or a manager's
+// number changing is exactly the kind of edit that must not wait on a cache.
+export async function getStationTerritories() {
+  const result = await sanityFetchLive<StationTerritoriesQueryResult>({
+    query: stationTerritoriesQuery,
+  });
+  return (result ?? []).map(toStationTerritory);
+}
+
+export async function getStations() {
+  const result = await sanityFetchLive<StationsQueryResult>({
+    query: stationsQuery,
+  });
+  return (result ?? []).map(toStation);
+}
+
+// --- Fuel ---
+// Live, like the rest. The fuel page pairs these sections with `getPumpPrices`,
+// which is already live — a cached read here would leave the two halves of the
+// page disagreeing about how fresh they are.
+export async function getFuelProducts() {
+  const result = await sanityFetchLive<FuelProductsQueryResult>({
+    query: fuelProductsQuery,
+  });
+  return (result ?? []).map(toFuelProduct);
+}
+
+// --- Gallery events ---
+// Live, like every other content surface here. Photography for an event
+// routinely lands days after the event record does, and with no revalidation
+// webhook a cached read would leave a freshly uploaded reel invisible until its
+// TTL expired. One page, one read of a dozen-odd documents.
+export async function getGalleryEvents() {
+  const result = await sanityFetchLive<GalleryEventsQueryResult>({
+    query: galleryEventsQuery,
+  });
+  return (result ?? []).map(toGalleryEvent);
 }

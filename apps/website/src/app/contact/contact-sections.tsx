@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import {
   RiArrowRightUpLine,
@@ -14,6 +13,7 @@ import {
 import { Button } from "@workspace/ui/components/button";
 import { SectionHeading } from "@workspace/ui/components/marketing";
 import { MosaicPageHeader } from "../mosaic-page-header";
+import { MosaicCtaBand } from "../mosaic-cta-band";
 import { ServiceCard } from "@workspace/ui/components/service-card";
 import { StationIcon } from "@workspace/ui/components/station-icon";
 
@@ -68,7 +68,6 @@ function ContactPageHeader() {
         <SiteBreadcrumbs
           items={[
             { label: "Home", href: "/" },
-            { label: "Company" },
             { label: "Contact Us" },
           ]}
         />
@@ -220,34 +219,24 @@ function EnquiriesGrid() {
 
 function StationCta() {
   return (
-    <section className="relative isolate overflow-hidden py-[var(--section-y)]">
-      <Image
-        src="/images/home/pipes-blue-sky.webp"
-        alt="PETROSOL fuel infrastructure beneath a blue sky"
-        fill
-        sizes="100vw"
-        className="-z-20 object-cover"
-      />
-      <div className="absolute inset-0 -z-10 bg-navy-900/72" />
-      <div className="mx-auto flex max-w-[860px] flex-col items-center gap-8 px-[var(--container-pad)]">
-        <SectionHeading
-          eyebrow="Visit us"
-          tone="light"
-          align="center"
-          highlight="near you"
-        >
-          Find a PETROSOL station
-        </SectionHeading>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Button asChild>
-            <Link href="/stations">Find a station</Link>
-          </Button>
-          <Button asChild variant="outlineInverse">
-            <Link href="/about">About PETROSOL</Link>
-          </Button>
-        </div>
+    <MosaicCtaBand>
+      <SectionHeading
+        eyebrow="Visit us"
+        tone="light"
+        align="center"
+        highlight="near you"
+      >
+        Find a PETROSOL station
+      </SectionHeading>
+      <div className="flex flex-wrap justify-center gap-4">
+        <Button asChild>
+          <Link href="/find-a-station">Find a station</Link>
+        </Button>
+        <Button asChild variant="outlineInverse">
+          <Link href="/who-we-are">Who we are</Link>
+        </Button>
       </div>
-    </section>
+    </MosaicCtaBand>
   );
 }
 
