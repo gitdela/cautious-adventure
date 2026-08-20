@@ -9,7 +9,8 @@ import {
   SectionHeading,
   Stat,
 } from "@workspace/ui/components/marketing";
-import { PageHeader } from "@workspace/ui/components/page-header";
+import { MosaicPageHeader } from "../mosaic-page-header";
+import { MosaicCtaBand } from "../mosaic-cta-band";
 import {
   StationChip,
   type StationIconName,
@@ -71,23 +72,14 @@ const steps = [
 
 function DeliveryPageHeader() {
   return (
-    <PageHeader
-      title="Fuel Delivery Service"
-      background={
-        <Image
-          src="/images/home/pipes-blue-sky.png"
-          alt="Fuel pipelines against a blue sky"
-          fill
-          priority
-          sizes="100vw"
-        />
-      }
+    <MosaicPageHeader
+      title="Fuel Delivery"
       breadcrumbs={
         <SiteBreadcrumbs
           items={[
             { label: "Home", href: "/" },
-            { label: "Services" },
-            { label: "Fuel Delivery Service" },
+            { label: "Products & Services" },
+            { label: "Fuel Delivery" },
           ]}
         />
       }
@@ -148,7 +140,7 @@ function DeliverySplit() {
         </div>
         <div className="mt-8">
           <Button asChild>
-            <Link href="/contact">Request a delivery</Link>
+            <Link href="/contact-us">Request a delivery</Link>
           </Button>
         </div>
       </div>
@@ -217,34 +209,24 @@ function DeliverySteps() {
 
 function DeliveryCta() {
   return (
-    <section className="relative isolate overflow-hidden py-[var(--section-y)]">
-      <Image
-        src="/images/home/refinery-tanks.png"
-        alt="Petroleum storage tanks"
-        fill
-        sizes="100vw"
-        className="-z-20 object-cover"
-      />
-      <div className="absolute inset-0 -z-10 bg-navy-900/72" />
-      <div className="mx-auto flex max-w-[860px] flex-col items-center gap-8 px-[var(--container-pad)]">
-        <SectionHeading
-          tone="light"
-          align="center"
-          eyebrow="Ready when you are"
-          highlight="delivered in full"
-        >
-          Quality fuel,
-        </SectionHeading>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Button asChild>
-            <Link href="/contact">Request a delivery</Link>
-          </Button>
-          <Button asChild variant="outlineInverse">
-            <Link href="/fuel">Explore our fuels</Link>
-          </Button>
-        </div>
+    <MosaicCtaBand>
+      <SectionHeading
+        tone="light"
+        align="center"
+        eyebrow="Ready when you are"
+        highlight="delivered in full"
+      >
+        Quality fuel,
+      </SectionHeading>
+      <div className="flex flex-wrap justify-center gap-4">
+        <Button asChild>
+          <Link href="/contact-us">Request a delivery</Link>
+        </Button>
+        <Button asChild variant="outlineInverse">
+          <Link href="/fuels">Explore our fuels</Link>
+        </Button>
       </div>
-    </section>
+    </MosaicCtaBand>
   );
 }
 

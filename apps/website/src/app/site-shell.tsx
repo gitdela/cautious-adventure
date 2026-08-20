@@ -9,6 +9,8 @@ import {
   type SiteSocialItem,
 } from "@workspace/ui/components/site-chrome";
 
+import { ContactFab } from "./contact-fab";
+import { HeaderTone, SiteBrandAuto } from "./header-tone";
 import { SiteBrand } from "./site-brand";
 import { SiteDesktopNav } from "./site-desktop-nav";
 import { SiteMobileNav } from "./site-mobile-nav";
@@ -48,25 +50,28 @@ const socials: SiteSocialItem[] = socialLinks.map((social) => ({
 
 export function SiteShell({ children }: { children: ReactNode }) {
   return (
-    <div className="flex min-h-full flex-1 flex-col bg-background">
-      <SiteHeader
-        brand={<SiteBrand />}
-        items={navigationItems}
-        socials={socials}
-        renderLink={renderSiteLink}
-        desktopNav={<SiteDesktopNav items={navigationItems} />}
-        mobileNav={<SiteMobileNav items={navigationItems} />}
-        action={
-          <Button asChild size="sm" variant="station">
-            <Link href="/stations">Find Our Station</Link>
-          </Button>
-        }
-      />
+    // `relative` anchors the header when it goes absolute in overlay tone.
+    <div className="relative flex min-h-full flex-1 flex-col bg-background">
+      <HeaderTone>
+        <SiteHeader
+          brand={<SiteBrandAuto />}
+          items={navigationItems}
+          socials={socials}
+          renderLink={renderSiteLink}
+          desktopNav={<SiteDesktopNav items={navigationItems} />}
+          mobileNav={<SiteMobileNav items={navigationItems} />}
+          action={
+            <Button asChild size="sm" variant="station">
+              <Link href="/find-a-station">Find a Station</Link>
+            </Button>
+          }
+        />
+      </HeaderTone>
 
       <div className="flex-1">{children}</div>
 
       <SiteFooter
-        brand={<SiteBrand inverse size="footer" />}
+        brand={<SiteBrand tone="inverse" size="footer" />}
         summary="Quality fuel in full quantity, lubricants and vehicle care — at PETROSOL stations across Ghana."
         contact={
           <>
@@ -77,12 +82,22 @@ export function SiteShell({ children }: { children: ReactNode }) {
         groups={footerGroups}
         renderLink={renderSiteLink}
         legal={
-          <span>
-            © {new Date().getFullYear()} PETROSOL Ghana PLC. All rights reserved.
+          <span className="inline-flex flex-wrap items-center gap-x-4 gap-y-1">
+            <span>
+              © {new Date().getFullYear()} PETROSOL PLATINUM ENERGY PLC. All rights reserved.
+            </span>
+            <Link href="/privacy" className="transition-colors hover:text-white">
+              Privacy
+            </Link>
+            <Link href="/terms" className="transition-colors hover:text-white">
+              Terms
+            </Link>
           </span>
         }
         tagline="energizing dreams!"
       />
+
+      <ContactFab />
     </div>
   );
 }

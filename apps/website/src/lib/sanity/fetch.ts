@@ -2,6 +2,7 @@ import "server-only";
 
 import { unstable_cache } from "next/cache";
 import { draftMode } from "next/headers";
+import { connection } from "next/server";
 
 import { getPublishedClient } from "@workspace/cms/browser";
 import { getDraftClient } from "@workspace/cms/server";
@@ -26,7 +27,9 @@ export type SanityFetchOptions = {
   revalidate?: number;
 };
 
-const DEFAULT_REVALIDATE = 3600;
+// In dev the Sanity webhook can't reach localhost to revalidate tags, so fall
+// back to a short TTL; production freshness comes from the webhook.
+const DEFAULT_REVALIDATE = process.env.NODE_ENV === "development" ? 10 : 3600;
 
 function fetchPublishedCached<T>(
   query: string,
@@ -68,6 +71,33 @@ export async function sanityFetch<T>({
   }
 
   return fetchPublishedCached(query, params, tags, revalidate);
+}
+
+/**
+ * Uncached per-request fetch for content that must always be current (pump
+ * prices). Forces the route dynamic via `connection()` and reads Sanity's live
+ * API rather than the CDN, so a publish is visible on the very next request —
+ * no webhook or TTL involved. Use sparingly: every page view hits Sanity.
+ */
+export async function sanityFetchLive<T>({
+  query,
+  params = {},
+}: Pick<SanityFetchOptions, "query" | "params">): Promise<T> {
+  ensureSanityConfigured();
+
+  const { isEnabled: isDraft } = await draftMode();
+  if (isDraft) {
+    const token = process.env.SANITY_API_READ_TOKEN;
+    if (!token) {
+      throw new Error(
+        "[website] Draft Mode is enabled but SANITY_API_READ_TOKEN is not set.",
+      );
+    }
+    return getDraftClient({ token }).fetch<T>(query, params);
+  }
+
+  await connection();
+  return getPublishedClient().withConfig({ useCdn: false }).fetch<T>(query, params);
 }
 
 /** Published-only cached fetch — safe in build-time / no-request contexts. */

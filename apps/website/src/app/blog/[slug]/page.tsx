@@ -6,24 +6,11 @@ import { BlogPostView, pickRelated } from "@workspace/content";
 
 import { contentAdapters } from "@/lib/content-adapters";
 import { JsonLd } from "@/lib/json-ld";
-import { getBlogPost, getBlogPosts, getBlogSlugs } from "@/lib/sanity/data";
+import { getBlogPost, getBlogPosts } from "@/lib/sanity/data";
+
+import { ArticleProgress } from "../../news/[slug]/article-islands";
 
 type Props = { params: Promise<{ slug: string }> };
-
-// Generate the known posts at build; long-tail posts render on first request.
-export const dynamicParams = true;
-
-export async function generateStaticParams() {
-  try {
-    const slugs = await getBlogSlugs();
-    return slugs.map((slug) => ({ slug }));
-  } catch {
-    // Tolerate an unreachable/unconfigured CMS at build time — every post then
-    // renders on first request via dynamicParams instead of failing the build.
-    console.warn("[website] generateStaticParams: CMS unreachable, skipping prerender");
-    return [];
-  }
-}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -31,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!post) return {};
 
   return {
-    title: post.title,
+    title: { absolute: `${post.title} — PETROSOL` },
     description: post.excerpt,
     alternates: { canonical: `/blog/${post.slug}` },
     openGraph: {
@@ -50,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function BlogPostRoute({ params }: Props) {
+export default async function BlogArticlePage({ params }: Props) {
   const { slug } = await params;
   const post = await getBlogPost(slug);
   if (!post) notFound();
@@ -68,7 +55,7 @@ export default async function BlogPostRoute({ params }: Props) {
     datePublished: post.publishedAt,
     dateModified: post.updatedAt ?? post.publishedAt,
     mainEntityOfPage: shareUrl,
-    publisher: { "@type": "Organization", name: "Petrosol", url: base },
+    publisher: { "@type": "Organization", name: "PETROSOL", url: base },
     ...(post.author?.name
       ? { author: { "@type": "Person", name: post.author.name } }
       : {}),
@@ -76,6 +63,7 @@ export default async function BlogPostRoute({ params }: Props) {
 
   return (
     <main>
+      <ArticleProgress />
       <JsonLd data={jsonLd} />
       <BlogPostView
         post={post}
@@ -83,6 +71,7 @@ export default async function BlogPostRoute({ params }: Props) {
         adapters={contentAdapters}
         blogHref="/blog"
         basePath="/blog"
+        listLabel="Blog"
         shareUrl={shareUrl}
       />
     </main>

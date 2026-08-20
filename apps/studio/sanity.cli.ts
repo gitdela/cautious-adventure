@@ -13,4 +13,8 @@ export default defineCliConfig({
     projectId: resolveSanityProjectId(process.env),
     dataset: resolveSanityDataset(process.env),
   },
+  studioHost: 'petrosol',
+  deployment: {
+    appId: 'qmoa0p3mhg3wgc398ntogcsf',
+  },
 })

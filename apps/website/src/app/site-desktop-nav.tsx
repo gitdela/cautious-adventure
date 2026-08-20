@@ -7,8 +7,10 @@ import { RiArrowDownSLine } from "@remixicon/react";
 import type { SiteNavItem } from "@workspace/ui/components/site-chrome";
 import { cn } from "@workspace/ui/lib/utils";
 
+// Overlay tone is set by `HeaderTone` when the chrome floats over the hero
+// video. The dropdown panel stays a light card, so only triggers flip.
 const topLinkClassName =
-  "inline-flex items-center gap-1 whitespace-nowrap font-display text-[clamp(13px,1.15vw,15px)] font-bold tracking-[-0.01em] text-navy-900 transition-colors hover:text-brand";
+  "inline-flex items-center gap-1 whitespace-nowrap font-display text-[clamp(13px,1.15vw,15px)] font-bold tracking-[-0.01em] text-navy-900 transition-colors hover:text-brand group-data-[tone=overlay]/tone:text-white group-data-[tone=overlay]/tone:hover:text-brand";
 const dropLinkClassName =
   "block rounded-[10px] px-3.5 py-[11px] text-sm font-bold whitespace-nowrap text-navy-900 transition-colors hover:bg-card hover:text-brand";
 

@@ -1,25 +1,16 @@
-import Image from "next/image";
 import Link from "next/link";
 
+import { ContentEmpty, type TeamMemberSummary } from "@workspace/content";
 import { Button } from "@workspace/ui/components/button";
 import { SectionHeading, Stat } from "@workspace/ui/components/marketing";
-import { PageHeader } from "@workspace/ui/components/page-header";
-import { PersonCard } from "@workspace/ui/components/person-card";
+import { MosaicPageHeader } from "../mosaic-page-header";
+import { MosaicCtaBand } from "../mosaic-cta-band";
 
 import { SiteBreadcrumbs } from "../site-breadcrumbs";
+import { TeamCard, splitNameForHeadline } from "../team-card";
 
-const leadershipTeam = [
-  ["Joseph Yaribil", "Head, Compliance and Supply Chain"],
-  [
-    "Philip Boamah Assampong",
-    "Head, Marketing & Ag. Commercial Business Manager",
-  ],
-  ["Rita Afful", "Human Resources Manager"],
-  ["Michael Affum Oseikoh", "Head, Finance and Planning"],
-  ["Oko Kwei Odai", "Head, Projects, Technology and Maintenance"],
-  ["Isaac Debezor", "Head, Risk and Internal Audit"],
-];
-
+// People come from Sanity. These principles are page copy, not records, so
+// they stay here.
 const leadershipPrinciples = [
   ["Integrity", "Honest, transparent and accountable in all our operations."],
   ["Professionalism", "Upholding industry best practice in everything we do."],
@@ -29,23 +20,14 @@ const leadershipPrinciples = [
 
 function LeadershipPageHeader() {
   return (
-    <PageHeader
-      title="Leadership"
-      background={
-        <Image
-          src="/images/home/surveyor-hivis.png"
-          alt="Petrosol professional reviewing field operations"
-          fill
-          priority
-          sizes="100vw"
-        />
-      }
+    <MosaicPageHeader
+      title="Leadership Team"
       breadcrumbs={
         <SiteBreadcrumbs
           items={[
             { label: "Home", href: "/" },
-            { label: "Company" },
-            { label: "Leadership" },
+            { label: "About" },
+            { label: "Leadership Team" },
           ]}
         />
       }
@@ -82,46 +64,39 @@ function LeadershipIntro() {
   );
 }
 
-function CeoFeature() {
+/**
+ * The featured member — the CEO — gets the large block. `shortBio` is the
+ * preview; the full biography lives on their profile page.
+ */
+function CeoFeature({ member }: { member: TeamMemberSummary }) {
+  const { lead, last } = splitNameForHeadline(member.name);
+  // Blank lines separate paragraphs in the preview field.
+  const paragraphs = (member.shortBio ?? "").split(/\n{2,}/).filter(Boolean);
+
   return (
-    <section className="ps-container grid grid-cols-[repeat(auto-fit,minmax(min(100%,400px),1fr))] items-center gap-[clamp(48px,6.25vw,80px)] py-[var(--section-y)]">
-      <PersonCard
-        name="Michael Bozumbil"
-        role="Chief Executive Officer"
-        className="w-full max-w-[400px]"
-      />
+    // The left column hugs the 400px card rather than taking a fractional
+    // share — a wider column would leave dead space between card and text.
+    <section className="ps-container grid grid-cols-1 items-center gap-[clamp(48px,6.25vw,80px)] py-[var(--section-y)] min-[841px]:grid-cols-[minmax(0,400px)_minmax(0,1fr)]">
+      {/* The card is the link to his profile — no separate "read more". */}
+      <TeamCard member={member} className="w-full max-w-[400px]" />
       <div>
-        <SectionHeading eyebrow="Executive leadership" highlight="Bozumbil">
-          Michael
+        <SectionHeading eyebrow="Executive leadership" highlight={last}>
+          {lead}
         </SectionHeading>
         <div className="mt-6 flex max-w-[56ch] flex-col gap-5">
-          <p>
-            Michael Bozumbil serves as the Chief Executive Officer of PETROSOL
-            Platinum Energy PLC, leading the company&apos;s strategic direction and
-            operational excellence across Ghana&apos;s petroleum downstream sector.
-          </p>
-          <p>
-            Under his leadership, PETROSOL has grown to operate over 115 fuel
-            stations nationwide, achieved triple ISO certification, and
-            established itself as one of Ghana&apos;s premier privately-owned Oil
-            Marketing Companies — with a reputation for clean fuel in full
-            quantity and service excellence.
-          </p>
-          <p>
-            His vision of being a model of excellence in the global energy space
-            continues to drive PETROSOL&apos;s expansion and its commitment to
-            energizing the dreams of Ghanaians.
-          </p>
+          {paragraphs.map((paragraph) => (
+            <p key={paragraph.slice(0, 32)}>{paragraph}</p>
+          ))}
         </div>
         <Button asChild variant="outline" className="mt-8">
-          <Link href="/achievements">Our achievements</Link>
+          <Link href="/awards-and-recognition">Awards &amp; recognition</Link>
         </Button>
       </div>
     </section>
   );
 }
 
-function TeamGrid() {
+function TeamGrid({ members }: { members: TeamMemberSummary[] }) {
   return (
     <section className="ps-blueprint rounded-tr-[120px] bg-surface-inverse py-[var(--section-y)]">
       <div className="ps-container">
@@ -132,11 +107,20 @@ function TeamGrid() {
         >
           Meet the full
         </SectionHeading>
-        <div className="mt-14 grid grid-cols-[repeat(auto-fit,minmax(min(100%,264px),1fr))] gap-[var(--gutter)] min-[1100px]:grid-cols-3">
-          {leadershipTeam.map(([name, role]) => (
-            <PersonCard key={name} name={name} role={role} tone="dark" />
-          ))}
-        </div>
+        {members.length > 0 ? (
+          <div className="mt-14 grid grid-cols-[repeat(auto-fit,minmax(min(100%,264px),1fr))] gap-[var(--gutter)] min-[1100px]:grid-cols-3">
+            {members.map((member) => (
+              <TeamCard key={member.id} member={member} tone="dark" />
+            ))}
+          </div>
+        ) : (
+          <div className="mt-14">
+            <ContentEmpty
+              title="No team members yet"
+              description="Leadership profiles will appear here once they are published."
+            />
+          </div>
+        )}
       </div>
     </section>
   );
@@ -168,44 +152,42 @@ function LeadershipPrinciples() {
 
 function CareersCta() {
   return (
-    <section className="relative isolate overflow-hidden py-[var(--section-y)]">
-      <Image
-        src="/images/home/refinery-tanks.png"
-        alt="Petrosol refinery tanks"
-        fill
-        sizes="100vw"
-        className="-z-20 object-cover"
-      />
-      <div className="absolute inset-0 -z-10 bg-navy-900/72" />
-      <div className="mx-auto flex max-w-[860px] flex-col items-center gap-8 px-[var(--container-pad)]">
-        <SectionHeading
-          eyebrow="Join our team"
-          tone="light"
-          align="center"
-          highlight="PETROSOL?"
-        >
-          Interested in a career at
-        </SectionHeading>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Button asChild>
-            <Link href="/#contact">Contact HR</Link>
-          </Button>
-          <Button asChild variant="outlineInverse">
-            <Link href="/about">About PETROSOL</Link>
-          </Button>
-        </div>
+    <MosaicCtaBand>
+      <SectionHeading
+        eyebrow="Join our team"
+        tone="light"
+        align="center"
+        highlight="PETROSOL?"
+      >
+        Interested in a career at
+      </SectionHeading>
+      <div className="flex flex-wrap justify-center gap-4">
+        <Button asChild>
+          <Link href="/contact-us">Contact HR</Link>
+        </Button>
+        <Button asChild variant="outlineInverse">
+          <Link href="/who-we-are">Who we are</Link>
+        </Button>
       </div>
-    </section>
+    </MosaicCtaBand>
   );
 }
 
-function LeadershipSections() {
+function LeadershipSections({ members }: { members: TeamMemberSummary[] }) {
+  // The featured member headlines the page; everyone else fills the grid. If
+  // nobody is flagged, the whole list falls through to the grid rather than
+  // silently dropping someone.
+  const featured = members.find((member) => member.featured);
+  const rest = featured
+    ? members.filter((member) => member.id !== featured.id)
+    : members;
+
   return (
     <main>
       <LeadershipPageHeader />
       <LeadershipIntro />
-      <CeoFeature />
-      <TeamGrid />
+      {featured ? <CeoFeature member={featured} /> : null}
+      <TeamGrid members={rest} />
       <LeadershipPrinciples />
       <CareersCta />
     </main>

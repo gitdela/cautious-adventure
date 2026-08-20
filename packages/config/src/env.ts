@@ -191,3 +191,36 @@ export function resolveSanityConfig(env: EnvSource = {}): SanityConfig {
     apiVersion: resolveSanityApiVersion(env),
   }
 }
+
+// ---------------------------------------------------------------------------
+// Cloudflare Turnstile
+//
+// The *site key* only — it is public and ships in the browser bundle. The
+// matching secret key is server-only and is read straight from process.env in
+// the route handler, never through here (same rule as the Sanity secrets).
+// ---------------------------------------------------------------------------
+
+// Cloudflare's documented "always passes" dummy site key. Used as the dev
+// fallback so the contact form works locally with no Cloudflare account —
+// pair it with the matching dummy secret (1x0000…AA) on the server.
+export const turnstileTestSiteKey = '1x00000000000000000000AA'
+
+export function resolveTurnstileSiteKey(env: EnvSource = {}): string {
+  const value = firstDefined(env, [
+    'NEXT_PUBLIC_TURNSTILE_SITE_KEY',
+    'VITE_TURNSTILE_SITE_KEY',
+    'TURNSTILE_SITE_KEY',
+  ])
+
+  if (value) return value
+
+  if (isProductionEnv(env)) {
+    throw new Error(
+      '[@workspace/config] Missing Cloudflare Turnstile site key in a production build. ' +
+        'Set NEXT_PUBLIC_TURNSTILE_SITE_KEY; production must never fall back to the ' +
+        'always-passes test key, which would leave the contact form unprotected.',
+    )
+  }
+
+  return turnstileTestSiteKey
+}

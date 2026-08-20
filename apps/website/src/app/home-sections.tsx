@@ -1,10 +1,18 @@
 import Image from "next/image";
+import Link from "next/link";
+
+import {
+  formatDate,
+  type BlogPostSummary,
+  type LubricantProductView,
+  type PumpPriceBoardView,
+} from "@workspace/content";
 
 import { Button } from "@workspace/ui/components/button";
 import { Card } from "@workspace/ui/components/card";
+import { ImagePlaceholder } from "@workspace/ui/components/image-placeholder";
 import {
   Eyebrow,
-  LogoStrip,
   PhotoTile,
   Seal,
   SectionHeading,
@@ -15,142 +23,89 @@ import {
   type StationIconName,
 } from "@workspace/ui/components/station-icon";
 
-import { HomeContactForm } from "./home-contact-form";
+import { contentAdapters } from "@/lib/content-adapters";
+
+import { HeroVideo } from "./hero-video";
 import { HomePriceBoard } from "./home-price-board";
+import { HomeProductsSection } from "./home-products-section";
 
 const services: Array<{
   icon: StationIconName;
   title: string;
   description: string;
   image: string;
+  href: string;
   imagePosition?: string;
 }> = [
-  {
-    icon: "pump",
-    title: "Petrol & Diesel",
-    description: "Clean, full-quantity fuel at 115+ stations across Ghana.",
-    image: "/images/home/fuel-pump.webp",
-  },
-  {
-    icon: "fuel-drop",
-    title: "Platinum Lubricants",
-    description: "11 Syntec® formulated lubricants for every engine type.",
-    image: "/images/home/lubricants-range.png",
-  },
-  {
-    icon: "fullcare",
-    title: "FullCare",
-    description: "Complete lube bay servicing at PETROSOL stations.",
-    image: "/images/home/fullcare.webp",
-  },
-  {
-    icon: "tanker",
-    title: "Fuel Delivery",
-    description: "Direct-to-location fuel delivery for homes and businesses.",
-    image: "/images/home/fuel-delivery.webp",
-  },
-  {
-    icon: "jerrycan",
-    title: "Bulk Supply",
-    description: "Corporate & industrial bulk petroleum supply solutions.",
-    image: "/images/home/refinery-tanks.png",
-  },
-  {
-    icon: "shop",
-    title: "Shop",
-    description: "Purchase PETROSOL products online and in-station.",
-    image: "/images/home/shop.webp",
-    imagePosition: "object-cover object-[center_12%]",
-  },
-];
+    {
+      icon: "pump",
+      title: "Petrol & Diesel",
+      description: "Clean, full-quantity fuel at 115+ stations across Ghana.",
+      image: "/images/home/fuel-pump.webp",
+      href: "/fuels",
+    },
+    {
+      icon: "fullcare",
+      title: "FullCare",
+      description: "Complete lube bay servicing at PETROSOL stations.",
+      image: "/images/home/fullcare.webp",
+      href: "/fullcare-vehicle-services",
+    },
+    {
+      icon: "tanker",
+      title: "Fuel Delivery",
+      description: "Direct-to-location fuel delivery for homes and businesses.",
+      image: "/images/home/fuel-delivery.webp",
+      href: "/fuel-delivery",
+    },
+    {
+      icon: "shop",
+      title: "Shop",
+      description: "Purchase PETROSOL products online and in-station.",
+      image: "/images/home/shop.webp",
+      href: "/shops-and-convenience",
+      imagePosition: "object-cover object-[center_12%]",
+    },
+  ];
 
-const news = [
-  {
-    image: "/images/home/pipes-blue-sky.png",
-    date: "July 2026",
-    title: "Petrosol expands its lubricants range with new fully synthetic engine oils",
-  },
-  {
-    image: "/images/home/offshore-rig-ocean.png",
-    date: "June 2026",
-    title: "Fuel delivery service now covers three more regions",
-  },
-  {
-    image: "/images/home/platform-yellow-rails.png",
-    date: "May 2026",
-    title: "Our CSR programme brings science labs to five more schools",
-  },
-];
 
-function HeroSection() {
+function HeroSection({ priceBoard }: { priceBoard: PumpPriceBoardView | null }) {
   return (
-    <section className="ps-blueprint -mt-[118px] bg-muted pt-[calc(118px+clamp(36px,4.4vw,56px))] pb-[clamp(56px,7.5vw,96px)]">
-      <div className="ps-container grid grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))] items-center gap-[clamp(48px,6.25vw,80px)]">
-        <div>
-          <Eyebrow>Efficiency meets reliability</Eyebrow>
-          <h1 className="mt-5 max-w-[12ch] font-display text-[length:var(--size-display-xl)] leading-[1.06] font-bold tracking-[-0.02em] text-navy-900">
-            Your energy solutions provider
-          </h1>
-          <p className="mt-6 max-w-[46ch] text-[15px] leading-[1.62]">
-            Whether you&apos;re looking for high-quality gasoline or innovative
-            solutions to power your home or business, we&apos;ve got you covered.
-          </p>
-          <HomePriceBoard />
-        </div>
+    // `isolate` scopes the negative z-indexes to the band. The header is
+    // absolutely positioned over it, so the top padding has to clear it — and
+    // it measures 78px on the mobile bar against 127px on the desktop tiers.
+    <section className="relative isolate flex min-h-[95svh] flex-col overflow-hidden bg-surface-inverse pt-[calc(78px+32px)] min-[961px]:pt-[calc(127px+40px)]">
+      <div className="absolute inset-0 -z-20">
+        <HeroVideo />
+      </div>
+      {/* The scrim, not the footage, is what guarantees text contrast. The DS
+          gradient runs left-to-right, which only works while the copy occupies
+          the left column — once it goes full width below 961px the right edge
+          is barely tinted, so mobile gets a vertical scrim instead. */}
+      <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(4,18,30,0.78)_0%,rgba(4,18,30,0.58)_45%,rgba(4,18,30,0.84)_100%)] min-[961px]:bg-[linear-gradient(90deg,rgba(4,18,30,0.86)_0%,rgba(4,18,30,0.62)_44%,rgba(4,18,30,0.24)_100%)]" />
 
-        <div className="grid grid-cols-2 items-start gap-[var(--gutter)]">
-          <div className="flex flex-col gap-[var(--gutter)]">
-            <PhotoTile
-              ratio="square"
-              image={
-                <Image
-                  src="/images/home/fuel-delivery.webp"
-                  alt="Petrosol fuel delivery tanker fleet"
-                  fill
-                  priority
-                  sizes="(max-width: 960px) 45vw, 22vw"
-                />
-              }
-            />
-            <PhotoTile
-              ratio="square"
-              image={
-                <Image
-                  src="/images/home/fuel-pump.webp"
-                  alt="Refuelling with Petrosol Super at the pump"
-                  fill
-                  priority
-                  sizes="(max-width: 960px) 45vw, 22vw"
-                />
-              }
-            />
+      <div className="relative flex flex-1 items-center pb-12">
+        <div className="ps-container grid w-full grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))] items-center gap-x-20 gap-y-14 min-[961px]:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
+          <div>
+            {/* <Eyebrow tone="light">Efficiency meets reliability</Eyebrow> */}
+            <h1 className="mt-5 max-w-[14ch] font-display text-[clamp(34px,3.6vw,var(--size-display-xl))] leading-[1.06] font-bold tracking-[-0.02em] text-pretty text-white">
+              Your energy solutions provider
+            </h1>
+            <p className="mt-6 max-w-[46ch] text-[15px] leading-[1.62] text-white/85">
+              Whether you&apos;re looking for high-quality gasoline or innovative
+              solutions to power your home or business, we&apos;ve got you covered.
+            </p>
+            <div className="mt-10 flex flex-wrap gap-4">
+              <Button asChild>
+                <Link href="/contact-us">Contact us</Link>
+              </Button>
+              <Button asChild variant="outlineInverse">
+                <Link href="#services">Discover more</Link>
+              </Button>
+            </div>
           </div>
-          <div className="flex flex-col gap-[var(--gutter)]">
-            <PhotoTile
-              ratio="square"
-              className="mt-12"
-              image={
-                <Image
-                  src="/images/home/fullcare.webp"
-                  alt="FullCare technician servicing an engine"
-                  fill
-                  priority
-                  sizes="(max-width: 960px) 45vw, 22vw"
-                />
-              }
-            />
-            <PhotoTile
-              ratio="square"
-              image={
-                <Image
-                  src="/images/home/fuel-delivery.webp"
-                  alt="Petrosol fuel delivery tanker fleet"
-                  fill
-                  sizes="(max-width: 960px) 45vw, 22vw"
-                />
-              }
-            />
-          </div>
+
+          {priceBoard ? <HomePriceBoard board={priceBoard} /> : null}
         </div>
       </div>
     </section>
@@ -159,13 +114,16 @@ function HeroSection() {
 
 function AboutSection() {
   return (
-    <section className="ps-container grid grid-cols-[repeat(auto-fit,minmax(min(100%,400px),1fr))] items-center gap-[clamp(48px,6.25vw,80px)] pt-10 pb-[var(--section-y)]">
+    // The photo column carries more weight than the copy once they sit side by
+    // side, so it takes the larger share — below 961px they stack and auto-fit
+    // governs again.
+    <section className="ps-container grid grid-cols-[repeat(auto-fit,minmax(min(100%,400px),1fr))] items-center gap-[clamp(48px,6.25vw,80px)] py-[var(--section-y)] min-[961px]:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
       <div>
-        <SectionHeading eyebrow="About us" highlight="values">
-          Learn about our history, mission, and
+        <SectionHeading eyebrow="About us" highlight="Platinum OMC.">
+          Ghana&apos;s Premier
         </SectionHeading>
         <p className="mt-6 max-w-[50ch] leading-[1.62]">
-          At Petrosol, we&apos;re committed to delivering excellence in the oil
+          At PETROSOL, we&apos;re committed to delivering excellence in the oil
           industry. With our state-of-the-art technology and advanced processes,
           we&apos;re able to provide innovative solutions to meet the evolving needs
           of our clients worldwide. We pride ourselves on our commitment to
@@ -173,7 +131,7 @@ function AboutSection() {
           new ways to improve our operations.
         </p>
         <Button asChild variant="outline" className="mt-8">
-          <a href="#services">Discover more</a>
+          <Link href="/who-we-are">Discover more</Link>
         </Button>
       </div>
 
@@ -181,10 +139,10 @@ function AboutSection() {
         <PhotoTile
           image={
             <Image
-              src="/images/home/surveyor-hivis.png"
-              alt="Site surveyor"
+              src="/images/home/petrosol-station-staff.webp"
+              alt="PETROSOL station attendants on the forecourt"
               fill
-              sizes="(max-width: 960px) 45vw, 22vw"
+              sizes="(max-width: 960px) 45vw, 24vw"
             />
           }
         />
@@ -192,10 +150,10 @@ function AboutSection() {
           className="mt-16"
           image={
             <Image
-              src="/images/home/offshore-platform.png"
-              alt="Offshore platform"
+              src="/images/home/fuel-pump.webp"
+              alt="Refuelling at a PETROSOL pump"
               fill
-              sizes="(max-width: 960px) 45vw, 22vw"
+              sizes="(max-width: 960px) 45vw, 24vw"
             />
           }
         />
@@ -207,25 +165,28 @@ function AboutSection() {
 
 function ServicesSection() {
   return (
-    <section id="services" className="ps-blueprint scroll-mt-24 bg-muted py-[var(--section-y)]">
+    <section id="services" className="ps-blueprint scroll-mt-[92px] bg-muted py-[var(--section-y)]">
       <div className="ps-container">
         <SectionHeading
           eyebrow="Our services"
-          highlight="services we offer"
+          highlight="Services We Offer"
           align="center"
         >
-          Discover the range of
+          Discover The Range Of
         </SectionHeading>
-        <div className="mt-16 grid grid-cols-[repeat(auto-fit,minmax(min(100%,264px),1fr))] gap-[var(--gutter)] min-[1100px]:grid-cols-3">
+        {/* All four cards on one row at desktop. The counts are pinned rather
+            than auto-fit so they step 1 → 2 → 4 and never land on three, which
+            would strand the fourth card on a row of its own. */}
+        <div className="mt-16 grid grid-cols-1 gap-[var(--gutter)] min-[720px]:grid-cols-2 min-[1100px]:grid-cols-4">
           {services.map((service) => (
-            <a key={service.title} href="#contact" className="group rounded-xl">
+            <Link key={service.title} href={service.href} className="group rounded-xl">
               <Card className="h-full items-center gap-0 overflow-hidden bg-navy-700 py-0 text-center transition-[transform,box-shadow] duration-400 ease-[cubic-bezier(.16,1,.3,1)] group-hover:-translate-y-[3px] group-hover:shadow-raised">
                 <div className="relative aspect-video w-full overflow-hidden">
                   <Image
                     src={service.image}
                     alt={service.title}
                     fill
-                    sizes="(max-width: 720px) 100vw, (max-width: 1100px) 50vw, 33vw"
+                    sizes="(max-width: 720px) 100vw, (max-width: 1100px) 50vw, 25vw"
                     className={service.imagePosition ?? "object-cover"}
                   />
                 </div>
@@ -245,7 +206,7 @@ function ServicesSection() {
                   </span>
                 </div>
               </Card>
-            </a>
+            </Link>
           ))}
         </div>
       </div>
@@ -258,15 +219,15 @@ function StatBand() {
     <section className="ps-blueprint bg-muted">
       <div className="rounded-tr-[120px] bg-surface-inverse py-[var(--section-y)]">
         <div className="ps-container">
-          <SectionHeading tone="light" highlight="energy industry">
-            To drive innovation and progress in the
+          <SectionHeading tone="light" highlight="Energy Industry">
+            To Drive Innovation And Progress In The
           </SectionHeading>
           <div className="mt-12">
-            <Stat value="10%" divider>
+            <Stat value="10%" divider className="items-center">
               lower prices than competitors. Our company is able to keep the price
               of oil and gas at the affordable level.
             </Stat>
-            <Stat value="20%" divider>
+            <Stat value="20%" divider className="items-center">
               reducing greenhouse gas emissions per year. We&apos;re committed to
               minimizing our environmental impact and promoting social
               responsibility.
@@ -281,42 +242,64 @@ function StatBand() {
 
 function ImageBand() {
   return (
+    // The band is far wider than the source (2.8:1 against 1.45:1), so only
+    // about half the height survives the crop. The canopy and its branding sit
+    // high in this frame, so the window is anchored near the middle: it keeps
+    // the fascia and the pumps while dropping the blank sky above.
     <Image
-      src="/images/home/refinery-wide.png"
-      alt="Engineer inspecting a refinery"
-      width={1400}
-      height={474}
+      src="/images/home/station-canopy-wide.webp"
+      alt="PETROSOL station canopy and pump islands"
+      width={2000}
+      height={1382}
       sizes="100vw"
-      className="h-[clamp(240px,36vw,520px)] w-full object-cover"
+      className="h-[clamp(240px,36vw,520px)] w-full object-cover object-[center_80%]"
     />
   );
 }
 
-function NewsSection() {
+function NewsSection({ posts }: { posts: BlogPostSummary[] }) {
+  if (posts.length === 0) return null;
+
+  const { Image: CmsImage } = contentAdapters;
+
   return (
     <section className="bg-muted py-[var(--section-y-tight)]">
       <div className="ps-container">
-        <SectionHeading eyebrow="Media" highlight="latest news" align="center">
-          Catch up on our
+        <SectionHeading eyebrow="Blog" highlight="Latest Stories" align="center">
+          Catch Up On Our
         </SectionHeading>
         <div className="mt-16 grid grid-cols-[repeat(auto-fit,minmax(min(100%,264px),1fr))] gap-[var(--gutter)] min-[1100px]:grid-cols-3">
-          {news.map((item) => (
-            <article key={item.title}>
-              <PhotoTile
-                ratio="news"
-                image={
-                  <Image
-                    src={item.image}
-                    alt={item.title}
-                    fill
-                    sizes="(max-width: 720px) 100vw, (max-width: 1100px) 50vw, 33vw"
-                  />
-                }
-              />
-              <p className="mt-5 text-[13px] text-muted-foreground">{item.date}</p>
-              <h3 className="mt-2 font-display text-base leading-[1.4] font-bold text-navy-900">
-                {item.title}
-              </h3>
+          {posts.slice(0, 3).map((post) => (
+            <article key={post.slug}>
+              <Link href={`/blog/${post.slug}`} className="group block rounded-xl">
+                <PhotoTile
+                  ratio="og"
+                  image={
+                    post.coverImage ? (
+                      <CmsImage
+                        source={post.coverImage}
+                        alt={post.coverImage.alt ?? post.title}
+                        width={1200}
+                        height={630}
+                        sizes="(max-width: 720px) 100vw, (max-width: 1100px) 50vw, 33vw"
+                      />
+                    ) : (
+                      <ImagePlaceholder
+                        label={`Drop a photo — ${post.title.slice(0, 40)}…`}
+                      />
+                    )
+                  }
+                />
+                <time
+                  dateTime={post.publishedAt}
+                  className="mt-5 block text-[13px] text-muted-foreground"
+                >
+                  {formatDate(post.publishedAt)}
+                </time>
+                <h3 className="mt-2 font-display text-base leading-[1.4] font-bold text-navy-900 transition-colors group-hover:text-brand">
+                  {post.title}
+                </h3>
+              </Link>
             </article>
           ))}
         </div>
@@ -330,57 +313,33 @@ function QuoteBand() {
     <section className="home-quote py-[calc(var(--section-y)*1.5)]">
       <div className="mx-auto max-w-[980px] px-[var(--container-pad)] text-center">
         <h2 className="font-display text-[length:var(--size-display-lg)] leading-[1.08] font-bold tracking-[-0.02em] text-white">
-          We&apos;re proud to be a useful and <span className="swash">valuable partner</span>{" "}
-          to our customers and communities
+          We&apos;re Proud To Be A Useful And <span className="swash">Valuable Partner</span>{" "}
+          To Our Customers And Communities
         </h2>
       </div>
     </section>
   );
 }
 
-const contactChannels = [
-  ["Write to us", "info@petrosol.example"],
-  ["Call us", "(234) 567.890.11 · MON–FRI 9AM–6PM"],
-  ["Visit us", "Head office, Airport West, Accra"],
-];
-
-function ContactSection() {
-  return (
-    <section id="contact" className="ps-blueprint scroll-mt-24 py-[var(--section-y)]">
-      <div className="ps-container grid grid-cols-[repeat(auto-fit,minmax(min(100%,400px),1fr))] items-start gap-[clamp(48px,6.25vw,80px)]">
-        <div>
-          <SectionHeading eyebrow="Contact us" highlight="brighter future">
-            We&apos;re excited to work with you to create a
-          </SectionHeading>
-          <div className="mt-12 flex flex-col gap-8">
-            {contactChannels.map(([title, detail]) => (
-              <div key={title}>
-                <h3 className="font-display text-base font-bold text-navy-900">
-                  {title}
-                </h3>
-                <p className="mt-2 text-[13px] text-muted-foreground">{detail}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-        <HomeContactForm />
-      </div>
-    </section>
-  );
-}
-
-function HomeSections() {
+function HomeSections({
+  priceBoard,
+  featuredPosts,
+  lubricants,
+}: {
+  priceBoard: PumpPriceBoardView | null;
+  featuredPosts: BlogPostSummary[];
+  lubricants: LubricantProductView[];
+}) {
   return (
     <main>
-      <HeroSection />
-      <LogoStrip />
+      <HeroSection priceBoard={priceBoard} />
       <AboutSection />
       <ServicesSection />
       <StatBand />
       <ImageBand />
-      <NewsSection />
+      <HomeProductsSection products={lubricants} />
       <QuoteBand />
-      <ContactSection />
+      <NewsSection posts={featuredPosts} />
     </main>
   );
 }

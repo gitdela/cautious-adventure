@@ -1,22 +1,23 @@
 import Link from "next/link";
 
+import type { BlogPostSummary } from "@workspace/content";
 import { Button } from "@workspace/ui/components/button";
 import { SectionHeading } from "@workspace/ui/components/marketing";
-import { PageHeader } from "@workspace/ui/components/page-header";
+import { MosaicPageHeader } from "../mosaic-page-header";
 
 import { SiteBreadcrumbs } from "../site-breadcrumbs";
 import { NewsListing } from "./news-listing";
 
 function NewsPageHeader() {
   return (
-    <PageHeader
-      title="News"
+    <MosaicPageHeader
+      title="Blog"
       breadcrumbs={
         <SiteBreadcrumbs
           items={[
             { label: "Home", href: "/" },
-            { label: "Media" },
-            { label: "News" },
+            { label: "Blog & Events" },
+            { label: "Blog" },
           ]}
         />
       }
@@ -38,10 +39,10 @@ function NewsCta() {
         </SectionHeading>
         <div className="flex flex-wrap justify-center gap-4">
           <Button asChild>
-            <Link href="/contact">Contact us</Link>
+            <Link href="/contact-us">Contact us</Link>
           </Button>
           <Button asChild variant="outlineInverse">
-            <Link href="/gallery">View the gallery</Link>
+            <Link href="/events">View events</Link>
           </Button>
         </div>
       </div>
@@ -49,11 +50,11 @@ function NewsCta() {
   );
 }
 
-function NewsSections() {
+function NewsSections({ posts }: { posts: BlogPostSummary[] }) {
   return (
     <main>
       <NewsPageHeader />
-      <NewsListing />
+      <NewsListing posts={posts} />
       <NewsCta />
     </main>
   );

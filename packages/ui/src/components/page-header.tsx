@@ -7,12 +7,19 @@ function PageHeader({
   breadcrumbs,
   background,
   className,
+  scrim = true,
   titleAs: TitleTag = "h1",
 }: {
   title: string;
   breadcrumbs: ReactNode;
   background?: ReactNode;
   className?: string;
+  /**
+   * Darkening wash over the background, so white text stays legible on a
+   * photo. Set false for a background that already provides its own contrast —
+   * the wash would only mute its colours.
+   */
+  scrim?: boolean;
   /** Demote the band title when the page's real h1 lives in the content (e.g. article pages). */
   titleAs?: "h1" | "p";
 }) {
@@ -29,7 +36,7 @@ function PageHeader({
           {background}
         </div>
       ) : null}
-      <div className="absolute inset-0 -z-10 bg-navy-900/72" />
+      {scrim ? <div className="absolute inset-0 -z-10 bg-navy-900/72" /> : null}
       <div className="ps-container flex min-h-[180px] flex-col justify-center gap-4 py-12">
         {breadcrumbs}
         <TitleTag

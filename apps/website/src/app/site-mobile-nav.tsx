@@ -2,21 +2,24 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { RiCloseLine, RiMenuLine } from "@remixicon/react";
-
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@workspace/ui/components/accordion";
-import { Button, buttonVariants } from "@workspace/ui/components/button";
+import { buttonVariants } from "@workspace/ui/components/button";
+import { MenuGlyph } from "@workspace/ui/components/menu-glyph";
 import type { SiteNavItem } from "@workspace/ui/components/site-chrome";
 import { cn } from "@workspace/ui/lib/utils";
 
+import { SiteBrandAuto } from "./header-tone";
 import { SiteBrand } from "./site-brand";
 import { socialLinks } from "./site-navigation";
 import { SocialIcon } from "./social-icon";
+
+const menuButtonClassName =
+  "inline-flex size-12 shrink-0 items-center justify-center rounded-full text-brand transition-colors hover:text-brand/80";
 
 function SiteMobileNav({ items }: { items: SiteNavItem[] }) {
   const [open, setOpen] = useState(false);
@@ -42,17 +45,32 @@ function SiteMobileNav({ items }: { items: SiteNavItem[] }) {
 
   return (
     <>
-      <div className="flex items-center justify-between px-[var(--container-pad)] py-3">
-        <SiteBrand size="mobile" />
-        <Button
-          variant="ghost"
-          size="icon"
-          aria-label="Open menu"
-          aria-expanded={open}
-          onClick={() => setOpen(true)}
-        >
-          <RiMenuLine />
-        </Button>
+      <div className="flex items-center justify-between gap-3 px-[var(--container-pad)] py-3">
+        <SiteBrandAuto size="mobile" />
+        <div className="flex items-center gap-2">
+          {/* Once the desktop nav collapses, the station CTA would otherwise be
+              two taps away inside the menu. Tablets have the width to keep it
+              on the bar; phones (≤600px) don't, so they fall back to the menu's
+              full-width copy of it. */}
+          <Link
+            href="/find-a-station"
+            className={cn(
+              buttonVariants({ variant: "station", size: "sm" }),
+              "hidden min-[601px]:inline-flex",
+            )}
+          >
+            Find Our Station
+          </Link>
+          <button
+            type="button"
+            aria-label="Open menu"
+            aria-expanded={open}
+            onClick={() => setOpen(true)}
+            className={menuButtonClassName}
+          >
+            <MenuGlyph className="size-[30px]" />
+          </button>
+        </div>
       </div>
 
       {open ? (
@@ -64,20 +82,21 @@ function SiteMobileNav({ items }: { items: SiteNavItem[] }) {
         >
           <div className="flex shrink-0 items-center justify-between px-[var(--container-pad)] py-3">
             <SiteBrand size="mobile" />
-            <Button
+            <button
               ref={closeRef}
-              variant="ghost"
-              size="icon"
+              type="button"
               aria-label="Close menu"
+              aria-expanded={open}
               onClick={closeMenu}
+              className={menuButtonClassName}
             >
-              <RiCloseLine />
-            </Button>
+              <MenuGlyph open className="size-[30px]" />
+            </button>
           </div>
 
           <nav
             aria-label="Mobile navigation"
-            className="flex min-h-0 flex-1 flex-col overflow-y-auto px-[var(--container-pad)] pt-4 pb-8"
+            className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-[var(--container-pad)] pt-4 pb-8"
           >
             <Accordion type="single" collapsible className="rounded-none border-0">
               {items.map((item) => {
@@ -121,7 +140,7 @@ function SiteMobileNav({ items }: { items: SiteNavItem[] }) {
             </Accordion>
 
             <Link
-              href="/stations"
+              href="/find-a-station"
               onClick={closeMenu}
               className={cn(buttonVariants({ variant: "station" }), "mt-7 w-full")}
             >
@@ -138,7 +157,7 @@ function SiteMobileNav({ items }: { items: SiteNavItem[] }) {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={social.label}
-                    className="inline-grid size-11 place-items-center rounded-full border border-border text-navy-900 transition-colors hover:border-brand hover:bg-brand hover:text-white [&_svg]:size-[18px]"
+                    className="inline-grid size-11 place-items-center rounded-full border border-border text-navy-900 transition-colors hover:border-brand hover:bg-brand hover:text-white [&_svg]:size-5"
                   >
                     <SocialIcon name={social.name} />
                   </a>

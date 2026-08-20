@@ -1,48 +1,82 @@
 import "server-only";
 
 import {
+  featuredPostsQuery,
+  fuelProductsQuery,
+  galleryEventsQuery,
   legalByKindAndVersionQuery,
   legalCurrentByKindQuery,
   legalKindVersionsQuery,
+  lubricantCategoriesQuery,
+  lubricantProductsQuery,
   pageBySlugQuery,
   pageSlugsQuery,
   postBySlugQuery,
+  pumpPricesQuery,
   postCountQuery,
   postListQuery,
   postSlugsQuery,
+  stationTerritoriesQuery,
+  stationsQuery,
+  teamMemberBySlugQuery,
+  teamMemberSlugsQuery,
+  teamMembersByGroupQuery,
 } from "@workspace/cms/queries";
 import type {
+  FeaturedPostsQueryResult,
+  FuelProductsQueryResult,
+  GalleryEventsQueryResult,
   LegalByKindAndVersionQueryResult,
   LegalCurrentByKindQueryResult,
   LegalKindVersionsQueryResult,
+  LubricantCategoriesQueryResult,
+  LubricantProductsQueryResult,
   PageBySlugQueryResult,
   PageSlugsQueryResult,
   PostBySlugQueryResult,
   PostCountQueryResult,
   PostListQueryResult,
   PostSlugsQueryResult,
+  PumpPricesQueryResult,
+  StationTerritoriesQueryResult,
+  StationsQueryResult,
+  TeamMemberBySlugQueryResult,
+  TeamMemberSlugsQueryResult,
+  TeamMembersByGroupQueryResult,
 } from "@workspace/cms/types";
 
 import {
   toBlogFull,
   toBlogSummary,
   toCompanyPage,
+  toFuelProduct,
+  toGalleryEvent,
   toLegalView,
+  toLubricantCategory,
+  toLubricantProduct,
+  toPumpPriceBoard,
+  toStation,
+  toStationTerritory,
+  toTeamMemberFull,
+  toTeamMemberSummary,
 } from "@workspace/content/mappers";
 
-import { sanityFetch, sanityFetchPublished } from "./fetch";
+import { sanityFetch, sanityFetchLive, sanityFetchPublished } from "./fetch";
 import { cacheTags } from "./tags";
 
 export const BLOG_PAGE_SIZE = 12;
 
 // --- Blog ---
+// Post reads are uncached by design (like pump prices): there is no
+// revalidation webhook, so a publish must be visible on the next request.
+// Slug/count reads keep the cached published path — they run in build-time
+// contexts (sitemap) where the live fetch's request scope doesn't exist.
 export async function getBlogPosts(page = 1) {
   const start = Math.max(0, (page - 1) * BLOG_PAGE_SIZE);
   const end = start + BLOG_PAGE_SIZE;
-  const result = await sanityFetch<PostListQueryResult>({
+  const result = await sanityFetchLive<PostListQueryResult>({
     query: postListQuery,
     params: { start, end },
-    tags: [cacheTags.postList(), cacheTags.type("post")],
   });
   return (result ?? []).map(toBlogSummary);
 }
@@ -55,11 +89,30 @@ export async function getBlogPostCount() {
   return count ?? 0;
 }
 
+/** Editor-curated home slots: posts with a featuredRank, best-ranked first. */
+export async function getFeaturedPosts() {
+  const result = await sanityFetchLive<FeaturedPostsQueryResult>({
+    query: featuredPostsQuery,
+  });
+  return (result ?? []).map(toBlogSummary);
+}
+
+/**
+ * Full post list for the /blog listing, which filters/paginates client-side.
+ * Capped defensively; revisit server-side pagination well before 200 posts.
+ */
+export async function getAllPosts() {
+  const result = await sanityFetchLive<PostListQueryResult>({
+    query: postListQuery,
+    params: { start: 0, end: 200 },
+  });
+  return (result ?? []).map(toBlogSummary);
+}
+
 export async function getBlogPost(slug: string) {
-  const result = await sanityFetch<PostBySlugQueryResult>({
+  const result = await sanityFetchLive<PostBySlugQueryResult>({
     query: postBySlugQuery,
     params: { slug },
-    tags: [cacheTags.postSlug(slug), cacheTags.type("post")],
   });
   return result ? toBlogFull(result) : null;
 }
@@ -104,6 +157,16 @@ export async function getLegalVersions(kind: string) {
     .filter((v): v is string => typeof v === "string" && v.length > 0);
 }
 
+// --- Pump prices (home hero board) ---
+// Uncached by design: prices must reflect a Studio publish on the next request,
+// and there is no revalidation webhook to purge a cached entry.
+export async function getPumpPrices() {
+  const result = await sanityFetchLive<PumpPricesQueryResult>({
+    query: pumpPricesQuery,
+  });
+  return result ? toPumpPriceBoard(result) : null;
+}
+
 // --- Company page ---
 export async function getCompanyPage(slug: string) {
   const result = await sanityFetch<PageBySlugQueryResult>({
@@ -122,4 +185,97 @@ export async function getPageSlugs(): Promise<string[]> {
   return (result ?? [])
     .map((r) => r.slug)
     .filter((s): s is string => typeof s === "string" && s.length > 0);
+}
+
+// --- Team (Leadership / Board) ---
+// Live reads, like posts and pump prices: there is no revalidation webhook in
+// this repo, so a cached read would leave a corrected job title invisible until
+// its TTL expired. These are two low-traffic pages, so the per-view cost is
+// cheap in exchange for edits landing on the next request.
+export type TeamGroup = "leadership" | "board";
+
+export async function getTeamMembers(group: TeamGroup) {
+  const result = await sanityFetchLive<TeamMembersByGroupQueryResult>({
+    query: teamMembersByGroupQuery,
+    params: { group },
+  });
+  return (result ?? []).map(toTeamMemberSummary);
+}
+
+export async function getTeamMember(slug: string) {
+  const result = await sanityFetchLive<TeamMemberBySlugQueryResult>({
+    query: teamMemberBySlugQuery,
+    params: { slug },
+  });
+  return result ? toTeamMemberFull(result) : null;
+}
+
+/** For `generateStaticParams` on the profile route. */
+export async function getTeamMemberSlugs(): Promise<string[]> {
+  const result = await sanityFetchPublished<TeamMemberSlugsQueryResult>({
+    query: teamMemberSlugsQuery,
+    tags: [cacheTags.type("teamMember")],
+  });
+  return (result ?? []).filter(
+    (s): s is string => typeof s === "string" && s.length > 0,
+  );
+}
+
+// --- Lubricants ---
+// Live reads, for the same reason as the team pages: with no revalidation
+// webhook, a corrected viscosity grade or a new pack shot has to be visible on
+// the next request. One page reading two small document sets — the per-view
+// cost is negligible.
+export async function getLubricantCategories() {
+  const result = await sanityFetchLive<LubricantCategoriesQueryResult>({
+    query: lubricantCategoriesQuery,
+  });
+  return (result ?? []).map(toLubricantCategory);
+}
+
+export async function getLubricantProducts() {
+  const result = await sanityFetchLive<LubricantProductsQueryResult>({
+    query: lubricantProductsQuery,
+  });
+  return (result ?? []).map(toLubricantProduct);
+}
+
+// --- Stations ---
+// Live, like the other product surfaces. A station changing hands or a manager's
+// number changing is exactly the kind of edit that must not wait on a cache.
+export async function getStationTerritories() {
+  const result = await sanityFetchLive<StationTerritoriesQueryResult>({
+    query: stationTerritoriesQuery,
+  });
+  return (result ?? []).map(toStationTerritory);
+}
+
+export async function getStations() {
+  const result = await sanityFetchLive<StationsQueryResult>({
+    query: stationsQuery,
+  });
+  return (result ?? []).map(toStation);
+}
+
+// --- Fuel ---
+// Live, like the rest. The fuel page pairs these sections with `getPumpPrices`,
+// which is already live — a cached read here would leave the two halves of the
+// page disagreeing about how fresh they are.
+export async function getFuelProducts() {
+  const result = await sanityFetchLive<FuelProductsQueryResult>({
+    query: fuelProductsQuery,
+  });
+  return (result ?? []).map(toFuelProduct);
+}
+
+// --- Gallery events ---
+// Live, like every other content surface here. Photography for an event
+// routinely lands days after the event record does, and with no revalidation
+// webhook a cached read would leave a freshly uploaded reel invisible until its
+// TTL expired. One page, one read of a dozen-odd documents.
+export async function getGalleryEvents() {
+  const result = await sanityFetchLive<GalleryEventsQueryResult>({
+    query: galleryEventsQuery,
+  });
+  return (result ?? []).map(toGalleryEvent);
 }

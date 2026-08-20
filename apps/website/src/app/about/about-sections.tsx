@@ -9,38 +9,29 @@ import {
   SectionHeading,
   Stat,
 } from "@workspace/ui/components/marketing";
-import { PageHeader } from "@workspace/ui/components/page-header";
 import { ServiceCard } from "@workspace/ui/components/service-card";
 
+import { MosaicPageHeader } from "../mosaic-page-header";
+import { MosaicCtaBand } from "../mosaic-cta-band";
 import { SiteBreadcrumbs } from "../site-breadcrumbs";
-
+import { CoreValuesSection } from "./about-core-values";
 import {
   affiliations,
   certifications,
-  pillars,
-  values,
+  operatingCulture,
   visionAndPurpose,
 } from "./about-data";
 
 function AboutPageHeader() {
   return (
-    <PageHeader
-      title="About PETROSOL"
-      background={
-        <Image
-          src="/images/about/hero-inspection.png"
-          alt="Petrosol engineer inspecting fuel infrastructure"
-          fill
-          priority
-          sizes="100vw"
-        />
-      }
+    <MosaicPageHeader
+      title="Who We Are"
       breadcrumbs={
         <SiteBreadcrumbs
           items={[
             { label: "Home", href: "/" },
-            { label: "Company" },
-            { label: "About PETROSOL" },
+            { label: "About" },
+            { label: "Who We Are" },
           ]}
         />
       }
@@ -57,7 +48,9 @@ function CertificationStrip() {
             <p className="font-mono text-[15px] font-semibold tracking-[0.02em] text-navy-900">
               {title}
             </p>
-            <p className="mt-1 text-[13px] text-muted-foreground">{description}</p>
+            <p className="mt-1 text-[13px] text-muted-foreground">
+              {description}
+            </p>
           </div>
         ))}
       </div>
@@ -67,7 +60,7 @@ function CertificationStrip() {
 
 function WhoWeAreSection() {
   return (
-    <section className="ps-container grid grid-cols-[repeat(auto-fit,minmax(min(100%,400px),1fr))] items-center gap-[clamp(48px,6.25vw,80px)] py-[var(--section-y)]">
+    <section className="ps-container grid grid-cols-1 items-center gap-[clamp(48px,6.25vw,80px)] py-[var(--section-y)] min-[841px]:grid-cols-2">
       <div>
         <SectionHeading eyebrow="Who we are" highlight="Ghanaian OMC">
           A privately-owned, ISO-certified
@@ -106,8 +99,8 @@ function WhoWeAreSection() {
           <PhotoTile
             image={
               <Image
-                src="/images/home/fuel-pump.webp"
-                alt="Refuelling at a PETROSOL pump"
+                src="/images/home/petrosol-station-staff.webp"
+                alt="PETROSOL station attendants on the forecourt"
                 fill
                 sizes="(max-width: 960px) 45vw, 22vw"
               />
@@ -117,8 +110,8 @@ function WhoWeAreSection() {
             className="mt-16"
             image={
               <Image
-                src="/images/about/worker-platform.png"
-                alt="Petrosol depot operations"
+                src="/images/home/fuel-pump.webp"
+                alt="Refuelling at a PETROSOL pump"
                 fill
                 sizes="(max-width: 960px) 45vw, 22vw"
               />
@@ -148,7 +141,7 @@ function VisionPurposeSection() {
         >
           We&apos;re here to
         </SectionHeading>
-        <div className="mt-12 grid grid-cols-[repeat(auto-fit,minmax(min(100%,400px),1fr))] gap-[var(--gutter)]">
+        <div className="mt-12 grid grid-cols-1 gap-[var(--gutter)] min-[841px]:grid-cols-2">
           {visionAndPurpose.map(([title, description]) => (
             <div key={title} className="border-t border-white/16 pt-5">
               <h3 className="font-display text-[18px] font-bold text-orange-400">
@@ -163,46 +156,19 @@ function VisionPurposeSection() {
   );
 }
 
-function CoreValuesSection() {
-  return (
-    <section className="py-[var(--section-y)]">
-      <div className="ps-container">
-        <SectionHeading eyebrow="What guides us" highlight="core values">
-          Our six
-        </SectionHeading>
-        <div className="mt-12 grid grid-cols-[repeat(auto-fit,minmax(min(100%,264px),1fr))] gap-[var(--gutter)] min-[1100px]:grid-cols-3">
-          {values.map(([title, description], index) => (
-            <article key={title} className="border-t border-border pt-5">
-              <p className="font-mono text-[13px] font-semibold tracking-[0.08em] text-brand">
-                {String(index + 1).padStart(2, "0")}
-              </p>
-              <h3 className="mt-3 font-display text-[18px] font-bold text-navy-900">
-                {title}
-              </h3>
-              <p className="mt-3 max-w-[40ch] text-[13px] leading-[1.58]">
-                {description}
-              </p>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function PillarsSection() {
+function OperatingCultureSection() {
   return (
     <section className="ps-blueprint bg-muted py-[var(--section-y)]">
       <div className="ps-container">
         <SectionHeading
-          eyebrow="How we operate"
-          highlight="our operations"
+          eyebrow="Our operating culture"
+          highlight="Fair Pricing"
           align="center"
         >
-          The six cardinal pillars of
+          High Quality, Full Quantity and
         </SectionHeading>
         <div className="mt-16 grid grid-cols-[repeat(auto-fit,minmax(min(100%,264px),1fr))] gap-[var(--gutter)] min-[1100px]:grid-cols-3">
-          {pillars.map((pillar) => {
+          {operatingCulture.map((pillar) => {
             const Icon = pillar.icon;
 
             return (
@@ -214,6 +180,24 @@ function PillarsSection() {
         </div>
       </div>
     </section>
+  );
+}
+
+function CultureBand() {
+  return (
+    <figure className="relative m-0 h-[clamp(300px,42vw,520px)] overflow-hidden">
+      <Image
+        src="/images/about/team-culture.webp"
+        alt="PETROSOL colleagues in branded team shirts reading a company brochure together at the head office"
+        fill
+        sizes="100vw"
+        className="object-cover"
+      />
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-gradient-to-t from-navy-900/62 to-transparent to-[45%]"
+      />
+    </figure>
   );
 }
 
@@ -230,7 +214,11 @@ function AffiliationsSection() {
         </SectionHeading>
         <div className="mt-12 flex flex-wrap justify-center gap-3">
           {affiliations.map((affiliation) => (
-            <Badge key={affiliation} variant="secondary">
+            <Badge
+              key={affiliation}
+              variant="secondary"
+              className="h-auto max-w-full py-1.5 text-center whitespace-normal"
+            >
               {affiliation}
             </Badge>
           ))}
@@ -242,34 +230,24 @@ function AffiliationsSection() {
 
 function PartnerCta() {
   return (
-    <section className="relative isolate overflow-hidden py-[var(--section-y)]">
-      <Image
-        src="/images/about/plant-silos-wide.png"
-        alt="Petrosol energy infrastructure"
-        fill
-        sizes="100vw"
-        className="-z-20 object-cover"
-      />
-      <div className="absolute inset-0 -z-10 bg-navy-900/72" />
-      <div className="mx-auto flex max-w-[860px] flex-col items-center gap-8 px-[var(--container-pad)]">
-        <SectionHeading
-          eyebrow="Work with us"
-          tone="light"
-          highlight="PETROSOL?"
-          align="center"
-        >
-          Ready to partner with
-        </SectionHeading>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Button asChild>
-            <Link href="/#contact">Contact us</Link>
-          </Button>
-          <Button asChild variant="outlineInverse">
-            <Link href="/stations">Find a station</Link>
-          </Button>
-        </div>
+    <MosaicCtaBand>
+      <SectionHeading
+        eyebrow="Work with us"
+        tone="light"
+        highlight="PETROSOL?"
+        align="center"
+      >
+        Ready to partner with
+      </SectionHeading>
+      <div className="flex flex-wrap justify-center gap-4">
+        <Button asChild>
+          <Link href="/contact-us">Contact us</Link>
+        </Button>
+        <Button asChild variant="outlineInverse">
+          <Link href="/find-a-station">Find a station</Link>
+        </Button>
       </div>
-    </section>
+    </MosaicCtaBand>
   );
 }
 
@@ -280,8 +258,9 @@ function AboutSections() {
       <CertificationStrip />
       <WhoWeAreSection />
       <VisionPurposeSection />
+      <OperatingCultureSection />
+      <CultureBand />
       <CoreValuesSection />
-      <PillarsSection />
       <AffiliationsSection />
       <PartnerCta />
     </main>

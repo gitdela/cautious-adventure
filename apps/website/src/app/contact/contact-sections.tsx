@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import {
   RiArrowRightUpLine,
@@ -13,7 +12,8 @@ import {
 
 import { Button } from "@workspace/ui/components/button";
 import { SectionHeading } from "@workspace/ui/components/marketing";
-import { PageHeader } from "@workspace/ui/components/page-header";
+import { MosaicPageHeader } from "../mosaic-page-header";
+import { MosaicCtaBand } from "../mosaic-cta-band";
 import { ServiceCard } from "@workspace/ui/components/service-card";
 import { StationIcon } from "@workspace/ui/components/station-icon";
 
@@ -62,22 +62,12 @@ const enquiryTeams = [
 
 function ContactPageHeader() {
   return (
-    <PageHeader
+    <MosaicPageHeader
       title="Contact Us"
-      background={
-        <Image
-          src="/images/home/refinery-wide.png"
-          alt="Petroleum refinery infrastructure"
-          fill
-          priority
-          sizes="100vw"
-        />
-      }
       breadcrumbs={
         <SiteBreadcrumbs
           items={[
             { label: "Home", href: "/" },
-            { label: "Company" },
             { label: "Contact Us" },
           ]}
         />
@@ -170,10 +160,10 @@ function OfficeDetails() {
   );
 }
 
-function ContactMain() {
+function ContactMain({ turnstileSiteKey }: { turnstileSiteKey: string }) {
   return (
     <section className="ps-container grid grid-cols-1 items-start gap-[clamp(48px,6.25vw,80px)] pt-[var(--section-y)] pb-[var(--section-y-tight)] min-[841px]:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
-      <ContactMessageForm />
+      <ContactMessageForm siteKey={turnstileSiteKey} />
       <OfficeDetails />
     </section>
   );
@@ -229,42 +219,32 @@ function EnquiriesGrid() {
 
 function StationCta() {
   return (
-    <section className="relative isolate overflow-hidden py-[var(--section-y)]">
-      <Image
-        src="/images/home/pipes-blue-sky.png"
-        alt="Petrosol fuel infrastructure beneath a blue sky"
-        fill
-        sizes="100vw"
-        className="-z-20 object-cover"
-      />
-      <div className="absolute inset-0 -z-10 bg-navy-900/72" />
-      <div className="mx-auto flex max-w-[860px] flex-col items-center gap-8 px-[var(--container-pad)]">
-        <SectionHeading
-          eyebrow="Visit us"
-          tone="light"
-          align="center"
-          highlight="near you"
-        >
-          Find a PETROSOL station
-        </SectionHeading>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Button asChild>
-            <Link href="/stations">Find a station</Link>
-          </Button>
-          <Button asChild variant="outlineInverse">
-            <Link href="/about">About PETROSOL</Link>
-          </Button>
-        </div>
+    <MosaicCtaBand>
+      <SectionHeading
+        eyebrow="Visit us"
+        tone="light"
+        align="center"
+        highlight="near you"
+      >
+        Find a PETROSOL station
+      </SectionHeading>
+      <div className="flex flex-wrap justify-center gap-4">
+        <Button asChild>
+          <Link href="/find-a-station">Find a station</Link>
+        </Button>
+        <Button asChild variant="outlineInverse">
+          <Link href="/who-we-are">Who we are</Link>
+        </Button>
       </div>
-    </section>
+    </MosaicCtaBand>
   );
 }
 
-function ContactSections() {
+function ContactSections({ turnstileSiteKey }: { turnstileSiteKey: string }) {
   return (
     <main>
       <ContactPageHeader />
-      <ContactMain />
+      <ContactMain turnstileSiteKey={turnstileSiteKey} />
       <MapEmbed />
       <EnquiriesGrid />
       <StationCta />

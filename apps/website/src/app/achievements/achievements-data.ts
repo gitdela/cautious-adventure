@@ -8,25 +8,19 @@ const achievementStats = [
   ["3", "National quality awards"],
 ] as const;
 
-const recentAwards = [
-  ["2025", "Marketing Campaign of the Year", "Ghana Oil and Gas Awards, 2025"],
-  ["2025", "Energy Business Leadership Award", "Ghana Energy Awards, 2025"],
-  [
-    "2025",
-    "Best HR Management in Oil and Gas (Indigenous)",
-    "HR Focus Conference, 2025",
-  ],
-  [
-    "2025",
-    "CEO of the Year — Downstream Petroleum",
-    "OMC Award, 9th CEO Summit, 2025",
-  ],
-  [
-    "2024",
-    "Overall Best National Quality Award",
-    "Association of Ghana Industries & Ghana Standards Authority, 2024",
-  ],
-] as const;
+/**
+ * The single latest win, shown by the "Most recent" section. Never a list —
+ * every other award lives in `awardsTimeline`.
+ *
+ * Maintenance: when a newer award arrives, replace all three fields here and
+ * add the outgoing award to the top of `awardsTimeline`.
+ */
+const latestAward = {
+  kicker: "2025 · Ghana Oil and Gas Awards, 2025",
+  title: "Marketing Campaign of the Year",
+  description:
+    "At the Ghana Oil and Gas Awards 2025, PETROSOL was named Marketing Campaign of the Year — recognition of a campaign that carried our promise of high quality, full quantity and fair pricing to customers across the country.",
+} as const;
 
 const awardCategories = [
   ["12+", "Quality & excellence"],
@@ -172,5 +166,5 @@ export {
   achievementStats,
   awardCategories,
   awardsTimeline,
-  recentAwards,
+  latestAward,
 };

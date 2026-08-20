@@ -1,14 +1,21 @@
 import type { Metadata } from "next";
 
+import { getFuelProducts, getPumpPrices } from "@/lib/sanity/data";
+
 import { FuelSections } from "./fuel-sections";
 
 export const metadata: Metadata = {
-  title: { absolute: "Fuel — PETROSOL" },
+  title: { absolute: "Fuels — PETROSOL" },
   description:
     "Explore PETROSOL petrol, premium gasoline, and low sulfur diesel supplied clean, in full quantity, and to local and international standards.",
-  alternates: { canonical: "/fuel" },
+  alternates: { canonical: "/fuels" },
 };
 
-export default function FuelPage() {
-  return <FuelSections />;
+export default async function FuelPage() {
+  const [products, priceBoard] = await Promise.all([
+    getFuelProducts(),
+    getPumpPrices(),
+  ]);
+
+  return <FuelSections products={products} priceBoard={priceBoard} />;
 }

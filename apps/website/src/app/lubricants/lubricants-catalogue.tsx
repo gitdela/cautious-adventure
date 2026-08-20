@@ -6,6 +6,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { RiArrowRightLine, RiCloseLine } from "@remixicon/react";
 
+import { urlForImage } from "@workspace/cms/image";
+import {
+  ContentEmpty,
+  type LubricantCategoryView,
+  type LubricantProductView,
+} from "@workspace/content";
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import { Card, CardContent } from "@workspace/ui/components/card";
@@ -31,18 +37,22 @@ import {
 } from "@workspace/ui/components/toggle-group";
 import { useIsMobile } from "@workspace/ui/hooks/use-mobile";
 
-import {
-  lubricantCategories,
-  lubricantProducts,
-  type LubricantCategory,
-  type LubricantProduct,
-} from "./lubricants-data";
+/** The unfiltered view. Not a category document — "no filter" is page behaviour,
+ *  not editable content. Categories are matched on slug, so this cannot collide
+ *  with a real one unless an editor names a category "all", which would be
+ *  indistinguishable to a visitor anyway. */
+const ALL = "all";
 
 function ProductImage({
   product,
+  width,
+  height,
   sizes,
 }: {
-  product: LubricantProduct;
+  product: LubricantProductView;
+  /** Requested crop, so the pack shot's hotspot is honoured at each frame ratio. */
+  width: number;
+  height: number;
   sizes: string;
 }) {
   if (!product.image) {
@@ -51,8 +61,13 @@ function ProductImage({
 
   return (
     <Image
-      src={product.image}
-      alt={`${product.name} lubricant pack`}
+      src={urlForImage(product.image)
+        .width(width)
+        .height(height)
+        .fit("crop")
+        .auto("format")
+        .url()}
+      alt={product.image.alt ?? `${product.name} lubricant pack`}
       fill
       sizes={sizes}
       className="object-cover"
@@ -64,17 +79,17 @@ function ProductOverview({
   product,
   title,
 }: {
-  product: LubricantProduct;
+  product: LubricantProductView;
   title: ReactNode;
 }) {
   return (
     <div className="flex flex-wrap items-center gap-6 pr-9">
       <div className="relative size-[clamp(120px,26vw,180px)] shrink-0 overflow-hidden rounded-xl border border-border bg-background">
-        <ProductImage product={product} sizes="180px" />
+        <ProductImage product={product} width={360} height={360} sizes="180px" />
       </div>
       <div className="min-w-0 flex-1 basis-60">
         <p className="mb-3 font-display text-[13px] leading-[1.2] font-bold tracking-[0.14em] text-brand uppercase">
-          {product.category}
+          {product.category.title}
         </p>
         {title}
         <div className="mt-4 flex flex-wrap gap-3">
@@ -106,7 +121,7 @@ function SpecRow({ label, children }: { label: string; children: ReactNode }) {
   );
 }
 
-function ProductSpecRows({ product }: { product: LubricantProduct }) {
+function ProductSpecRows({ product }: { product: LubricantProductView }) {
   return (
     <div>
       <SpecRow label="Suitable for">{product.applications}</SpecRow>
@@ -128,7 +143,7 @@ function ProductSpecs({
   product,
   onClose,
 }: {
-  product: LubricantProduct;
+  product: LubricantProductView;
   onClose: () => void;
 }) {
   const isMobile = useIsMobile();
@@ -150,11 +165,16 @@ function ProductSpecs({
             <DrawerHeader className="items-stretch gap-4 px-5 pt-5 pb-4 text-left group-data-[vaul-drawer-direction=bottom]/drawer-content:text-left">
               <div className="grid grid-cols-[96px_minmax(0,1fr)] items-center gap-4">
                 <div className="relative size-24 overflow-hidden rounded-xl border border-border bg-background">
-                  <ProductImage product={product} sizes="96px" />
+                  <ProductImage
+                    product={product}
+                    width={192}
+                    height={192}
+                    sizes="96px"
+                  />
                 </div>
                 <div className="min-w-0 pr-9">
                   <p className="mb-2 font-display text-[11px] leading-[1.2] font-bold tracking-[0.12em] text-brand uppercase">
-                    {product.category}
+                    {product.category.title}
                   </p>
                   <DrawerTitle className="font-display text-[clamp(18px,6vw,24px)] leading-[1.18] font-bold text-navy-900">
                     {product.name}
@@ -177,7 +197,7 @@ function ProductSpecs({
               <ProductSpecRows product={product} />
               <DrawerDescription className="mt-5 text-[13px] leading-[1.58]">
                 Full technical data sheets are available on request &mdash;{" "}
-                <Link href="/contact" className="text-brand hover:text-orange-600">
+                <Link href="/contact-us" className="text-brand hover:text-orange-600">
                   contact our products team
                 </Link>
                 .
@@ -205,7 +225,7 @@ function ProductSpecs({
         <ProductSpecRows product={product} />
         <DialogDescription className="text-[13px] leading-[1.58]">
           Full technical data sheets are available on request &mdash;{" "}
-          <Link href="/contact" className="text-brand hover:text-orange-600">
+          <Link href="/contact-us" className="text-brand hover:text-orange-600">
             contact our products team
           </Link>
           .
@@ -219,14 +239,16 @@ function LubricantCard({
   product,
   onOpen,
 }: {
-  product: LubricantProduct;
-  onOpen: (product: LubricantProduct) => void;
+  product: LubricantProductView;
+  onOpen: (product: LubricantProductView) => void;
 }) {
   return (
     <Card className="group/lubricant gap-0 border border-border bg-background py-0 shadow-card transition-[transform,box-shadow] duration-400 ease-[cubic-bezier(.16,1,.3,1)] hover:-translate-y-[3px] hover:shadow-raised">
       <div className="relative h-[280px] border-b border-border bg-background">
         <ProductImage
           product={product}
+          width={760}
+          height={560}
           sizes="(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 33vw"
         />
       </div>
@@ -237,7 +259,7 @@ function LubricantCard({
           className="group/spec flex flex-1 cursor-pointer flex-col items-start gap-2 bg-background px-6 pt-5 pb-6 text-left transition-colors group-hover/lubricant:bg-ink-50 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-inset focus-visible:ring-ring"
         >
           <span className="font-mono text-[11px] tracking-[0.08em] text-muted-foreground uppercase">
-            {product.category}
+            {product.category.title}
           </span>
           <span className="font-display text-[18px] font-bold text-navy-900">
             {product.name}
@@ -253,15 +275,20 @@ function LubricantCard({
   );
 }
 
-function LubricantsCatalogue() {
-  const [category, setCategory] = useState<LubricantCategory>("All");
-  const [selectedProduct, setSelectedProduct] = useState<LubricantProduct | null>(
-    null,
-  );
+function LubricantsCatalogue({
+  products,
+  categories,
+}: {
+  products: LubricantProductView[];
+  categories: LubricantCategoryView[];
+}) {
+  const [category, setCategory] = useState<string>(ALL);
+  const [selectedProduct, setSelectedProduct] =
+    useState<LubricantProductView | null>(null);
   const shownProducts =
-    category === "All"
-      ? lubricantProducts
-      : lubricantProducts.filter((product) => product.category === category);
+    category === ALL
+      ? products
+      : products.filter((product) => product.category.slug === category);
 
   return (
     <section className="ps-blueprint bg-muted pt-14 pb-[var(--section-y)]">
@@ -270,31 +297,42 @@ function LubricantsCatalogue() {
           type="single"
           value={category}
           onValueChange={(value) => {
-            if (value) setCategory(value as LubricantCategory);
+            if (value) setCategory(value);
           }}
           aria-label="Filter lubricants by category"
           className="mx-auto mb-10 flex-wrap justify-center gap-3"
         >
-          {lubricantCategories.map((item) => (
+          {[{ slug: ALL, title: "All" }, ...categories].map((item) => (
             <ToggleGroupItem
-              key={item}
-              value={item}
+              key={item.slug}
+              value={item.slug}
               className="h-11 rounded-4xl bg-background px-[18px] font-display text-[13px] font-bold shadow-card data-[state=on]:bg-navy-800 data-[state=on]:text-white"
             >
-              {item}
+              {item.title}
             </ToggleGroupItem>
           ))}
         </ToggleGroup>
 
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,280px),1fr))] gap-[var(--gutter)] min-[1100px]:grid-cols-3">
-          {shownProducts.map((product) => (
-            <LubricantCard
-              key={product.id}
-              product={product}
-              onOpen={setSelectedProduct}
-            />
-          ))}
-        </div>
+        {shownProducts.length === 0 ? (
+          <ContentEmpty
+            title="No lubricants to show"
+            description={
+              category === ALL
+                ? "The catalogue is being updated. Please check back shortly."
+                : "Nothing in this category yet — try another filter."
+            }
+          />
+        ) : (
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,280px),1fr))] gap-[var(--gutter)] min-[1100px]:grid-cols-3">
+            {shownProducts.map((product) => (
+              <LubricantCard
+                key={product.id}
+                product={product}
+                onOpen={setSelectedProduct}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       {selectedProduct ? (

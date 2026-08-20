@@ -12,7 +12,11 @@
     "typegen": "sanity typegen generate",
     "validate": "sanity documents validate -y",
     "seed:generate": "bun run seed/generate.ts",
-    "seed:dev": "sanity dataset import seed/seed.ndjson --dataset development --replace"
+    "seed:dev": "sanity dataset import seed/seed.ndjson --dataset development --replace",
+    "lubricants:import": "bun run seed/lubricants-import.ts",
+    "fuel:import": "bun run seed/fuel-import.ts",
+    "stations:import": "bun run seed/stations-import.ts",
+    "gallery:import": "bun run seed/gallery-import.ts"
   },
   "dependencies": {
     "@sanity/vision": "6.5.0",
@@ -25,6 +29,7 @@
   },
   "devDependencies": {
     "@sanity/cli": "6.5.0",
+    "@sanity/client": "7.23.2",
     "@types/react": "^19.2.14",
     "typescript": "~6.0.2"
   }

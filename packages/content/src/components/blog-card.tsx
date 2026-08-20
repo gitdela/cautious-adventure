@@ -28,9 +28,9 @@ export function BlogCard({
           image={post.coverImage}
           label={post.category?.title}
           adapters={adapters}
-          className="aspect-[16/9]"
-          width={800}
-          height={450}
+          className="aspect-[1200/630]"
+          width={1200}
+          height={630}
         />
         <div className="mt-4 flex items-center gap-2">
           {post.category?.title ? (

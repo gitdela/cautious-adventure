@@ -5,7 +5,8 @@ import { RiShieldCheckLine } from "@remixicon/react";
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import { PhotoTile, SectionHeading } from "@workspace/ui/components/marketing";
-import { PageHeader } from "@workspace/ui/components/page-header";
+import { MosaicPageHeader } from "../mosaic-page-header";
+import { MosaicCtaBand } from "../mosaic-cta-band";
 import {
   StationChip,
   type StationIconName,
@@ -40,23 +41,14 @@ const merchandisingPoints: Array<{
 
 function ShopPageHeader() {
   return (
-    <PageHeader
-      title="Shop"
-      background={
-        <Image
-          src="/images/about/plant-silos-wide.png"
-          alt="PETROSOL plant silos"
-          fill
-          priority
-          sizes="100vw"
-        />
-      }
+    <MosaicPageHeader
+      title="Shops & Convenience"
       breadcrumbs={
         <SiteBreadcrumbs
           items={[
             { label: "Home", href: "/" },
-            { label: "Services" },
-            { label: "Shop" },
+            { label: "At Our Stations" },
+            { label: "Shops & Convenience" },
           ]}
         />
       }
@@ -87,7 +79,7 @@ function ShopIntro() {
         </div>
         <div className="mt-8">
           <Button asChild>
-            <Link href="/contact">Find a shop near you</Link>
+            <Link href="/find-a-station">Find a shop near you</Link>
           </Button>
         </div>
       </div>
@@ -141,34 +133,24 @@ function MerchandisingBand() {
 
 function ShopCta() {
   return (
-    <section className="relative isolate overflow-hidden py-[var(--section-y)]">
-      <Image
-        src="/images/fuel/pumpjack-sky-wide.png"
-        alt="Oil pumpjack beneath a blue sky"
-        fill
-        sizes="100vw"
-        className="-z-20 object-cover"
-      />
-      <div className="absolute inset-0 -z-10 bg-navy-900/72" />
-      <div className="mx-auto flex max-w-[860px] flex-col items-center gap-8 px-[var(--container-pad)]">
-        <SectionHeading
-          tone="light"
-          align="center"
-          eyebrow="On your route"
-          highlight="on the way"
-        >
-          Everything you need,
-        </SectionHeading>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Button asChild>
-            <Link href="/contact">Find a shop near you</Link>
-          </Button>
-          <Button asChild variant="outlineInverse">
-            <Link href="/fullcare">Explore FullCare</Link>
-          </Button>
-        </div>
+    <MosaicCtaBand>
+      <SectionHeading
+        tone="light"
+        align="center"
+        eyebrow="On your route"
+        highlight="on the way"
+      >
+        Everything you need,
+      </SectionHeading>
+      <div className="flex flex-wrap justify-center gap-4">
+        <Button asChild>
+          <Link href="/find-a-station">Find a shop near you</Link>
+        </Button>
+        <Button asChild variant="outlineInverse">
+          <Link href="/fullcare-vehicle-services">Explore FULLCARE</Link>
+        </Button>
       </div>
-    </section>
+    </MosaicCtaBand>
   );
 }
 

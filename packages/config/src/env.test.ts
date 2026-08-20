@@ -5,7 +5,9 @@ import {
   resolveSanityConfig,
   resolveSanityDataset,
   resolveSanityProjectId,
+  resolveTurnstileSiteKey,
   sanityApiVersionFallback,
+  turnstileTestSiteKey,
 } from './env'
 
 describe('resolveSanityProjectId', () => {
@@ -84,5 +86,24 @@ describe('resolveSanityConfig', () => {
       dataset: 'development',
       apiVersion: '2026-07-01',
     })
+  })
+})
+
+describe('resolveTurnstileSiteKey', () => {
+  it('reads the site key from any supported key', () => {
+    expect(
+      resolveTurnstileSiteKey({ NEXT_PUBLIC_TURNSTILE_SITE_KEY: '0x4real' }),
+    ).toBe('0x4real')
+    expect(resolveTurnstileSiteKey({ VITE_TURNSTILE_SITE_KEY: 'v1' })).toBe('v1')
+  })
+
+  it('falls back to the always-passes test key outside production', () => {
+    expect(resolveTurnstileSiteKey({})).toBe(turnstileTestSiteKey)
+  })
+
+  it('throws in production rather than shipping the test key', () => {
+    expect(() =>
+      resolveTurnstileSiteKey({ NODE_ENV: 'production' }),
+    ).toThrow(/Missing Cloudflare Turnstile site key/i)
   })
 })

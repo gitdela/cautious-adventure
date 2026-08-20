@@ -18,7 +18,7 @@ html {
 .home-quote {
   background-image:
     linear-gradient(rgba(11, 36, 66, 0.72), rgba(11, 36, 66, 0.72)),
-    url("/images/home/refinery-wide.png");
+    url("/images/home/attendant-windscreen.webp");
   background-attachment: fixed;
   background-position: center;
   background-size: cover;

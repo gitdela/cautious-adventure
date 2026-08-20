@@ -5,7 +5,7 @@ import { Slot } from "radix-ui"
 import { cn } from "@workspace/ui/lib/utils"
 
 /**
- * Petrosol badge (DS Badge): pill, tinted fill + matching ink, uppercase-ready.
+ * PETROSOL badge (DS Badge): pill, tinted fill + matching ink, uppercase-ready.
  * DS tones map: default→orange tint · brand→solid orange · secondary→neutral
  * tint · dark→ink-1000 · success/destructive/info→status tints.
  */

@@ -43,6 +43,7 @@ function SectionHeading({
   size = "md",
   align = "left",
   tone = "dark",
+  as: HeadingTag = "h2",
   className,
 }: {
   eyebrow?: string;
@@ -51,6 +52,12 @@ function SectionHeading({
   size?: keyof typeof headingSizes;
   align?: Alignment;
   tone?: Tone;
+  /**
+   * Promote to `h1` on a page whose only top-level heading is this section —
+   * e.g. one with no `PageHeader` band. Defaults to `h2`, which is right
+   * wherever a page header already owns the `h1`.
+   */
+  as?: "h1" | "h2";
   className?: string;
 }) {
   return (
@@ -60,7 +67,7 @@ function SectionHeading({
           {eyebrow}
         </Eyebrow>
       ) : null}
-      <h2
+      <HeadingTag
         className={cn(
           "font-display font-bold tracking-[-0.02em]",
           headingSizes[size],
@@ -74,7 +81,7 @@ function SectionHeading({
             <span className="swash">{highlight}</span>
           </>
         ) : null}
-      </h2>
+      </HeadingTag>
     </div>
   );
 }
@@ -121,7 +128,7 @@ function Stat({
       className={cn(
         "grid items-baseline gap-6 py-8 min-[721px]:grid-cols-[minmax(180px,240px)_1fr] min-[721px]:gap-12 min-[721px]:py-12",
         divider &&
-          (tone === "inverse" ? "border-t border-white/16" : "border-t border-border"),
+        (tone === "inverse" ? "border-t border-white/16" : "border-t border-border"),
         className,
       )}
     >
@@ -146,6 +153,9 @@ const photoRatios = {
   square: "aspect-square",
   portrait: "aspect-[3/4]",
   news: "aspect-[4/3]",
+  /* Open Graph standard (1200×630) — for images authored with baked-in text
+     that must render uncropped. */
+  og: "aspect-[1200/630]",
 };
 
 function PhotoTile({
@@ -182,35 +192,6 @@ function PhotoTile({
   );
 }
 
-const defaultPartners = [
-  "GON",
-  "BOSON",
-  "BROMO",
-  "ABPER",
-  "BARNEY",
-  "ARES",
-  "PIESO",
-  "WAGON",
-];
-
-function LogoStrip({ names = defaultPartners }: { names?: string[] }) {
-  return (
-    <div className="overflow-hidden py-12 [mask-image:linear-gradient(90deg,transparent,#000_8%,#000_92%,transparent)]">
-      <div className="logo-strip-track flex w-max gap-[72px] pr-[72px]">
-        {[...names, ...names].map((name, index) => (
-          <span
-            key={`${name}-${index}`}
-            aria-hidden={index >= names.length}
-            className="font-display text-[28px] font-bold tracking-[0.02em] whitespace-nowrap text-ink-200"
-          >
-            {name}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 function Seal({ className }: { className?: string }) {
   const pathId = React.useId();
 
@@ -238,7 +219,7 @@ function Seal({ className }: { className?: string }) {
           className="font-display text-[9px] font-bold tracking-[0.14em]"
         >
           <textPath href={`#${pathId}`}>
-            SHAPING THE FUTURE · FOR TOMORROW ·
+            HERE TO SERVE · ENERGIZING DREAMS ·
           </textPath>
         </text>
       </svg>
@@ -259,4 +240,4 @@ function Seal({ className }: { className?: string }) {
   );
 }
 
-export { Eyebrow, LogoStrip, PhotoTile, Seal, SectionHeading, Stat };
+export { Eyebrow, PhotoTile, Seal, SectionHeading, Stat };

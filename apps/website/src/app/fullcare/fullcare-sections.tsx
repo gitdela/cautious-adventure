@@ -12,7 +12,8 @@ import {
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import { PhotoTile, SectionHeading } from "@workspace/ui/components/marketing";
-import { PageHeader } from "@workspace/ui/components/page-header";
+import { MosaicPageHeader } from "../mosaic-page-header";
+import { MosaicCtaBand } from "../mosaic-cta-band";
 import { StationIcon } from "@workspace/ui/components/station-icon";
 
 import { SiteBreadcrumbs } from "../site-breadcrumbs";
@@ -83,23 +84,14 @@ const steps = [
 
 function FullcarePageHeader() {
   return (
-    <PageHeader
-      title="FullCare"
-      background={
-        <Image
-          src="/images/about/hero-inspection.png"
-          alt="Technician inspecting a vehicle"
-          fill
-          priority
-          sizes="100vw"
-        />
-      }
+    <MosaicPageHeader
+      title="FULLCARE Vehicle Services"
       breadcrumbs={
         <SiteBreadcrumbs
           items={[
             { label: "Home", href: "/" },
-            { label: "Services" },
-            { label: "FullCare" },
+            { label: "At Our Stations" },
+            { label: "FULLCARE Vehicle Services" },
           ]}
         />
       }
@@ -112,7 +104,7 @@ function FullcareIntro() {
     <section className="ps-container grid grid-cols-1 items-center gap-[clamp(40px,5vw,80px)] py-[var(--section-y-tight)] min-[841px]:grid-cols-2">
       <div>
         <SectionHeading
-          eyebrow="Petrosol FullCare"
+          eyebrow="PETROSOL FullCare"
           highlight="total peace of mind"
         >
           All-round vehicle servicing for
@@ -134,7 +126,7 @@ function FullcareIntro() {
         </div>
         <div className="mt-8">
           <Button asChild>
-            <Link href="/contact">Find a FULLCARE Center</Link>
+            <Link href="/find-a-station">Find a FULLCARE Center</Link>
           </Button>
         </div>
       </div>
@@ -212,34 +204,24 @@ function StepsBand() {
 
 function FullcareCta() {
   return (
-    <section className="relative isolate overflow-hidden py-[var(--section-y)]">
-      <Image
-        src="/images/about/worker-platform.png"
-        alt="PETROSOL worker on an industrial platform"
-        fill
-        sizes="100vw"
-        className="-z-20 object-cover"
-      />
-      <div className="absolute inset-0 -z-10 bg-navy-900/72" />
-      <div className="mx-auto flex max-w-[860px] flex-col items-center gap-8 px-[var(--container-pad)]">
-        <SectionHeading
-          tone="light"
-          align="center"
-          eyebrow="Your next service"
-          highlight="fuel stop"
-        >
-          An oil change that takes a
-        </SectionHeading>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Button asChild>
-            <Link href="/contact">Find a FULLCARE Center</Link>
-          </Button>
-          <Button asChild variant="outlineInverse">
-            <Link href="/lubricants">Explore lubricants</Link>
-          </Button>
-        </div>
+    <MosaicCtaBand>
+      <SectionHeading
+        tone="light"
+        align="center"
+        eyebrow="Your next service"
+        highlight="fuel stop"
+      >
+        An oil change that takes a
+      </SectionHeading>
+      <div className="flex flex-wrap justify-center gap-4">
+        <Button asChild>
+          <Link href="/find-a-station">Find a FULLCARE Center</Link>
+        </Button>
+        <Button asChild variant="outlineInverse">
+          <Link href="/lubricants">Explore lubricants</Link>
+        </Button>
       </div>
-    </section>
+    </MosaicCtaBand>
   );
 }
 

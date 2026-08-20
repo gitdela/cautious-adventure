@@ -15,16 +15,16 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL(resolveWebsiteUrl(process.env)),
   title: {
-    default: "Petrosol — energizing dreams!",
-    template: "%s · Petrosol",
+    default: "PETROSOL — energizing dreams!",
+    template: "%s · PETROSOL",
   },
   description:
     "Whether you're looking for high-quality gasoline or innovative solutions to power your home or business, we've got you covered.",
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
-    siteName: "Petrosol",
-    title: "Petrosol — energizing dreams!",
+    siteName: "PETROSOL",
+    title: "PETROSOL — energizing dreams!",
   },
   twitter: { card: "summary_large_image" },
 };
@@ -47,7 +47,7 @@ export default function RootLayout({
           data={{
             "@context": "https://schema.org",
             "@type": "Organization",
-            name: "Petrosol",
+            name: "PETROSOL",
             url: websiteUrl,
           }}
         />

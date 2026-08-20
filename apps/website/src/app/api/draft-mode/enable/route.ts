@@ -4,7 +4,13 @@ import type { NextRequest } from "next/server";
 
 // Only these content areas may be previewed; blocks open-redirect abuse of the
 // draft-enable endpoint.
-const ALLOWED_PREFIXES = ["/blog", "/help", "/about", "/privacy", "/terms"];
+const ALLOWED_PREFIXES = [
+  "/blog",
+  "/help",
+  "/who-we-are",
+  "/privacy",
+  "/terms",
+];
 
 function isAllowedRedirect(target: string): boolean {
   // Relative-only. Reject protocol-relative ("//evil.com") and absolute URLs.

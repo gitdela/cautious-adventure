@@ -24,7 +24,7 @@ const isDev = Boolean(import.meta.env.DEV)
 
 export default defineConfig({
   name: 'default',
-  title: 'Petrosol Studio',
+  title: 'PETROSOL Studio',
   projectId: resolveSanityProjectId(env),
   dataset: resolveSanityDataset(env),
   plugins: [

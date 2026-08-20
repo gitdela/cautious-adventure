@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 480" preserveAspectRatio="xMidYMid slice" role="presentation">
+  <!-- Flat variant of header-mosaic.svg: same tile map, no dot-grid texture.
+       The two "ghost" tiles (1440,0 and 1728,384) were dots over base navy with
+       no fill of their own, so they have no flat equivalent and are omitted —
+       their cells simply read as part of the navy field. Every dotted green
+       tile falls back to its underlying flat fill. -->
+
+  <!-- Base field. The left ~60% stays plain so centred content keeps a
+       readable surface. -->
+  <rect width="1920" height="480" fill="#052236"/>
+
+  <!-- row y=0 -->
+  <rect x="1632" y="0" width="96" height="96" fill="#1b4a2e"/>
+  <rect x="1824" y="0" width="96" height="96" fill="#2e6327"/>
+
+  <!-- row y=96 -->
+  <rect x="1344" y="96" width="96" height="96" fill="#2e6327"/>
+  <rect x="1440" y="96" width="96" height="96" fill="#1b4a2e"/>
+  <rect x="1536" y="96" width="96" height="96" fill="#35701f" opacity=".9"/>
+  <rect x="1632" y="96" width="96" height="96" fill="#1b4a2e"/>
+  <rect x="1824" y="96" width="96" height="96" fill="#2e6327"/>
+
+  <!-- row y=192 -->
+  <rect x="1440" y="192" width="96" height="96" fill="#2e6327"/>
+  <rect x="1536" y="192" width="96" height="96" fill="#2e6327"/>
+  <rect x="1632" y="192" width="96" height="96" fill="#1b4a2e"/>
+  <rect x="1728" y="192" width="96" height="96" fill="#35701f" opacity=".9"/>
+  <rect x="1824" y="192" width="96" height="96" fill="#2e6327"/>
+
+  <!-- row y=288 -->
+  <rect x="1152" y="288" width="96" height="96" fill="#2e6327"/>
+  <rect x="1344" y="288" width="96" height="96" fill="#1b4a2e"/>
+  <rect x="1440" y="288" width="96" height="96" fill="#2e6327"/>
+  <rect x="1632" y="288" width="96" height="96" fill="#1b4a2e"/>
+  <rect x="1824" y="288" width="96" height="96" fill="#1b4a2e"/>
+
+  <!-- row y=384 -->
+  <rect x="1536" y="384" width="96" height="96" fill="#1b4a2e"/>
+</svg>

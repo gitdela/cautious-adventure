@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 480" preserveAspectRatio="xMidYMid slice" role="presentation">
+  <defs>
+    <!-- Dot grid over green tiles. -->
+    <pattern id="dg" patternUnits="userSpaceOnUse" width="26" height="26">
+      <circle cx="5" cy="5" r="1.7" fill="#041a2d"/>
+    </pattern>
+    <!-- Same geometry, darker: dots over the base navy for "ghost" tiles. -->
+    <pattern id="dn" patternUnits="userSpaceOnUse" width="26" height="26">
+      <circle cx="5" cy="5" r="1.7" fill="#02121f"/>
+    </pattern>
+  </defs>
+
+  <!-- Base field. The left ~60% stays plain so the title and breadcrumb
+       always sit on a clean surface. -->
+  <rect width="1920" height="480" fill="#052236"/>
+
+  <!-- Tiles: 96x96, snapped to a 96px grid, clustered at x >= 1152.
+       The gaps are deliberate — the checkerboard has to breathe. -->
+
+  <!-- row y=0 -->
+  <rect x="1440" y="0" width="96" height="96" fill="url(#dn)"/>
+  <rect x="1632" y="0" width="96" height="96" fill="#1b4a2e"/>
+  <rect x="1632" y="0" width="96" height="96" fill="url(#dg)"/>
+  <rect x="1824" y="0" width="96" height="96" fill="#2e6327"/>
+
+  <!-- row y=96 -->
+  <rect x="1344" y="96" width="96" height="96" fill="#2e6327"/>
+  <rect x="1440" y="96" width="96" height="96" fill="#1b4a2e"/>
+  <rect x="1440" y="96" width="96" height="96" fill="url(#dg)"/>
+  <rect x="1536" y="96" width="96" height="96" fill="#35701f" opacity=".9"/>
+  <rect x="1632" y="96" width="96" height="96" fill="#1b4a2e"/>
+  <rect x="1824" y="96" width="96" height="96" fill="#2e6327"/>
+
+  <!-- row y=192 -->
+  <rect x="1440" y="192" width="96" height="96" fill="#2e6327"/>
+  <rect x="1536" y="192" width="96" height="96" fill="#2e6327"/>
+  <rect x="1632" y="192" width="96" height="96" fill="#1b4a2e"/>
+  <rect x="1632" y="192" width="96" height="96" fill="url(#dg)"/>
+  <rect x="1728" y="192" width="96" height="96" fill="#35701f" opacity=".9"/>
+  <rect x="1824" y="192" width="96" height="96" fill="#2e6327"/>
+
+  <!-- row y=288 -->
+  <rect x="1152" y="288" width="96" height="96" fill="#2e6327"/>
+  <rect x="1344" y="288" width="96" height="96" fill="#1b4a2e"/>
+  <rect x="1344" y="288" width="96" height="96" fill="url(#dg)"/>
+  <rect x="1440" y="288" width="96" height="96" fill="#2e6327"/>
+  <rect x="1632" y="288" width="96" height="96" fill="#1b4a2e"/>
+  <rect x="1632" y="288" width="96" height="96" fill="url(#dg)"/>
+  <rect x="1824" y="288" width="96" height="96" fill="#1b4a2e"/>
+
+  <!-- row y=384 -->
+  <rect x="1536" y="384" width="96" height="96" fill="#1b4a2e"/>
+  <rect x="1536" y="384" width="96" height="96" fill="url(#dg)"/>
+  <rect x="1728" y="384" width="96" height="96" fill="url(#dn)"/>
+</svg>

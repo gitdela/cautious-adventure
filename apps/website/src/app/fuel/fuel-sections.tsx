@@ -1,8 +1,13 @@
-import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { RiLeafLine, RiShieldCheckLine } from "@remixicon/react";
 
+import {
+  formatCedis,
+  formatPumpDate,
+  type FuelProductView,
+  type PumpPriceBoardView,
+} from "@workspace/content";
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import {
@@ -10,17 +15,14 @@ import {
   SectionHeading,
   Stat,
 } from "@workspace/ui/components/marketing";
-import { PageHeader } from "@workspace/ui/components/page-header";
+import { MosaicPageHeader } from "../mosaic-page-header";
+import { MosaicCtaBand } from "../mosaic-cta-band";
 import { ServiceCard } from "@workspace/ui/components/service-card";
 import { StationIcon } from "@workspace/ui/components/station-icon";
 
-import { SiteBreadcrumbs } from "../site-breadcrumbs";
+import { contentAdapters } from "@/lib/content-adapters";
 
-const pumpPrices = [
-  ["\u20b59.80", "Petrol"],
-  ["\u20b516.00", "Diesel"],
-  ["\u20b511.20", "Premium"],
-];
+import { SiteBreadcrumbs } from "../site-breadcrumbs";
 
 const integrityPoints = [
   {
@@ -45,23 +47,14 @@ const integrityPoints = [
 
 function FuelPageHeader() {
   return (
-    <PageHeader
-      title="Fuel"
-      background={
-        <Image
-          src="/images/fuel/pumpjack-sky-wide.png"
-          alt="Oil pumpjack beneath a blue sky"
-          fill
-          priority
-          sizes="100vw"
-        />
-      }
+    <MosaicPageHeader
+      title="Fuels"
       breadcrumbs={
         <SiteBreadcrumbs
           items={[
             { label: "Home", href: "/" },
-            { label: "Products" },
-            { label: "Fuel" },
+            { label: "Products & Services" },
+            { label: "Fuels" },
           ]}
         />
       }
@@ -69,20 +62,27 @@ function FuelPageHeader() {
   );
 }
 
-function PriceBand() {
+/**
+ * The same `pumpPrices` singleton the home hero totem reads, in the fuel page's
+ * band layout. Absent board — nothing published, or every row incomplete — drops
+ * the band rather than showing an empty strip under a date.
+ */
+function PriceBand({ board }: { board: PumpPriceBoardView | null }) {
+  if (!board) return null;
+
   return (
-    <section className="rounded-tr-[120px] bg-surface-inverse py-[var(--section-y-tight)]">
+    <section className="bg-surface-inverse py-[var(--section-y-tight)]">
       <div className="ps-container flex flex-wrap items-center justify-center gap-x-20 gap-y-8">
         <time
-          dateTime="2026-07-27"
+          dateTime={board.updatedAt.slice(0, 10)}
           className="basis-full text-center font-mono text-[11px] tracking-[0.14em] text-white/65 uppercase"
         >
-          At the pump today &middot; 27 Jul 2026
+          At the pump today &middot; {formatPumpDate(board.updatedAt)}
         </time>
-        {pumpPrices.map(([value, fuel]) => (
+        {board.prices.map(({ fuel, amount }) => (
           <Stat
             key={fuel}
-            value={value}
+            value={formatCedis(amount)}
             label={
               <>
                 {fuel} &middot; GHS/L
@@ -97,98 +97,48 @@ function PriceBand() {
   );
 }
 
+/**
+ * One fuel's editorial block. `flip` alternates which side the photograph sits
+ * on; it is derived from the product's position, not stored — see the `order`
+ * field's description in the schema.
+ */
 function FuelFeature({
-  eyebrow,
-  heading,
-  highlight,
-  imageSrc,
-  imageAlt,
+  product,
   flip = false,
-  children,
 }: {
-  eyebrow: string;
-  heading: string;
-  highlight: string;
-  imageSrc: string;
-  imageAlt: string;
+  product: FuelProductView;
   flip?: boolean;
-  children: ReactNode;
 }) {
+  const { Image: CmsImage } = contentAdapters;
+
   return (
     <section className="ps-container grid grid-cols-1 items-center gap-[clamp(48px,6.25vw,80px)] py-[var(--section-y-tight)] min-[841px]:grid-cols-2">
       <div className={flip ? "order-2" : "order-1"}>
-        <SectionHeading eyebrow={eyebrow} highlight={highlight}>
-          {heading}
+        <SectionHeading eyebrow={product.eyebrow} highlight={product.highlight}>
+          {product.heading}
         </SectionHeading>
-        <div className="mt-6 flex max-w-[54ch] flex-col gap-5">{children}</div>
+        <div className="mt-6 flex max-w-[54ch] flex-col gap-5">
+          {product.body.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </div>
       </div>
       <PhotoTile
         ratio="news"
         className={flip ? "order-1" : "order-2"}
         image={
-          <Image
-            src={imageSrc}
-            alt={imageAlt}
-            fill
-            sizes="(max-width: 840px) 100vw, 50vw"
-          />
+          product.image ? (
+            <CmsImage
+              source={product.image}
+              alt={product.image.alt ?? product.name}
+              width={1200}
+              height={800}
+              sizes="(max-width: 840px) 100vw, 50vw"
+            />
+          ) : null
         }
       />
     </section>
-  );
-}
-
-function PetrolSection() {
-  return (
-    <FuelFeature
-      eyebrow="Gasoline / Premium"
-      heading="Petrol that arrives as clean as it"
-      highlight="left the depot"
-      imageSrc="/images/fuel/petrosol-petrol-pump.webp"
-      imageAlt="PETROSOL petrol pump refuelling a vehicle"
-    >
-      <p>
-        PETROSOL markets high quality petrol that meets both local and
-        international standards &mdash; fit for use in all makes of petrol vehicles
-        and machines from around the world.
-      </p>
-      <p>
-        To maintain its integrity, we&apos;ve invested heavily so that from the
-        loading depots to the stations, all the way to your fuel tank, no
-        contaminants gain access to the product.
-      </p>
-      <p>
-        Besides getting it in full quantity, you get the full benefit of every
-        litre &mdash; while the environment is protected from harmful emissions.
-      </p>
-    </FuelFeature>
-  );
-}
-
-function DieselSection() {
-  return (
-    <FuelFeature
-      eyebrow="Gasoil / Automotive Gasoil"
-      heading="Low sulfur diesel, protected"
-      highlight="every step"
-      imageSrc="/images/home/refinery-tanks.png"
-      imageAlt="Petroleum storage tanks"
-      flip
-    >
-      <p>
-        Like our petrol, PETROSOL diesel meets both local and international
-        standards &mdash; guaranteed fit for all makes of diesel vehicles and
-        machines from around the world.
-      </p>
-      <p>
-        Our low sulfur diesel travels a protected chain: from loading depot to
-        station to your tank, no contaminants gain access to the product.
-      </p>
-      <p>
-        Every litre delivers its full benefit, in full quantity &mdash; with fewer
-        harmful emissions along the way.
-      </p>
-    </FuelFeature>
   );
 }
 
@@ -240,10 +190,15 @@ function IntegritySplit() {
         ratio="news"
         image={
           <Image
-            src="/images/board/gauges.png"
-            alt="Calibrated industrial pump gauges"
+            src="/images/fuel/attendant-card-payment.webp"
+            alt="A PETROSOL attendant taking card payment at the pump"
             fill
             sizes="(max-width: 840px) 100vw, 50vw"
+            // A tall portrait in a 4:3 tile shows just over half its height. A
+            // centre crop lands on the bonnet and cuts the attendant's head off;
+            // hard against the top loses the card handoff. 20% keeps the
+            // dispenser readout, his face, and the payment all in frame.
+            className="object-[center_20%]"
           />
         }
       />
@@ -253,44 +208,47 @@ function IntegritySplit() {
 
 function BulkCta() {
   return (
-    <section className="relative isolate overflow-hidden py-[var(--section-y)]">
-      <Image
-        src="/images/about/plant-silos-wide.png"
-        alt="PETROSOL bulk energy infrastructure"
-        fill
-        sizes="100vw"
-        className="-z-20 object-cover"
-      />
-      <div className="absolute inset-0 -z-10 bg-navy-900/72" />
-      <div className="mx-auto flex max-w-[860px] flex-col items-center gap-8 px-[var(--container-pad)]">
-        <SectionHeading
-          tone="light"
-          align="center"
-          eyebrow="Bulk supply"
-          highlight="direct to site"
-        >
-          Corporate volumes, delivered
-        </SectionHeading>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Button asChild>
-            <Link href="/contact">Enquire about bulk supply</Link>
-          </Button>
-          <Button asChild variant="outlineInverse">
-            <Link href="/lubricants">Explore lubricants</Link>
-          </Button>
-        </div>
+    <MosaicCtaBand>
+      <SectionHeading
+        tone="light"
+        align="center"
+        eyebrow="Bulk supply"
+        highlight="direct to site"
+      >
+        Corporate volumes, delivered
+      </SectionHeading>
+      <div className="flex flex-wrap justify-center gap-4">
+        <Button asChild>
+          <Link href="/contact-us">Enquire about bulk supply</Link>
+        </Button>
+        <Button asChild variant="outlineInverse">
+          <Link href="/lubricants">Explore lubricants</Link>
+        </Button>
       </div>
-    </section>
+    </MosaicCtaBand>
   );
 }
 
-function FuelSections() {
+function FuelSections({
+  products,
+  priceBoard,
+}: {
+  products: FuelProductView[];
+  priceBoard: PumpPriceBoardView | null;
+}) {
   return (
     <main>
       <FuelPageHeader />
-      <PriceBand />
-      <PetrolSection />
-      <DieselSection />
+      <PriceBand board={priceBoard} />
+      {products.map((product, index) => (
+        // Even positions keep the photo on the right, odd flip it — so the
+        // sections alternate however many fuels an editor adds.
+        <FuelFeature
+          key={product.id}
+          product={product}
+          flip={index % 2 === 1}
+        />
+      ))}
       <IntegrityBand />
       <IntegritySplit />
       <BulkCta />
