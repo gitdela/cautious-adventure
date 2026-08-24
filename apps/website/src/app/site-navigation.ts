@@ -3,7 +3,7 @@ import type {
   SiteNavItem,
 } from "@workspace/ui/components/site-chrome";
 
-type SocialName = "facebook" | "x" | "instagram" | "linkedin";
+type SocialName = "facebook" | "x" | "instagram" | "linkedin" | "tiktok";
 
 const navigationItems: SiteNavItem[] = [
   {
@@ -17,7 +17,7 @@ const navigationItems: SiteNavItem[] = [
   {
     label: "At Our Stations",
     children: [
-      { label: "Find a Station", href: "/find-a-station" },
+      { label: "Find our Station", href: "/find-a-station" },
       { label: "FULLCARE Vehicle Services", href: "/fullcare-vehicle-services" },
       { label: "Shops & Convenience", href: "/shops-and-convenience" },
     ],
@@ -65,7 +65,7 @@ const footerGroups: SiteFooterGroup[] = [
   {
     title: "At Our Stations",
     items: [
-      { label: "Find a Station", href: "/find-a-station" },
+      { label: "Find our Station", href: "/find-a-station" },
       { label: "FULLCARE Vehicle Services", href: "/fullcare-vehicle-services" },
       { label: "Shops & Convenience", href: "/shops-and-convenience" },
     ],
@@ -106,6 +106,11 @@ const socialLinks: Array<{
     label: "LinkedIn",
     href: "https://www.linkedin.com/company/petrosol-ghana",
     name: "linkedin",
+  },
+  {
+    label: "TikTok",
+    href: "https://www.tiktok.com/@petrosolghana",
+    name: "tiktok",
   },
 ];
 

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useLenis } from "lenis/react";
 import {
   Accordion,
   AccordionContent,
@@ -24,6 +25,7 @@ const menuButtonClassName =
 function SiteMobileNav({ items }: { items: SiteNavItem[] }) {
   const [open, setOpen] = useState(false);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const lenis = useLenis();
   const closeMenu = () => setOpen(false);
 
   useEffect(() => {
@@ -33,15 +35,20 @@ function SiteMobileNav({ items }: { items: SiteNavItem[] }) {
       if (event.key === "Escape") setOpen(false);
     };
 
+    // `overflow: hidden` blocks native scrolling; Lenis drives the wheel
+    // through its own loop, so it has to be stopped as well or the page keeps
+    // moving behind the menu.
     document.body.style.overflow = "hidden";
+    lenis?.stop();
     document.addEventListener("keydown", onKeyDown);
     closeRef.current?.focus();
 
     return () => {
       document.body.style.overflow = "";
+      lenis?.start();
       document.removeEventListener("keydown", onKeyDown);
     };
-  }, [open]);
+  }, [open, lenis]);
 
   return (
     <>

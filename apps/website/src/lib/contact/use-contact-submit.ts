@@ -72,7 +72,7 @@ function useContactSubmit() {
       // The submit button is disabled until a token arrives, so this is a
       // belt-and-braces guard rather than an expected path.
       if (!token) {
-        setFormError("Still running the security check — try again in a moment.");
+        setFormError("Still running the security check. Try again in a moment.");
         setStatus("error");
         return;
       }

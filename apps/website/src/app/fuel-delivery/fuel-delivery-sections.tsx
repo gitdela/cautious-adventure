@@ -4,11 +4,7 @@ import { RiShieldCheckLine } from "@remixicon/react";
 
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
-import {
-  PhotoTile,
-  SectionHeading,
-  Stat,
-} from "@workspace/ui/components/marketing";
+import { PhotoTile, SectionHeading } from "@workspace/ui/components/marketing";
 import { MosaicPageHeader } from "../mosaic-page-header";
 import { MosaicCtaBand } from "../mosaic-cta-band";
 import {
@@ -17,12 +13,6 @@ import {
 } from "@workspace/ui/components/station-icon";
 
 import { SiteBreadcrumbs } from "../site-breadcrumbs";
-
-const quantityStats = [
-  ["10L = 10L", "At every station, every delivery"],
-  ["100%", "Full quantity, every liter paid"],
-  ["115+", "Stations across Ghana"],
-];
 
 const promisePoints: Array<{
   icon: StationIconName;
@@ -45,7 +35,7 @@ const promisePoints: Array<{
     icon: "tanker",
     title: "Value for your money",
     description:
-      "To choose PETROSOL is to choose value for your hard-earned money — full quantity, every time.",
+      "To choose PETROSOL is to choose value for your hard-earned money: full quantity, every time.",
   },
 ];
 
@@ -66,7 +56,7 @@ const steps = [
     number: "03",
     title: "Verify & sign",
     description:
-      "Watch the meter as we discharge, confirm the volume, sign — done.",
+      "Watch the meter as we discharge, confirm the volume, sign. Done.",
   },
 ];
 
@@ -87,24 +77,6 @@ function DeliveryPageHeader() {
   );
 }
 
-function QuantityBand() {
-  return (
-    <section className="rounded-tr-[120px] bg-surface-inverse py-[var(--section-y-tight)]">
-      <div className="ps-container flex flex-wrap items-center justify-center gap-x-20 gap-y-8">
-        {quantityStats.map(([value, label]) => (
-          <Stat
-            key={value}
-            value={value}
-            label={label}
-            size="md"
-            className="min-w-[120px]"
-          />
-        ))}
-      </div>
-    </section>
-  );
-}
-
 function DeliverySplit() {
   return (
     <section className="ps-container grid grid-cols-1 items-center gap-[clamp(40px,5vw,80px)] py-[var(--section-y)] min-[841px]:grid-cols-2">
@@ -113,8 +85,8 @@ function DeliverySplit() {
         className="max-[840px]:order-2"
         image={
           <Image
-            src="/images/home/fuel-delivery.webp"
-            alt="PETROSOL fuel delivery to a customer site"
+            src="/images/fuel-delivery/tanker-fleet.webp"
+            alt="Three PETROSOL road tankers parked in line, marked “clean fuel in full quantity” and carrying flammable-load hazard plates"
             fill
             sizes="(max-width: 840px) 100vw, 50vw"
           />
@@ -124,12 +96,15 @@ function DeliverySplit() {
         <SectionHeading eyebrow="Fuel delivery service" highlight="to you">
           The station comes
         </SectionHeading>
-        <p className="mt-6 max-w-[50ch]">
-          PETROSOL doesn&apos;t just guarantee you quality fuel at the pump.
-          Our delivery service brings that same fuel &mdash; and the same
-          guarantee &mdash; straight to your home, business or site: for each
-          liter paid, an exact liter is received.
-        </p>
+        <div className="mt-6 flex max-w-[50ch] flex-col gap-4">
+          <p>
+            PETROSOL goes beyond providing quality fuel at our stations. Through
+            our reliable fuel delivery service, we bring the same high-quality
+            products and commitment to accurate quantity directly to your
+            business.
+          </p>
+          <p>Every litre you pay for is a litre you receive.</p>
+        </div>
         <div className="mt-7 flex flex-wrap gap-3">
           <Badge variant="success">
             <RiShieldCheckLine data-icon="inline-start" />
@@ -234,7 +209,6 @@ function FuelDeliverySections() {
   return (
     <main>
       <DeliveryPageHeader />
-      <QuantityBand />
       <DeliverySplit />
       <QuantityPromise />
       <DeliverySteps />

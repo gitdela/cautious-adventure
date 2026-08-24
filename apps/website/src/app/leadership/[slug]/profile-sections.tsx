@@ -61,7 +61,7 @@ function profileContext(member: TeamMemberFull): ProfileContext {
  */
 function ProfilePortrait({ member }: { member: TeamMemberFull }) {
   if (!member.coverPhoto) {
-    return <ImagePlaceholder label={`Drop a portrait — ${member.name}`} />;
+    return <ImagePlaceholder label={`Drop a portrait: ${member.name}`} />;
   }
 
   return (

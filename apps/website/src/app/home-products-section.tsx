@@ -50,13 +50,18 @@ function HomeProductsSection({ products }: { products: LubricantProductView[] })
         >
           Platinum Lubricants For
         </SectionHeading>
-        <p className="mx-auto mt-6 max-w-[56ch] text-center leading-[1.62]">
-          {/* Explicit space: the count is an expression, so JSX would otherwise
-              butt it straight against the next word. */}
-          {products.length}{" "}
-          Syntec&reg;-formulated lubricants — engine oils, gear and transmission
-          fluids, brake fluid and coolant — blended to international standards
-          and stocked at every PETROSOL station.
+        {/* Sits tight under the h2 so the two read as one heading block, with
+            the body copy keeping its own larger gap below. No width cap: the
+            line is ~670px at this size and the container gives it 1152px, so it
+            holds one line on desktop and only wraps once the screen is genuinely
+            too narrow. */}
+        <h3 className="mt-4 text-center font-display text-[length:var(--size-heading-lg)] leading-[1.28] font-bold tracking-[-0.01em] text-balance text-navy-900">
+          Engineered for Performance. Designed for Protection.
+        </h3>
+        <p className="mx-auto mt-6 max-w-[64ch] text-center leading-[1.62]">
+          Available across PETROSOL stations nationwide, our lubricants provide
+          the dependable protection your vehicle needs every journey, every
+          engine, every time.
         </p>
         <div className="mt-16 grid grid-cols-[repeat(auto-fit,minmax(min(100%,240px),1fr))] gap-[var(--gutter)] min-[1100px]:grid-cols-4">
           {featured.map((product) => (

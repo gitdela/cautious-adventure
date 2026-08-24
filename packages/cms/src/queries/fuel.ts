@@ -5,8 +5,8 @@ import { getPublishedClient } from '../config'
 import type { FuelProductsQueryResult } from '../generated/sanity.types'
 
 /**
- * Every fuel section on /fuel, in display order. Two documents today, so there
- * is nothing to paginate or filter.
+ * Every fuel product shown in the unified /fuels showcase, in display order.
+ * Two documents today, so there is nothing to paginate or filter.
  */
 export const fuelProductsQuery = defineQuery(`
   *[_type == "fuelProduct"] | order(order asc) {
@@ -14,9 +14,6 @@ export const fuelProductsQuery = defineQuery(`
     name,
     "slug": slug.current,
     eyebrow,
-    heading,
-    highlight,
-    body,
     image
   }
 `)

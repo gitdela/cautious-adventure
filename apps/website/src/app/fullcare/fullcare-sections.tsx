@@ -32,7 +32,7 @@ const checks: Array<{
   {
     title: "Oil & fuel filter change",
     description:
-      "Oil and fuel filters replaced with genuine parts — never imitations.",
+      "Oil and fuel filters replaced with genuine parts, never imitations.",
     icon: <RiFilter3Line />,
   },
   {
@@ -44,7 +44,7 @@ const checks: Array<{
   {
     title: "Routine checks",
     description:
-      "Battery, refrigerant, coolant, transmission and gear oil, washer fluid — we advise on or correct any anomaly detected.",
+      "Battery, refrigerant, coolant, transmission and gear oil, washer fluid: we advise on or correct any anomaly detected.",
     icon: <RiBatteryChargeLine />,
   },
   {
@@ -66,7 +66,7 @@ const steps = [
     number: "01",
     title: "Drive in",
     description:
-      "Pull up to any PETROSOL FULLCARE Center — no appointment needed.",
+      "Pull up to any PETROSOL FULLCARE Center. No appointment needed.",
   },
   {
     number: "02",

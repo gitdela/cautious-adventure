@@ -35,15 +35,16 @@ function LubricantsIntro() {
       <SectionHeading
         eyebrow="Our lubricants"
         align="center"
-        highlight="Syntec&reg; additives"
+        highlight="and Protection"
       >
-        Blended from virgin base oils and
+        Optimum Engine Performance
       </SectionHeading>
       <p className="mt-6 max-w-[72ch]">
-        PETROSOL markets best-in-class lubricants, made from group II virgin base
-        oils, superior synthetic base oils and Syntec&reg; additives. Every blend is
-        designed for longer service life, fuel efficiency, and the lubrication
-        requirements of OEMs around the world.
+        PETROSOL offers a premium range of high-performance lubricants formulated
+        from Group II virgin base oils, advanced synthetic base oils, and
+        Syntec&reg; additive technology. Each formulation is carefully developed
+        to deliver reliable engine protection, enhanced performance, improved
+        fuel efficiency, and extended service life for every vehicle.
       </p>
     </section>
   );
@@ -63,8 +64,7 @@ function QualityBand() {
         </SectionHeading>
         <p className="mt-5 max-w-[56ch] text-[13px] leading-[1.62] text-white/78">
           PETROSOL lubricants are blended to international specifications and
-          batch-tested before release. Tamper-evident seals on every pack &mdash;
-          if the seal is broken, don&apos;t buy it.
+          batch-tested before release. Tamper-evident seals on every pack.
         </p>
         <div className="mt-7 flex flex-wrap items-center gap-6">
           <Button asChild>

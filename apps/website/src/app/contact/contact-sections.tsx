@@ -230,7 +230,7 @@ function StationCta() {
       </SectionHeading>
       <div className="flex flex-wrap justify-center gap-4">
         <Button asChild>
-          <Link href="/find-a-station">Find a station</Link>
+          <Link href="/find-a-station">Find our station</Link>
         </Button>
         <Button asChild variant="outlineInverse">
           <Link href="/who-we-are">Who we are</Link>

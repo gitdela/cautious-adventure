@@ -94,6 +94,7 @@ function Stat({
   tone = "inverse",
   divider = false,
   className,
+  valueClassName,
 }: {
   value: string;
   children?: React.ReactNode;
@@ -102,11 +103,17 @@ function Stat({
   tone?: "inverse" | "default";
   divider?: boolean;
   className?: string;
+  valueClassName?: string;
 }) {
   if (size === "md") {
     return (
       <div className={cn("text-center", className)}>
-        <strong className="font-display text-[length:var(--size-stat-md)] leading-[1.05] font-bold tracking-[-0.02em] text-brand">
+        <strong
+          className={cn(
+            "font-display text-[length:var(--size-stat-md)] leading-[1.05] font-bold tracking-[-0.02em] text-brand",
+            valueClassName,
+          )}
+        >
           {value}
         </strong>
         {label ? (
@@ -132,7 +139,12 @@ function Stat({
         className,
       )}
     >
-      <strong className="font-display text-[length:var(--size-stat-xl)] leading-none font-bold tracking-[-0.02em] text-brand">
+      <strong
+        className={cn(
+          "font-display text-[length:var(--size-stat-xl)] leading-none font-bold tracking-[-0.02em] text-brand",
+          valueClassName,
+        )}
+      >
         {value}
       </strong>
       {children ? (

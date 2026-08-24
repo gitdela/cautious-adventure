@@ -1,4 +1,5 @@
 @import "@workspace/ui/globals.css";
+@import "lenis/dist/lenis.css";
 
 /* Fonts come from the ui package theme: Verdana (brand face, system font)
    and IBM Plex Mono (spec/data readouts). */

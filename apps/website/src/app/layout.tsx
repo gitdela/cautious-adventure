@@ -15,7 +15,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL(resolveWebsiteUrl(process.env)),
   title: {
-    default: "PETROSOL — energizing dreams!",
+    default: "PETROSOL | energizing dreams!",
     template: "%s · PETROSOL",
   },
   description:
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "PETROSOL",
-    title: "PETROSOL — energizing dreams!",
+    title: "PETROSOL | energizing dreams!",
   },
   twitter: { card: "summary_large_image" },
 };
@@ -40,9 +40,12 @@ export default function RootLayout({
   const sanityConfig = resolveSanityConfig(process.env);
   ensureSanityConfigured();
 
+  // No `h-full`/`min-h-full` chain on html/body: lenis.css forces
+  // `height: auto` on both while Lenis is active, so the sticky footer
+  // relies on `min-h-dvh` instead.
   return (
-    <html lang="en" className="h-full antialiased">
-      <body className="min-h-full flex flex-col">
+    <html lang="en" className="antialiased">
+      <body className="min-h-dvh flex flex-col">
         <JsonLd
           data={{
             "@context": "https://schema.org",

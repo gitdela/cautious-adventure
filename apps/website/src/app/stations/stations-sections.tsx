@@ -15,13 +15,13 @@ import { StationsDirectory } from "./stations-directory";
 function StationsPageHeader() {
   return (
     <MosaicPageHeader
-      title="Find a Station"
+      title="Find our Station"
       breadcrumbs={
         <SiteBreadcrumbs
           items={[
             { label: "Home", href: "/" },
             { label: "At Our Stations" },
-            { label: "Find a Station" },
+            { label: "Find our Station" },
           ]}
         />
       }
@@ -39,14 +39,16 @@ function StationsCta() {
           eyebrow="Get in touch"
           highlight="we'll help"
         >
-          No station near you? Talk to us &mdash;
+          Looking for a PETROSOL Station Near You? &mdash;
         </SectionHeading>
         <div className="mt-8 grid items-start gap-[clamp(32px,4vw,64px)] min-[841px]:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
           <div className="flex flex-col gap-5">
             <p className="max-w-[48ch] text-[14px] text-white/78">
               We&apos;re expanding the network every year. Call us and
-              we&apos;ll point you to your nearest PETROSOL station &mdash; or
-              suggest a location and we&apos;ll look into it.
+              we&apos;ll point you to your nearest PETROSOL station.
+            </p>
+            <p className="max-w-[48ch] text-[14px] text-white/78">
+              As we continue to expand our network across Ghana, we&apos;re always interested in hearing from you.
             </p>
             <a
               href="tel:+233362196538"

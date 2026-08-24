@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { RiArrowLeftSLine, RiArrowRightSLine } from "@remixicon/react";
+import { useLenis } from "lenis/react";
 
 import {
   PortableContent,
@@ -91,11 +92,11 @@ function PhotoStage({
           >
             <EventPhoto
               photo={photo}
-              alt={`${title} — photo ${slot + 1}`}
-              width={1280}
-              height={800}
-              sizes="(min-width: 900px) 860px, 94vw"
-              placeholder={`Drop photo ${slot + 1} — ${title}`}
+              alt={`${title}, photo ${slot + 1}`}
+              width={1600}
+              height={1000}
+              sizes="(min-width: 900px) 900px, 94vw"
+              placeholder={`Drop photo ${slot + 1}: ${title}`}
               priority={slot === 0}
               // The rows crop to fit their strip; this is where you come to see
               // the whole photograph, so nothing is cut. Portrait shots
@@ -197,6 +198,16 @@ function EventModal({
   open: boolean;
   onClose: () => void;
 }) {
+  const lenis = useLenis();
+
+  // The dialog's own scroll lock stops native scrolling; Lenis drives the
+  // wheel through its own loop and has to be stopped alongside it.
+  useEffect(() => {
+    if (!open) return;
+    lenis?.stop();
+    return () => lenis?.start();
+  }, [open, lenis]);
+
   if (!event) return null;
 
   // An event with no reel yet cannot open the lightbox — the stage divides by
@@ -207,10 +218,12 @@ function EventModal({
     <Dialog open={open} onOpenChange={(next) => !next && onClose()}>
       <DialogContent
         className={cn(
-          "max-h-[86vh] overflow-y-auto px-[var(--card-pad)] pt-12 pb-[var(--card-pad)]",
+          "max-h-[90vh] overflow-y-auto px-[var(--card-pad)] pt-12 pb-[var(--card-pad)]",
           // Stories are a column of prose and read better narrow; the lightbox
           // and the film want the extra width for their picture boxes.
-          mode === "story" ? "sm:max-w-[680px]" : "sm:max-w-[860px]",
+          mode === "story"
+            ? "sm:max-w-[680px]"
+            : "sm:max-w-[min(960px,calc(100vw-4rem))]",
         )}
       >
         <DialogHeader className="gap-0">

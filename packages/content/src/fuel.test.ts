@@ -9,9 +9,6 @@ const row = {
   name: "Petrol",
   slug: "petrol",
   eyebrow: "Gasoline / Premium",
-  heading: "Petrol that arrives as clean as it",
-  highlight: "left the depot",
-  body: ["First paragraph.", "Second paragraph."],
   image: null,
 };
 
@@ -22,17 +19,8 @@ describe("toFuelProduct", () => {
       slug: "petrol",
       name: "Petrol",
       eyebrow: "Gasoline / Premium",
-      heading: "Petrol that arrives as clean as it",
-      highlight: "left the depot",
-      body: ["First paragraph.", "Second paragraph."],
       image: null,
     });
-  });
-
-  // The section renders one <p> per entry, so an absent body has to be an empty
-  // list rather than undefined.
-  it("falls back to an empty body", () => {
-    expect(toFuelProduct({ ...row, body: null } as never).body).toEqual([]);
   });
 
   it("rejects a product with no slug", () => {

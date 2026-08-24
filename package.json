@@ -10,6 +10,7 @@
     "packages/*"
   ],
   "scripts": {
+    "dev": "turbo run dev --filter=website --filter=studio",
     "dev:website": "turbo run dev --filter=website",
     "build:website": "turbo run build --filter=website",
     "dev:studio": "turbo run dev --filter=studio",

@@ -17,6 +17,7 @@ function PersonCard({
   tone = "light",
   media,
   mediaClassName,
+  footer,
   className,
 }: {
   name: string;
@@ -29,6 +30,12 @@ function PersonCard({
    */
   media?: ReactNode;
   mediaClassName?: string;
+  /**
+   * Optional slot beside the name — a call to action, a link affordance, a
+   * badge. Kept a slot rather than a `href` prop so this stays routing-agnostic:
+   * the card itself never knows whether it is inside a link.
+   */
+  footer?: ReactNode;
   className?: string;
 }) {
   return (
@@ -50,14 +57,19 @@ function PersonCard({
           </span>
         )}
       </div>
-      <h3
-        className={cn(
-          "mt-4 font-display text-base font-bold",
-          tone === "dark" ? "text-white" : "text-navy-900",
-        )}
-      >
-        {name}
-      </h3>
+      {/* Baseline-aligned so the footer sits on the name's first line even
+          when a long name wraps, rather than drifting to the block's centre. */}
+      <div className="mt-4 flex items-baseline justify-between gap-3">
+        <h3
+          className={cn(
+            "font-display text-base font-bold",
+            tone === "dark" ? "text-white" : "text-navy-900",
+          )}
+        >
+          {name}
+        </h3>
+        {footer}
+      </div>
       <p
         className={cn(
           "mt-1 text-[13px]",

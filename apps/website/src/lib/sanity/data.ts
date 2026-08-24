@@ -276,6 +276,16 @@ export async function getFuelProducts() {
 export async function getGalleryEvents() {
   const result = await sanityFetchLive<GalleryEventsQueryResult>({
     query: galleryEventsQuery,
+    params: { stream: null },
+  });
+  return (result ?? []).map(toGalleryEvent);
+}
+
+/** Community / CSR entries for the sustainability page, in gallery order. */
+export async function getCommunityGalleryEvents() {
+  const result = await sanityFetchLive<GalleryEventsQueryResult>({
+    query: galleryEventsQuery,
+    params: { stream: "community" },
   });
   return (result ?? []).map(toGalleryEvent);
 }

@@ -62,7 +62,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
           mobileNav={<SiteMobileNav items={navigationItems} />}
           action={
             <Button asChild size="sm" variant="station">
-              <Link href="/find-a-station">Find a Station</Link>
+              <Link href="/find-a-station">Find our Station</Link>
             </Button>
           }
         />
@@ -72,7 +72,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
 
       <SiteFooter
         brand={<SiteBrand tone="inverse" size="footer" />}
-        summary="Quality fuel in full quantity, lubricants and vehicle care — at PETROSOL stations across Ghana."
+        summary="Visit any PETROSOL station across Ghana and experience reliable and clean fuel in full quantity."
         contact={
           <>
             <a href="tel:+233362196538">+233 (0)362 196 538</a>

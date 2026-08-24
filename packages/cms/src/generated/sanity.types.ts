@@ -153,9 +153,9 @@ export type FuelProduct = {
   name: string;
   slug: Slug;
   eyebrow: string;
-  heading: string;
-  highlight: string;
-  body: Array<string>;
+  heading?: string;
+  highlight?: string;
+  body?: Array<string>;
   image: {
     asset?: SanityImageAssetReference;
     media?: unknown;
@@ -573,15 +573,12 @@ export type AllSanitySchemaTypes =
 
 // Source: ../../packages/cms/src/queries/fuel.ts
 // Variable: fuelProductsQuery
-// Query: *[_type == "fuelProduct"] | order(order asc) {    _id,    name,    "slug": slug.current,    eyebrow,    heading,    highlight,    body,    image  }
+// Query: *[_type == "fuelProduct"] | order(order asc) {    _id,    name,    "slug": slug.current,    eyebrow,    image  }
 export type FuelProductsQueryResult = Array<{
   _id: string;
   name: string;
   slug: string;
   eyebrow: string;
-  heading: string;
-  highlight: string;
-  body: Array<string>;
   image: {
     asset?: SanityImageAssetReference;
     media?: unknown;
@@ -594,7 +591,7 @@ export type FuelProductsQueryResult = Array<{
 
 // Source: ../../packages/cms/src/queries/gallery.ts
 // Variable: galleryEventsQuery
-// Query: *[_type == "galleryEvent"] | order(order asc) {    _id,    title,    "slug": slug.current,    kind,    stream,    eventDate,    coverImage,    photos,    excerpt,    body,    caption,    muxPlaybackId,    posterTime  }
+// Query: *[    _type == "galleryEvent" &&    (!defined($stream) || stream == $stream)  ] | order(order asc) {    _id,    title,    "slug": slug.current,    kind,    stream,    eventDate,    coverImage,    photos,    excerpt,    body,    caption,    muxPlaybackId,    posterTime  }
 export type GalleryEventsQueryResult = Array<{
   _id: string;
   title: string;
@@ -1003,8 +1000,8 @@ export type TeamMemberSlugsQueryResult = Array<string>;
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    '\n  *[_type == "fuelProduct"] | order(order asc) {\n    _id,\n    name,\n    "slug": slug.current,\n    eyebrow,\n    heading,\n    highlight,\n    body,\n    image\n  }\n': FuelProductsQueryResult;
-    '\n  *[_type == "galleryEvent"] | order(order asc) {\n    _id,\n    title,\n    "slug": slug.current,\n    kind,\n    stream,\n    eventDate,\n    coverImage,\n    photos,\n    excerpt,\n    body,\n    caption,\n    muxPlaybackId,\n    posterTime\n  }\n': GalleryEventsQueryResult;
+    '\n  *[_type == "fuelProduct"] | order(order asc) {\n    _id,\n    name,\n    "slug": slug.current,\n    eyebrow,\n    image\n  }\n': FuelProductsQueryResult;
+    '\n  *[\n    _type == "galleryEvent" &&\n    (!defined($stream) || stream == $stream)\n  ] | order(order asc) {\n    _id,\n    title,\n    "slug": slug.current,\n    kind,\n    stream,\n    eventDate,\n    coverImage,\n    photos,\n    excerpt,\n    body,\n    caption,\n    muxPlaybackId,\n    posterTime\n  }\n': GalleryEventsQueryResult;
     '\n  *[\n    _type == "legalDocument" &&\n    documentKind == $kind &&\n    approvalState == "approved" &&\n    effectiveAt <= now()\n  ] | order(effectiveAt desc)[0] {\n    _id,\n    documentKind,\n    title,\n    version,\n    "slug": slug.current,\n    effectiveAt,\n    publishedAt,\n    body,\n    jurisdiction,\n    seo\n  }\n': LegalCurrentByKindQueryResult;
     '\n  *[\n    _type == "legalDocument" &&\n    documentKind == $kind &&\n    version == $version\n  ][0] {\n    _id,\n    documentKind,\n    title,\n    version,\n    "slug": slug.current,\n    effectiveAt,\n    publishedAt,\n    approvalState,\n    body,\n    jurisdiction,\n    seo\n  }\n': LegalByKindAndVersionQueryResult;
     '\n  *[_type == "legalDocument" && documentKind == $kind && approvalState in ["approved", "superseded"]]\n    | order(effectiveAt desc) {\n    documentKind,\n    version,\n    effectiveAt,\n    approvalState\n  }\n': LegalKindVersionsQueryResult;

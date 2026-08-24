@@ -5,18 +5,15 @@ import {
   formatDate,
   type BlogPostSummary,
   type LubricantProductView,
-  type PumpPriceBoardView,
 } from "@workspace/content";
 
 import { Button } from "@workspace/ui/components/button";
 import { Card } from "@workspace/ui/components/card";
 import { ImagePlaceholder } from "@workspace/ui/components/image-placeholder";
 import {
-  Eyebrow,
   PhotoTile,
   Seal,
   SectionHeading,
-  Stat,
 } from "@workspace/ui/components/marketing";
 import {
   StationChip,
@@ -26,7 +23,6 @@ import {
 import { contentAdapters } from "@/lib/content-adapters";
 
 import { HeroVideo } from "./hero-video";
-import { HomePriceBoard } from "./home-price-board";
 import { HomeProductsSection } from "./home-products-section";
 
 const services: Array<{
@@ -65,11 +61,10 @@ const services: Array<{
       image: "/images/home/shop.webp",
       href: "/shops-and-convenience",
       imagePosition: "object-cover object-[center_12%]",
-    },
-  ];
+  },
+];
 
-
-function HeroSection({ priceBoard }: { priceBoard: PumpPriceBoardView | null }) {
+function HeroSection() {
   return (
     // `isolate` scopes the negative z-indexes to the band. The header is
     // absolutely positioned over it, so the top padding has to clear it — and
@@ -85,15 +80,16 @@ function HeroSection({ priceBoard }: { priceBoard: PumpPriceBoardView | null }) 
       <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(4,18,30,0.78)_0%,rgba(4,18,30,0.58)_45%,rgba(4,18,30,0.84)_100%)] min-[961px]:bg-[linear-gradient(90deg,rgba(4,18,30,0.86)_0%,rgba(4,18,30,0.62)_44%,rgba(4,18,30,0.24)_100%)]" />
 
       <div className="relative flex flex-1 items-center pb-12">
-        <div className="ps-container grid w-full grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))] items-center gap-x-20 gap-y-14 min-[961px]:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
-          <div>
+        <div className="ps-container w-full">
+          <div className="max-w-[800px] min-[961px]:ml-[clamp(40px,6vw,96px)]">
             {/* <Eyebrow tone="light">Efficiency meets reliability</Eyebrow> */}
-            <h1 className="mt-5 max-w-[14ch] font-display text-[clamp(34px,3.6vw,var(--size-display-xl))] leading-[1.06] font-bold tracking-[-0.02em] text-pretty text-white">
-              Your energy solutions provider
+            <h1 className="mt-5 max-w-[16ch] font-display text-[clamp(34px,3.6vw,var(--size-display-xl))] leading-[1.06] font-bold tracking-[-0.02em] text-pretty text-white">
+              Your Energy Solutions Provider
             </h1>
-            <p className="mt-6 max-w-[46ch] text-[15px] leading-[1.62] text-white/85">
-              Whether you&apos;re looking for high-quality gasoline or innovative
-              solutions to power your home or business, we&apos;ve got you covered.
+            <p className="mt-6 max-w-[58ch] text-base leading-[1.62] text-white/85 min-[961px]:text-lg">
+              Whether you&apos;re chasing personal ambitions, driving business
+              growth, or building the future of Ghana, PETROSOL is here to power
+              every journey with energy solutions you can trust.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <Button asChild>
@@ -104,8 +100,7 @@ function HeroSection({ priceBoard }: { priceBoard: PumpPriceBoardView | null }) 
               </Button>
             </div>
           </div>
-
-          {priceBoard ? <HomePriceBoard board={priceBoard} /> : null}
+          {/* Pump price board intentionally hidden for now. */}
         </div>
       </div>
     </section>
@@ -119,16 +114,17 @@ function AboutSection() {
     // governs again.
     <section className="ps-container grid grid-cols-[repeat(auto-fit,minmax(min(100%,400px),1fr))] items-center gap-[clamp(48px,6.25vw,80px)] py-[var(--section-y)] min-[961px]:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
       <div>
-        <SectionHeading eyebrow="About us" highlight="Platinum OMC.">
-          Ghana&apos;s Premier
+        <SectionHeading eyebrow="About us" highlight="PETROSOL Difference">
+          Discover the
         </SectionHeading>
         <p className="mt-6 max-w-[50ch] leading-[1.62]">
-          At PETROSOL, we&apos;re committed to delivering excellence in the oil
-          industry. With our state-of-the-art technology and advanced processes,
-          we&apos;re able to provide innovative solutions to meet the evolving needs
-          of our clients worldwide. We pride ourselves on our commitment to
-          safety, reliability, and sustainability, and we&apos;re always looking for
-          new ways to improve our operations.
+          At PETROSOL Platinum Energy PLC, we believe energy is more than fuel,
+          it is the force that drives businesses, connects communities, and
+          powers the aspirations of individuals and nations. As a proudly
+          Ghanaian, ISO-certified Oil Marketing Company (OMC), we are committed
+          to delivering reliable energy solutions that fuel progress while
+          maintaining the highest standards of safety, quality, and
+          environmental responsibility.
         </p>
         <Button asChild variant="outline" className="mt-8">
           <Link href="/who-we-are">Discover more</Link>
@@ -214,6 +210,39 @@ function ServicesSection() {
   );
 }
 
+/**
+ * One commitment in the band below Our Services.
+ *
+ * Same two-column rhythm and divider as `Stat`, but the left cell holds a
+ * heading rather than a figure: these entries are named commitments, not
+ * numbers, and `Stat` sets its value at 74px in a 240px column, which a phrase
+ * this long would break apart.
+ */
+function CommitmentRow({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="grid items-start gap-6 border-t border-white/16 py-8 min-[961px]:grid-cols-[minmax(360px,420px)_1fr] min-[961px]:gap-12 min-[961px]:py-12">
+      {/* The column is sized around the type rather than the other way round:
+          "Sustainable Energy" needs roughly 335px at this size, so the column
+          never drops below 360px and the longest title breaks across two lines
+          instead of three. The two-column layout waits until 961px for the same
+          reason — any earlier and that column would starve the description.
+          `text-balance` evens the pair rather than orphaning a single word. */}
+      <h3 className="m-0 font-display text-[length:var(--size-display-sm)] leading-[1.18] font-bold tracking-[-0.02em] text-balance text-brand">
+        {title}
+      </h3>
+      <p className="max-w-[52ch] text-[15px] leading-[1.62] text-white/72">
+        {children}
+      </p>
+    </div>
+  );
+}
+
 function StatBand() {
   return (
     <section className="ps-blueprint bg-muted">
@@ -223,15 +252,16 @@ function StatBand() {
             To Drive Innovation And Progress In The
           </SectionHeading>
           <div className="mt-12">
-            <Stat value="10%" divider className="items-center">
-              lower prices than competitors. Our company is able to keep the price
-              of oil and gas at the affordable level.
-            </Stat>
-            <Stat value="20%" divider className="items-center">
-              reducing greenhouse gas emissions per year. We&apos;re committed to
-              minimizing our environmental impact and promoting social
-              responsibility.
-            </Stat>
+            <CommitmentRow title="Sustainable Energy Solutions">
+              We are expanding beyond traditional oil marketing by embracing
+              cleaner energy solutions, including solar and other initiatives
+              that support a more sustainable energy future.
+            </CommitmentRow>
+            <CommitmentRow title="Quality &amp; Reliability">
+              We deliver dependable petroleum products and energy solutions
+              backed by rigorous quality standards and a commitment to
+              operational excellence.
+            </CommitmentRow>
             <div className="border-t border-white/16" />
           </div>
         </div>
@@ -273,19 +303,23 @@ function NewsSection({ posts }: { posts: BlogPostSummary[] }) {
             <article key={post.slug}>
               <Link href={`/blog/${post.slug}`} className="group block rounded-xl">
                 <PhotoTile
-                  ratio="og"
+                  // 3:2 rather than one of the named ratios: `og` (1200/630) is
+                  // for artwork with baked-in text that must not be cropped,
+                  // and these are photographs, which it left looking letterboxed.
+                  // The requested crop matches, so Sanity crops once.
+                  className="aspect-[3/2]"
                   image={
                     post.coverImage ? (
                       <CmsImage
                         source={post.coverImage}
                         alt={post.coverImage.alt ?? post.title}
                         width={1200}
-                        height={630}
+                        height={800}
                         sizes="(max-width: 720px) 100vw, (max-width: 1100px) 50vw, 33vw"
                       />
                     ) : (
                       <ImagePlaceholder
-                        label={`Drop a photo — ${post.title.slice(0, 40)}…`}
+                        label={`Drop a photo: ${post.title.slice(0, 40)}…`}
                       />
                     )
                   }
@@ -313,8 +347,7 @@ function QuoteBand() {
     <section className="home-quote py-[calc(var(--section-y)*1.5)]">
       <div className="mx-auto max-w-[980px] px-[var(--container-pad)] text-center">
         <h2 className="font-display text-[length:var(--size-display-lg)] leading-[1.08] font-bold tracking-[-0.02em] text-white">
-          We&apos;re Proud To Be A Useful And <span className="swash">Valuable Partner</span>{" "}
-          To Our Customers And Communities
+          WE LOVE TO ENERGIZE <span className="swash">YOUR DREAMS</span>
         </h2>
       </div>
     </section>
@@ -322,17 +355,15 @@ function QuoteBand() {
 }
 
 function HomeSections({
-  priceBoard,
   featuredPosts,
   lubricants,
 }: {
-  priceBoard: PumpPriceBoardView | null;
   featuredPosts: BlogPostSummary[];
   lubricants: LubricantProductView[];
 }) {
   return (
     <main>
-      <HeroSection priceBoard={priceBoard} />
+      <HeroSection />
       <AboutSection />
       <ServicesSection />
       <StatBand />

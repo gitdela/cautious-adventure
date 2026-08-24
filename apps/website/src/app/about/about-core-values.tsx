@@ -1,46 +1,58 @@
 import Image from "next/image";
 
-import {
-  PhotoTile,
-  SectionHeading,
-} from "@workspace/ui/components/marketing";
+import { PhotoTile, SectionHeading } from "@workspace/ui/components/marketing";
+import { cn } from "@workspace/ui/lib/utils";
 
-import { values, type CoreValue } from "./about-data";
+import { customerPromises, values } from "./about-data";
 
-function ValueBlock({ value }: { value: CoreValue }) {
+/**
+ * The six cardinal pillars, framed from the customer's side — they are written
+ * as things a customer receives, not things the company does internally.
+ */
+function CustomerPromisesSection() {
   return (
-    <article className="grid gap-x-14 gap-y-6 border-t border-border pt-6 min-[841px]:grid-cols-[minmax(220px,1fr)_2fr]">
-      <div>
-        <p className="font-mono text-[13px] font-semibold tracking-[0.08em] text-brand">
-          {value.number}
-        </p>
-        <h3 className="mt-3 font-display text-[length:var(--size-display-sm)] leading-[1.18] font-bold tracking-[-0.02em] text-navy-900">
-          {value.title}
-        </h3>
-        <p className="mt-3 max-w-[34ch]">{value.summary}</p>
-      </div>
-
-      <div className="max-w-[62ch]">
-        <p className="font-display text-[11px] font-bold tracking-[0.14em] text-muted-foreground uppercase">
-          What it means
-        </p>
-        <p className="mt-3">{value.meaning}</p>
-
-        <p className="mt-6 font-display text-[11px] font-bold tracking-[0.14em] text-muted-foreground uppercase">
-          How we live it
-        </p>
-        <ul className="mt-3 flex flex-col gap-2.5">
-          {value.behaviors.map((behavior) => (
-            <li
-              key={behavior}
-              className="relative pl-7 before:absolute before:top-[0.72em] before:left-0 before:h-[3px] before:w-3.5 before:bg-leaf-500 before:content-['']"
-            >
-              {behavior}
+    <section className="ps-blueprint bg-surface-inverse py-[var(--section-y)]">
+      <div className="ps-container">
+        <SectionHeading
+          eyebrow="Our promise"
+          tone="light"
+          align="center"
+        >
+          6 Cardinal Pillars of PETROSOL Operations
+        </SectionHeading>
+        <ol className="mt-16 grid list-none grid-cols-[repeat(auto-fit,minmax(min(100%,240px),1fr))] gap-x-[var(--gutter)] gap-y-16 p-0 min-[1100px]:grid-cols-3">
+          {customerPromises.map((promise) => (
+            <li key={promise.title} className="flex flex-col items-center">
+              <div className="relative w-full max-w-[220px]">
+                <div className="relative aspect-square overflow-hidden rounded-full border-[7px] border-white bg-white">
+                  <Image
+                    src={promise.image.src}
+                    alt={promise.image.alt}
+                    fill
+                    sizes="(max-width: 600px) 64vw, 220px"
+                    className={cn(
+                      promise.image.fit === "contain"
+                        ? "object-contain p-5"
+                        : "object-cover",
+                      promise.image.position,
+                    )}
+                  />
+                </div>
+                <span className="absolute top-7 -left-2 grid size-11 place-items-center rounded-full bg-brand font-mono text-[17px] font-bold text-white">
+                  {promise.number}
+                </span>
+              </div>
+              <div className="mt-7 w-full max-w-[250px] text-center">
+                <h3 className="font-display text-[18px] leading-[1.3] font-bold text-white">
+                  {promise.title}
+                </h3>
+                <p className="mt-2 text-white/78">{promise.description}</p>
+              </div>
             </li>
           ))}
-        </ul>
+        </ol>
       </div>
-    </article>
+    </section>
   );
 }
 
@@ -50,7 +62,7 @@ function FleetTeamPhotoBreak() {
       // A wide line-up of people: a fixed 21/8 letterbox left it a thin strip
       // on a phone. The ratio opens up as the viewport narrows so the group
       // stays legible, and is a little taller than 21/8 even at full width.
-      className="aspect-[4/3] min-[601px]:aspect-[16/9] min-[841px]:aspect-[2/1] min-[1100px]:aspect-[12/5]"
+      className="aspect-[4/3] rounded-none min-[601px]:aspect-[16/9] min-[841px]:aspect-[2/1] min-[1100px]:aspect-[12/5]"
       image={
         <Image
           src="/images/about/fleet-team.webp"
@@ -71,7 +83,8 @@ function FleetTeamPhotoBreak() {
  * tiles instead take a fixed height and most of the viewport width, and the row
  * scrolls; the next tile peeks in as the affordance that there is more.
  */
-const servicePhotoSizes = "(max-width: 840px) 80vw, (max-width: 1280px) 50vw, 620px";
+const servicePhotoSizes =
+  "(max-width: 840px) 80vw, (max-width: 1280px) 50vw, 620px";
 
 /** Fixed height on phones, so a narrower tile does not also become a short one. */
 const servicePhotoTile =
@@ -92,10 +105,11 @@ function ServicePhotoBreak() {
         className={servicePhotoTile}
         image={
           <Image
-            src="/images/about/service-payment.webp"
-            alt="A PETROSOL forecourt attendant taking a card payment at a customer's car window"
+            src="/images/about/team-empathy.webp"
+            alt="Two PETROSOL workers in hard hats and branded high-visibility vests standing arm in arm"
             fill
             sizes={servicePhotoSizes}
+            className="object-[50%_42%]"
           />
         }
       />
@@ -103,8 +117,8 @@ function ServicePhotoBreak() {
         className={servicePhotoTile}
         image={
           <Image
-            src="/images/home/fullcare.webp"
-            alt="A PETROSOL FullCare engine inspection"
+            src="/images/about/service-payment.webp"
+            alt="A PETROSOL forecourt attendant taking a card payment at a customer's car window"
             fill
             sizes={servicePhotoSizes}
           />
@@ -114,6 +128,14 @@ function ServicePhotoBreak() {
   );
 }
 
+/**
+ * Six values, one line each.
+ *
+ * This section used to give every value a summary, a definition and four
+ * behaviours, which made it the longest thing on an overview page and crowded
+ * out the company's actual story. The fuller definitions still live in
+ * `about-data.ts` for a culture or careers page to pick up.
+ */
 function CoreValuesSection() {
   return (
     <section className="py-[var(--section-y)]">
@@ -123,32 +145,30 @@ function CoreValuesSection() {
             Our six
           </SectionHeading>
           <p className="mt-6 max-w-[72ch]">
-            At PETROSOL, our core values are the fundamental principles and
-            deeply held beliefs that guide every action, decision, attitude and
-            interaction. They shape how we work, how we treat one another and
-            how we serve our customers, partners and communities. Together with
-            our operating culture—High Quality, Full Quantity and Fair
-            Pricing—these values define who we are and the value we are
-            committed to delivering across Ghana.
+            Our values are the principles behind every decision and every
+            interaction: how we work, how we treat one another, and how we
+            serve our customers and communities.
           </p>
         </div>
 
-        {values.slice(0, 2).map((value) => (
-          <ValueBlock key={value.number} value={value} />
-        ))}
-        <FleetTeamPhotoBreak />
+        <ol className="grid list-none grid-cols-[repeat(auto-fit,minmax(min(100%,264px),1fr))] gap-x-[var(--gutter)] gap-y-10 p-0 min-[1100px]:grid-cols-3">
+          {values.map((value) => (
+            <li key={value.number} className="border-t border-border pt-5">
+              <p className="font-mono text-[13px] font-semibold tracking-[0.08em] text-brand">
+                {value.number}
+              </p>
+              <h3 className="mt-3 font-display text-[18px] leading-[1.32] font-bold text-navy-900">
+                {value.title}
+              </h3>
+              <p className="mt-2 max-w-[38ch]">{value.summary}</p>
+            </li>
+          ))}
+        </ol>
 
-        {values.slice(2, 4).map((value) => (
-          <ValueBlock key={value.number} value={value} />
-        ))}
         <ServicePhotoBreak />
-
-        {values.slice(4).map((value) => (
-          <ValueBlock key={value.number} value={value} />
-        ))}
       </div>
     </section>
   );
 }
 
-export { CoreValuesSection };
+export { CoreValuesSection, CustomerPromisesSection, FleetTeamPhotoBreak };

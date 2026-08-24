@@ -16,7 +16,7 @@ describe("site navigation", () => {
       {
         label: "At Our Stations",
         children: [
-          { label: "Find a Station", href: "/find-a-station" },
+          { label: "Find our Station", href: "/find-a-station" },
           { label: "FULLCARE Vehicle Services", href: "/fullcare-vehicle-services" },
           { label: "Shops & Convenience", href: "/shops-and-convenience" },
         ],

@@ -5,7 +5,7 @@ import { getStationTerritories, getStations } from "@/lib/sanity/data";
 import { StationsSections } from "../stations/stations-sections";
 
 export const metadata: Metadata = {
-  title: { absolute: "Find a Station — PETROSOL" },
+  title: { absolute: "Find our Station | PETROSOL" },
   description:
     "Find your nearest PETROSOL fuel station in Ghana and search by territory, station name or manager, with available amenities listed.",
   alternates: { canonical: "/find-a-station" },

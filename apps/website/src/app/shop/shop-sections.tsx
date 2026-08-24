@@ -23,7 +23,7 @@ const merchandisingPoints: Array<{
       icon: "shop",
       title: "Quality",
       description:
-        "Every item on our shelves is selected for quality — the same standard we hold our fuel to.",
+        "Every item on our shelves is selected for quality: the same standard we hold our fuel to.",
     },
     {
       icon: "fuel-drop",
@@ -60,14 +60,17 @@ function ShopIntro() {
   return (
     <section className="ps-container grid grid-cols-1 items-center gap-[clamp(40px,5vw,80px)] py-[var(--section-y)] min-[841px]:grid-cols-2">
       <div>
-        <SectionHeading eyebrow="The PETROSOL shop" highlight="fuel stop">
-          A corner store at every
-        </SectionHeading>
+        <SectionHeading>PETROSOL MART</SectionHeading>
         <p className="mt-6 max-w-[50ch]">
-          Shops at PETROSOL service stations are properly stocked with assorted
-          items to meet the grocery needs of our customers &mdash; so you can
-          grab what you need while your tank fills or your car is in the
-          FULLCARE bay.
+          Our PETROSOL Marts are designed to make every stop more convenient.
+          Our service station shops offer a carefully selected range of everyday
+          essentials; snacks, beverages, and other useful items, giving you the
+          convenience of shopping while you refuel or have your vehicle serviced
+          at our FULLCARE bay.
+        </p>
+        <p className="mt-4 max-w-[50ch]">
+          Whether you&apos;re making a quick stop or taking a break along the way,
+          PETROSOL Mart has all you need.
         </p>
         <div className="mt-7 flex flex-wrap gap-3">
           <Badge>Properly stocked</Badge>
@@ -75,7 +78,6 @@ function ShopIntro() {
             <RiShieldCheckLine data-icon="inline-start" />
             Quality merchandise
           </Badge>
-          <Badge variant="secondary">At every station</Badge>
         </div>
         <div className="mt-8">
           <Button asChild>
@@ -138,9 +140,9 @@ function ShopCta() {
         tone="light"
         align="center"
         eyebrow="On your route"
-        highlight="on the way"
+        highlight="at one place."
       >
-        Everything you need,
+        Everything you need
       </SectionHeading>
       <div className="flex flex-wrap justify-center gap-4">
         <Button asChild>

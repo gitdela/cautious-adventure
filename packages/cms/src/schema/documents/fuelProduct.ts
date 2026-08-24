@@ -1,12 +1,12 @@
 import { defineArrayMember, defineField, defineType } from 'sanity'
 
 /**
- * One fuel on the /fuel page — Petrol, Diesel — rendered as a two-column
- * feature block: headline and prose on one side, photograph on the other.
+ * One named fuel in the unified /fuels showcase — Petrol or Diesel. Shared
+ * page copy lives in the website; these documents own labels and photography.
  *
  * Deliberately not modelled like `lubricantProduct`: fuels carry no grade,
  * standard or pack data, on our page or on petrosol.com.gh. What they carry is
- * a short editorial section, so that is exactly what this type holds.
+ * a compact visual identity rather than a separate editorial narrative.
  *
  * Pump prices are NOT here. They live in the `pumpPrices` singleton, which both
  * the home hero and the fuel page's price band read — one number, one place.
@@ -21,7 +21,7 @@ export const fuelProductType = defineType({
       title: 'Name',
       type: 'string',
       description:
-        'Short name for this fuel, e.g. “Petrol”. Used to find the document in Studio — the page itself shows the eyebrow and headline below.',
+        'Short name for this fuel, e.g. “Petrol”. Shown beneath its photo in the unified fuels showcase.',
       validation: (rule) => rule.required(),
     }),
     defineField({
@@ -29,7 +29,7 @@ export const fuelProductType = defineType({
       title: 'Slug',
       type: 'slug',
       description:
-        'Stable identifier. Not a URL — fuels are sections on /fuel, not pages of their own.',
+        'Stable identifier. Not a URL — fuels are tiles on /fuels, not pages of their own.',
       options: { source: 'name', maxLength: 96 },
       validation: (rule) => rule.required(),
     }),
@@ -38,39 +38,42 @@ export const fuelProductType = defineType({
       title: 'Eyebrow',
       type: 'string',
       description:
-        'Small label above the headline, e.g. “Gasoline / Premium” or “Gasoil / Automotive Gasoil”.',
+        'Small product-family label below the photo, e.g. “Gasoline / Premium” or “Gasoil / Automotive Gasoil”.',
       validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'heading',
-      title: 'Headline',
+      title: 'Legacy headline',
       type: 'string',
       description:
-        'The headline’s opening words, e.g. “Petrol that arrives as clean as it”. The highlighted phrase below finishes the sentence.',
-      validation: (rule) => rule.required(),
+        'Retained for compatibility with existing records. The unified fuels page no longer renders this field.',
+      hidden: true,
+      readOnly: true,
     }),
     defineField({
       name: 'highlight',
-      title: 'Highlighted phrase',
+      title: 'Legacy highlighted phrase',
       type: 'string',
       description:
-        'The end of the headline, drawn in the brand script — e.g. “left the depot”. Keep it to a few words; it is a flourish, not a sentence.',
-      validation: (rule) => rule.required(),
+        'Retained for compatibility with existing records. The unified fuels page no longer renders this field.',
+      hidden: true,
+      readOnly: true,
     }),
     defineField({
       name: 'body',
-      title: 'Body',
+      title: 'Legacy body',
       type: 'array',
       of: [defineArrayMember({ type: 'text', rows: 4 })],
       description:
-        'One entry per paragraph. Three reads best at this width.',
-      validation: (rule) => rule.required().min(1),
+        'Retained for compatibility with existing records. Shared fuels-page copy now lives in the website.',
+      hidden: true,
+      readOnly: true,
     }),
     defineField({
       name: 'image',
       title: 'Photo',
       type: 'image',
-      // Hotspot matters here: the section crops to a wide tile, so whoever
+      // Hotspot matters here: the showcase crops to a portrait tile, so whoever
       // uploads decides what survives the crop.
       options: { hotspot: true },
       validation: (rule) => rule.required(),
@@ -88,7 +91,7 @@ export const fuelProductType = defineType({
       title: 'Display order',
       type: 'number',
       description:
-        'Lower numbers appear first. It also decides the layout: even positions put the photo on the right, odd on the left, so reordering alternates the sections automatically.',
+        'Lower numbers appear first in the unified product-photo mosaic.',
       validation: (rule) => rule.required().integer().min(0),
     }),
   ],

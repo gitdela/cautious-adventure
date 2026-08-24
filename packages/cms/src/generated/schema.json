@@ -894,14 +894,14 @@
         "value": {
           "type": "string"
         },
-        "optional": false
+        "optional": true
       },
       "highlight": {
         "type": "objectAttribute",
         "value": {
           "type": "string"
         },
-        "optional": false
+        "optional": true
       },
       "body": {
         "type": "objectAttribute",
@@ -911,7 +911,7 @@
             "type": "string"
           }
         },
-        "optional": false
+        "optional": true
       },
       "image": {
         "type": "objectAttribute",

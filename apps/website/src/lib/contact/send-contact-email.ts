@@ -137,7 +137,7 @@ async function sendContactEmail({
         // whole reason the form is worth more than a mailto: link.
         replyTo: submission.email,
         subject: singleLine(
-          `[Website] ${submission.topic} — ${submission.name}`,
+          `[Website] ${submission.topic}: ${submission.name}`,
         ),
         text: buildText(submission),
         html: buildHtml(submission),

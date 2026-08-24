@@ -10,6 +10,8 @@ import { useState, type ReactNode } from "react";
 
 import { createAppQueryClient } from "@/lib/query-client";
 
+import { SmoothScroll } from "./smooth-scroll";
+
 type ProvidersProps = {
   children: ReactNode;
   sanityConfig: SanityClientConfig;
@@ -25,7 +27,9 @@ export function Providers({ children, sanityConfig }: ProvidersProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>{children}</TooltipProvider>
+      <TooltipProvider>
+        <SmoothScroll>{children}</SmoothScroll>
+      </TooltipProvider>
     </QueryClientProvider>
   );
 }

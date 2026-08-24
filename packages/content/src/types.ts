@@ -77,20 +77,14 @@ export type StationView = {
 };
 
 /**
- * One fuel section on /fuel — an editorial block, not a spec sheet. Pump prices
- * are separate: they come from the `pumpPrices` singleton as a
- * `PumpPriceBoardView`, shared with the home hero.
+ * One named product in the unified /fuels photo showcase. The shared product
+ * promise is page-owned copy; pump prices remain in the `pumpPrices` singleton.
  */
 export type FuelProductView = {
   id: string;
   slug: string;
   name: string;
   eyebrow: string;
-  /** Opening words of the headline; `highlight` finishes the sentence. */
-  heading: string;
-  highlight: string;
-  /** One entry per paragraph. */
-  body: string[];
   image?: ContentImageValue | null;
 };
 
@@ -136,6 +130,14 @@ export type BlogPostSummary = {
   author?: AuthorRef | null;
   readMinutes?: number | null;
   coverImage?: ContentImageValue | null;
+  /**
+   * Editor-set feature position, lowest first. Null means "not featured".
+   *
+   * Carried on the summary so any listing can honour the same choice — the
+   * home page band and the blog carousel would otherwise disagree about what
+   * "featured" means.
+   */
+  featuredRank?: number | null;
 };
 
 export type BlogPostFull = BlogPostSummary & {

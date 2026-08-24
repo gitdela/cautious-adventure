@@ -5,7 +5,7 @@ import { resolveTurnstileSiteKey } from "@workspace/config/env";
 import { ContactSections } from "./contact-sections";
 
 export const metadata: Metadata = {
-  title: { absolute: "Contact Us — PETROSOL" },
+  title: { absolute: "Contact Us | PETROSOL" },
   description:
     "Contact PETROSOL Platinum Energy for product, service, station, career, media, and corporate enquiries in Ghana.",
   alternates: { canonical: "/contact-us" },
