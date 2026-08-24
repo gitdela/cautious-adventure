@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!member) return {};
 
   return {
-    title: { absolute: `${member.name} — PETROSOL` },
+    title: { absolute: `${member.name} | PETROSOL` },
     description:
       member.shortBio ??
       `${member.name}, ${member.role} at PETROSOL Platinum Energy.`,

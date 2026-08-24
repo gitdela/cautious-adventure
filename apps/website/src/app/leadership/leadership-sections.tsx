@@ -15,7 +15,7 @@ const leadershipPrinciples = [
   ["Integrity", "Honest, transparent and accountable in all our operations."],
   ["Professionalism", "Upholding industry best practice in everything we do."],
   ["Excellence", "Setting the standard for petroleum OMCs in Africa."],
-  ["People first", "Our team is our greatest asset — we invest in their growth."],
+  ["People first", "Our team is our greatest asset: we invest in their growth."],
 ];
 
 function LeadershipPageHeader() {
@@ -48,12 +48,12 @@ function LeadershipIntro() {
         </SectionHeading>
         <p className="mt-6 max-w-[62ch]">
           Our leadership team brings together decades of experience across
-          petroleum operations, finance, marketing, compliance and human capital
-          — united by a shared commitment to energizing dreams and delivering
+          petroleum operations, finance, marketing, compliance and human capital,
+          united by a shared commitment to energizing dreams and delivering
           excellence across Ghana.
         </p>
         <Stat
-          value="7+"
+          value="7"
           label="Senior leaders"
           size="md"
           tone="default"

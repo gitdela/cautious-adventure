@@ -66,6 +66,7 @@ export function toBlogSummary(p: PostListItem): BlogPostSummary {
       : null,
     readMinutes: null,
     coverImage: (p.coverImage as ContentImageValue | null) ?? null,
+    featuredRank: p.featuredRank ?? null,
   };
 }
 
@@ -210,9 +211,6 @@ export function toFuelProduct(
     slug: assertSlug(f.slug),
     name: f.name,
     eyebrow: f.eyebrow,
-    heading: f.heading,
-    highlight: f.highlight,
-    body: f.body ?? [],
     image: (f.image as ContentImageValue | null) ?? null,
   };
 }

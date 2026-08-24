@@ -19,7 +19,7 @@ const latestAward = {
   kicker: "2025 · Ghana Oil and Gas Awards, 2025",
   title: "Marketing Campaign of the Year",
   description:
-    "At the Ghana Oil and Gas Awards 2025, PETROSOL was named Marketing Campaign of the Year — recognition of a campaign that carried our promise of high quality, full quantity and fair pricing to customers across the country.",
+    "At the Ghana Oil and Gas Awards 2025, PETROSOL was named Marketing Campaign of the Year, recognition of a campaign that carried our promise of high quality, full quantity and fair pricing to customers across the country.",
 } as const;
 
 const awardCategories = [
@@ -40,7 +40,7 @@ const awardsTimeline: readonly TimelineEntry[] = [
         "HR Focus Conference, 2025",
       ],
       [
-        "CEO of the Year — Downstream Petroleum",
+        "CEO of the Year (Downstream Petroleum)",
         "OMC Award, 9th CEO Summit, 2025",
       ],
     ],
@@ -54,11 +54,11 @@ const awardsTimeline: readonly TimelineEntry[] = [
         "Ghana Oil and Gas Award, 2024",
       ],
       [
-        "Unsung Hero of the Year — Reachel Talata Sabil",
+        "Unsung Hero of the Year: Reachel Talata Sabil",
         "Ghana Oil and Gas Awards, 2024",
       ],
       [
-        "National Quality Award (Diamond) — Non-Food Category",
+        "National Quality Award (Diamond), Non-Food Category",
         "Association of Ghana Industries & Ghana Standards Authority, 2024",
       ],
       [
@@ -78,17 +78,17 @@ const awardsTimeline: readonly TimelineEntry[] = [
     [
       ["Brand of the Year", "Ghana Energy Awards, 2023"],
       [
-        "Outstanding Achiever of the Decade — Michael Bozumbil",
+        "Outstanding Achiever of the Decade: Michael Bozumbil",
         "Ghana Oil and Gas Awards, 2023",
       ],
-      ["Unsung Hero of the Year — Timothy Akook", "Ghana Oil and Gas Awards, 2023"],
+      ["Unsung Hero of the Year: Timothy Akook", "Ghana Oil and Gas Awards, 2023"],
       [
         "Employer of the Year Championing Diversity and Inclusion",
         "Women in Mining and Energy Awards, 2023",
       ],
       ["Most Promising HR Management in Oil and Gas", "HR Focus Awards, 2023"],
       [
-        "National Quality Award — Diamond (Non-Food Industry)",
+        "National Quality Award, Diamond (Non-Food Industry)",
         "Association of Ghana Industries & Ghana Standards Authority, 2023",
       ],
     ],
@@ -105,7 +105,7 @@ const awardsTimeline: readonly TimelineEntry[] = [
   [
     "2019",
     [
-      ["Rising Star Award — Company", "Ghana Energy Awards, 2019"],
+      ["Rising Star Award (Company)", "Ghana Energy Awards, 2019"],
       [
         "Best Company in Customer Safety and Security Management Practices",
         "Health, Environment Safety and Security Awards (HESS), 2019",
@@ -128,11 +128,11 @@ const awardsTimeline: readonly TimelineEntry[] = [
         "Health, Environment Safety and Security Awards (HESS), 2018",
       ],
       [
-        "Accountancy and Finance Team of the Year — Oil and Gas Sector",
+        "Accountancy and Finance Team of the Year (Oil and Gas Sector)",
         "Ghana Accountancy and Finance Awards (GAFAS), 2018",
       ],
       [
-        "Chamber Business Awards — Oil and Gas (Downstream and Upstream)",
+        "Chamber Business Awards: Oil and Gas (Downstream and Upstream)",
         "Ghana National Chamber of Commerce and Industries (GNCCI), 2018",
       ],
       ["CEO of the Year (Downstream)", "Ghana Oil and Gas Awards (GOGAS), 2018"],
@@ -144,7 +144,7 @@ const awardsTimeline: readonly TimelineEntry[] = [
       ["Marketing Campaign of the Year", "Ghana Oil and Gas Awards (GOGAS), 2017"],
       ["Best Growing Oil and Gas Company", "2017"],
       [
-        "Accountancy and Finance Team of the Year — Oil and Gas Sector",
+        "Accountancy and Finance Team of the Year (Oil and Gas Sector)",
         "Ghana Accountancy and Finance Awards (GAFAS), 2017",
       ],
     ],
@@ -153,7 +153,7 @@ const awardsTimeline: readonly TimelineEntry[] = [
     "2016",
     [
       [
-        "Chamber Business Awards — Mining/Oil and Gas",
+        "Chamber Business Awards: Mining/Oil and Gas",
         "Ghana National Chamber of Commerce and Industries (GNCCI), 2016",
       ],
       ["Fastest Growing OMC", "Chamber of Petroleum Consumers (COPEC) Award, 2016"],

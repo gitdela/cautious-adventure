@@ -42,7 +42,7 @@ function HomePriceBoard({ board }: { board: PumpPriceBoardView }) {
             {/* Sized locally rather than on `--size-stat-md`: that token is
                 shared with the stat blocks and person cards, which should not
                 shrink with the totem. */}
-            <span className="font-mono text-[clamp(22px,2.2vw,28px)] leading-none font-semibold tabular-nums text-orange-400">
+            <span className="font-mono text-[clamp(22px,2.2vw,28px)] leading-none font-semibold tabular-nums text-white">
               {formatCedis(amount)}
             </span>
           </div>

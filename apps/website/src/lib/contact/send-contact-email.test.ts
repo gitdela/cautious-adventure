@@ -75,7 +75,7 @@ describe("sendContactEmail", () => {
     await sendContactEmail({ submission, ...config });
 
     expect(lastPayload().subject).toBe(
-      "[Website] Fuel delivery — Ama Mensah",
+      "[Website] Fuel delivery: Ama Mensah",
     );
   });
 

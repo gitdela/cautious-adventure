@@ -5,7 +5,7 @@ import { getLubricantCategories, getLubricantProducts } from "@/lib/sanity/data"
 import { LubricantsSections } from "./lubricants-sections";
 
 export const metadata: Metadata = {
-  title: { absolute: "Lubricants — PETROSOL" },
+  title: { absolute: "Lubricants | PETROSOL" },
   description:
     "Explore PETROSOL engine oils, motorcycle oils, transmission fluids, brake fluids, and coolants blended for performance and protection.",
   alternates: { canonical: "/lubricants" },

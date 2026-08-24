@@ -319,7 +319,7 @@ function LubricantsCatalogue({
             description={
               category === ALL
                 ? "The catalogue is being updated. Please check back shortly."
-                : "Nothing in this category yet — try another filter."
+                : "Nothing in this category yet. Try another filter."
             }
           />
         ) : (

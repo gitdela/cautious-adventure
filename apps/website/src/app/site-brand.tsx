@@ -43,7 +43,7 @@ function SiteBrand({
     >
       <Image
         src={toneSources[tone]}
-        alt="PETROSOL — energizing dreams!"
+        alt="PETROSOL: energizing dreams!"
         width={3862}
         height={1360}
         priority={size !== "footer"}

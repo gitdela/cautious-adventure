@@ -16,7 +16,10 @@
     "lubricants:import": "bun run seed/lubricants-import.ts",
     "fuel:import": "bun run seed/fuel-import.ts",
     "stations:import": "bun run seed/stations-import.ts",
-    "gallery:import": "bun run seed/gallery-import.ts"
+    "gallery:import": "bun run seed/gallery-import.ts",
+    "blog:import": "bun run seed/blog-import.ts",
+    "blog:titles": "bun run seed/blog-titles.ts",
+    "blog:featured": "bun run seed/blog-featured.ts"
   },
   "dependencies": {
     "@sanity/vision": "6.5.0",

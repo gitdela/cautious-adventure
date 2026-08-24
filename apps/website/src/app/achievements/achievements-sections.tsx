@@ -290,7 +290,7 @@ const moments: Moment[] = [
       src: "/images/achievements/ceo-of-the-year.webp",
       alt: "PETROSOL CEO Michael Bozumbil receiving his award citation on stage",
     },
-    title: "CEO of the Year — Downstream Petroleum",
+    title: "CEO of the Year (Downstream Petroleum)",
     source: "Michael Bozumbil · OMC Award, 9th CEO Summit, 2025",
   },
 ];

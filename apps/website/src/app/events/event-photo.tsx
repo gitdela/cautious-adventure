@@ -99,7 +99,7 @@ function EventPoster({
         width={1800}
         height={620}
         sizes={sizes}
-        placeholder={`Drop a video still — ${event.title}`}
+        placeholder={`Drop a video still: ${event.title}`}
       />
     );
   }
@@ -116,7 +116,7 @@ function EventPoster({
     );
   }
 
-  return <ImagePlaceholder label={`Drop a video still — ${event.title}`} />;
+  return <ImagePlaceholder label={`Drop a video still: ${event.title}`} />;
 }
 
 export { EventPhoto, EventPoster, muxPosterUrl };

@@ -58,7 +58,7 @@ export async function legalMetadata(
 // current version is.
 export function legalVersionMetadata(fallbackTitle: string): Metadata {
   return {
-    title: `${fallbackTitle} — archived version`,
+    title: `${fallbackTitle} (archived version)`,
     robots: { index: false, follow: false },
   };
 }

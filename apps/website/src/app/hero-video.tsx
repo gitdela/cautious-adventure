@@ -3,15 +3,15 @@
 import Image from "next/image";
 import {
   createRef,
-  useCallback,
   useEffect,
   useMemo,
   useRef,
   useState,
-  useSyncExternalStore,
 } from "react";
 
 import { cn } from "@workspace/ui/lib/utils";
+
+import { usePrefersReducedMotion } from "@/lib/use-prefers-reduced-motion";
 
 import { MuxBackgroundVideo } from "./mux-background-video";
 
@@ -52,8 +52,6 @@ const FADE_SECONDS = 1;
 const HERO_FALLBACK_IMAGE = "/images/home/fuel-delivery.webp";
 const HERO_FALLBACK_ALT = "PETROSOL fuel delivery tanker fleet";
 
-const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
-
 function buildStreamUrl({ id }: HeroClip) {
   return `https://stream.mux.com/${id}.m3u8`;
 }
@@ -66,26 +64,6 @@ function buildPosterUrl({ id, startAt }: HeroClip) {
   const url = new URL(`https://image.mux.com/${id}/thumbnail.webp`);
   url.searchParams.set("time", String(startAt ?? 0));
   return url.toString();
-}
-
-function subscribeToReducedMotion(onChange: () => void) {
-  const query = window.matchMedia(REDUCED_MOTION_QUERY);
-  query.addEventListener("change", onChange);
-  return () => query.removeEventListener("change", onChange);
-}
-
-/**
- * Gate the streams in JS rather than CSS — `display: none` would still download
- * the manifests and segments.
- */
-function usePrefersReducedMotion() {
-  return useSyncExternalStore(
-    subscribeToReducedMotion,
-    useCallback(() => window.matchMedia(REDUCED_MOTION_QUERY).matches, []),
-    // Server render assumes reduced motion, so the HTML ships the poster and
-    // the video mounts on hydration.
-    useCallback(() => true, []),
-  );
 }
 
 /** Autoplay is refused in plenty of ordinary cases (iOS low-power mode, say).

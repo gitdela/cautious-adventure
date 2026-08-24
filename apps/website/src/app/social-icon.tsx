@@ -2,6 +2,7 @@ import {
   RiFacebookFill,
   RiInstagramFill,
   RiLinkedinFill,
+  RiTiktokFill,
   RiTwitterXFill,
 } from "@remixicon/react";
 
@@ -12,6 +13,7 @@ const socialIcons: Record<SocialName, typeof RiFacebookFill> = {
   x: RiTwitterXFill,
   instagram: RiInstagramFill,
   linkedin: RiLinkedinFill,
+  tiktok: RiTiktokFill,
 };
 
 function SocialIcon({ name }: { name: SocialName }) {

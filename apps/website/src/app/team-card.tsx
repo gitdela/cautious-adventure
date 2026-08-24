@@ -105,10 +105,17 @@ function TeamCard({
   return (
     <Link
       href={teamProfileHref(member.slug)}
+      aria-label={`View profile — ${member.name}, ${member.role}`}
       className={cn(
-        // The whole card is the affordance — no underline, no colour shift, no
-        // shadow change. Just a 3px lift on a soft-overshoot ease.
+        // A 3px lift was the only signal these cards were links, which says
+        // nothing on a touch screen and little on a desktop. The lift stays,
+        // but the underlined "View profile" beside the name now carries the
+        // affordance, and the name shifts to brand on hover.
+        //
+        // `no-underline` here only clears the link's own decoration — the
+        // footer span sets its own, which a descendant is free to add.
         "group rounded-xl no-underline transition-transform duration-400 ease-[cubic-bezier(.16,1,.3,1)] hover:-translate-y-[3px]",
+        "[&_h3]:transition-colors hover:[&_h3]:text-brand",
         "focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:outline-none",
         "motion-reduce:transition-none motion-reduce:hover:translate-y-0",
         fill && "h-full",
@@ -122,6 +129,21 @@ function TeamCard({
         className={fill ? "h-full" : undefined}
         mediaClassName={fill ? "aspect-auto min-h-[400px] flex-1" : undefined}
         media={<TeamMemberPhoto member={member} />}
+        footer={
+          // Rendered at rest rather than on hover: hover does not exist on a
+          // phone, which is where the cards read as inert.
+          <span
+            aria-hidden="true"
+            className={cn(
+              // `shrink-0` so a long name wraps instead of crushing this, and
+              // `whitespace-nowrap` so the label never breaks across two lines.
+              "shrink-0 font-display text-[13px] font-semibold whitespace-nowrap underline underline-offset-4 transition-colors",
+              tone === "dark" ? "text-orange-400" : "text-orange-600",
+            )}
+          >
+            View profile
+          </span>
+        }
       />
     </Link>
   );

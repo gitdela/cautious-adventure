@@ -5,9 +5,9 @@ import { getPublishedClient } from '../config'
 import type { GalleryEventsQueryResult } from '../generated/sanity.types'
 
 /**
- * Every gallery event, in page order. One read for the whole of /events: a
- * dozen-odd documents that the page filters by year in place, so querying per
- * year would cost a round trip to save nothing.
+ * Gallery events in page order. Passing `stream: null` returns the whole
+ * gallery for /events; passing a stream lets another page reuse the same
+ * projection without downloading unrelated records.
  *
  * `order` is not projected — it is the sort key, not something the page renders.
  *
@@ -15,7 +15,10 @@ import type { GalleryEventsQueryResult } from '../generated/sanity.types'
  * why there is no `asset->` dereference here or anywhere else in this package.
  */
 export const galleryEventsQuery = defineQuery(`
-  *[_type == "galleryEvent"] | order(order asc) {
+  *[
+    _type == "galleryEvent" &&
+    (!defined($stream) || stream == $stream)
+  ] | order(order asc) {
     _id,
     title,
     "slug": slug.current,
@@ -35,5 +38,5 @@ export const galleryEventsQuery = defineQuery(`
 export async function fetchGalleryEvents(
   client: SanityClient = getPublishedClient(),
 ): Promise<GalleryEventsQueryResult> {
-  return client.fetch(galleryEventsQuery)
+  return client.fetch(galleryEventsQuery, { stream: null })
 }
