@@ -3,6 +3,10 @@
 import { useSyncExternalStore, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 
+import { cn } from "@workspace/ui/lib/utils";
+
+import { useMobileNavOpen } from "@/lib/mobile-nav-open";
+
 type Listener = () => void;
 
 let target: HTMLDivElement | null = null;
@@ -32,13 +36,32 @@ function getServerSnapshot() {
 /**
  * Full-bleed strip above the homepage header. It reserves its height during
  * server rendering so the overlaid header and hero do not shift on hydration.
+ *
+ * It stands down while the mobile menu is open. The menu renders inside the
+ * site header, which is `relative z-40` and therefore its own stacking context
+ * — so the menu's `z-50` is scoped to that context and can never rise above
+ * this bar's `z-50`, which sits outside it. Hiding the bar is both the fix and
+ * the better behaviour: a price ticker has no business over an open menu.
  */
+function topBarClassName(navOpen: boolean) {
+  return cn(
+    "relative z-50 hidden h-9 w-full overflow-hidden border-b border-white/15 bg-navy-900",
+    // Dropping the `block` leaves the base `hidden` to win, so the bar goes
+    // away without the element being unmounted.
+    !navOpen && "group-data-[tone=overlay]/tone:block",
+  );
+}
+
 function SiteTopBarSlot() {
+  const navOpen = useMobileNavOpen();
+
   return (
     <div
       ref={setTarget}
       data-site-top-bar
-      className="relative z-50 hidden h-9 w-full overflow-hidden border-b border-white/15 bg-navy-900 group-data-[tone=overlay]/tone:block"
+      // Left mounted rather than removed, so the portalled marquee keeps its
+      // target and does not tear down and rebuild on every menu toggle.
+      className={topBarClassName(navOpen)}
     />
   );
 }
@@ -54,4 +77,4 @@ function SiteTopBarPortal({ children }: { children: ReactNode }) {
   return portalTarget ? createPortal(children, portalTarget) : null;
 }
 
-export { SiteTopBarPortal, SiteTopBarSlot };
+export { SiteTopBarPortal, SiteTopBarSlot, topBarClassName };

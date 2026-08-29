@@ -283,7 +283,15 @@ function MediaLayer({
 }
 
 const controlButtonClass =
-  "inline-grid size-9 cursor-pointer place-items-center rounded-full border border-white/30 bg-black/25 text-white backdrop-blur-sm transition-colors hover:bg-black/50 focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:outline-none";
+  "inline-grid size-8 cursor-pointer place-items-center rounded-full border border-white/30 bg-black/25 text-white backdrop-blur-sm transition-colors hover:bg-black/50 focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:outline-none";
+
+/**
+ * The dot is 8px, but the button around it is padded out to a ~28px target.
+ * A bare 8px control would be far below the 24px minimum and near-impossible to
+ * hit on a phone, which is exactly where these controls matter most.
+ */
+const controlDotClass =
+  "group grid cursor-pointer place-items-center p-2.5 focus-visible:outline-none";
 
 function HeroControls({
   active,
@@ -297,7 +305,7 @@ function HeroControls({
   return (
     <nav
       aria-label="Hero media"
-      className="absolute inset-x-0 bottom-6 z-20 flex items-center justify-center gap-4"
+      className="absolute inset-x-0 bottom-5 z-20 flex items-center justify-center gap-2"
     >
       <button
         type="button"
@@ -305,10 +313,10 @@ function HeroControls({
         onClick={() => onSelect(previousHeroMediaIndex(active))}
         className={controlButtonClass}
       >
-        <RiArrowLeftSLine className="size-5" />
+        <RiArrowLeftSLine className="size-4" />
       </button>
 
-      <ul className="flex items-center gap-2">
+      <ul className="flex items-center">
         {Array.from({ length: count }, (_, index) => (
           <li key={index}>
             <button
@@ -318,11 +326,19 @@ function HeroControls({
               // set, they are not independent toggles.
               aria-current={index === active ? "true" : undefined}
               onClick={() => onSelect(index)}
-              className={cn(
-                "block size-2.5 cursor-pointer rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:outline-none",
-                index === active ? "bg-white" : "bg-white/40 hover:bg-white/75",
-              )}
-            />
+              className={controlDotClass}
+            >
+              <span
+                className={cn(
+                  // The ring rides the dot, since the padded button itself is
+                  // invisible and would show focus in mid-air.
+                  "block size-2 rounded-full transition-colors group-focus-visible:ring-2 group-focus-visible:ring-white/70 group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-transparent",
+                  index === active
+                    ? "bg-white"
+                    : "bg-white/40 group-hover:bg-white/75",
+                )}
+              />
+            </button>
           </li>
         ))}
       </ul>
@@ -333,7 +349,7 @@ function HeroControls({
         onClick={() => onSelect(nextHeroMediaIndex(active))}
         className={controlButtonClass}
       >
-        <RiArrowRightSLine className="size-5" />
+        <RiArrowRightSLine className="size-4" />
       </button>
     </nav>
   );
