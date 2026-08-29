@@ -39,8 +39,8 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        source: "/csr",
-        destination: "/sustainability-and-community",
+        source: "/sustainability-and-community",
+        destination: "/sustainability",
         permanent: true,
       },
       { source: "/contact", destination: "/contact-us", permanent: true },

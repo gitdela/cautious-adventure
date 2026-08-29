@@ -101,7 +101,7 @@ function buildHtml(submission: ContactSubmission): string {
       <td style="padding:4px 0;font-size:13px;">${escapeHtml(value)}</td>
     </tr>`;
 
-  return `<div style="font-family:system-ui,-apple-system,sans-serif;color:#041a2d;line-height:1.55;">
+  return `<div style="font-family:Verdana,sans-serif;color:#041a2d;line-height:1.55;">
   <h2 style="margin:0 0 16px;font-size:18px;">New enquiry from the website</h2>
   <table style="border-collapse:collapse;margin-bottom:20px;">
     ${row("Name", submission.name)}

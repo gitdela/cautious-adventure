@@ -14,6 +14,8 @@ import { MenuGlyph } from "@workspace/ui/components/menu-glyph";
 import type { SiteNavItem } from "@workspace/ui/components/site-chrome";
 import { cn } from "@workspace/ui/lib/utils";
 
+import { setMobileNavOpen } from "@/lib/mobile-nav-open";
+
 import { SiteBrandAuto } from "./header-tone";
 import { SiteBrand } from "./site-brand";
 import { socialLinks } from "./site-navigation";
@@ -40,12 +42,17 @@ function SiteMobileNav({ items }: { items: SiteNavItem[] }) {
     // moving behind the menu.
     document.body.style.overflow = "hidden";
     lenis?.stop();
+    // Stands the price marquee down while the menu is up. Announcing it here
+    // rather than from the click handlers covers every way the menu closes —
+    // the close button, Escape, and unmounting mid-navigation.
+    setMobileNavOpen(true);
     document.addEventListener("keydown", onKeyDown);
     closeRef.current?.focus();
 
     return () => {
       document.body.style.overflow = "";
       lenis?.start();
+      setMobileNavOpen(false);
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [open, lenis]);

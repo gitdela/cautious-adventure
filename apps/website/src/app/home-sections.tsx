@@ -5,6 +5,7 @@ import {
   formatDate,
   type BlogPostSummary,
   type LubricantProductView,
+  type PumpPriceBoardView,
 } from "@workspace/content";
 
 import { Button } from "@workspace/ui/components/button";
@@ -20,9 +21,11 @@ import {
   type StationIconName,
 } from "@workspace/ui/components/station-icon";
 
+import { RETAIL_NETWORK_SIZE } from "@/lib/company";
 import { contentAdapters } from "@/lib/content-adapters";
 
-import { HeroVideo } from "./hero-video";
+import { HeroMedia } from "./hero-media";
+import { HomePriceMarquee } from "./home-price-marquee";
 import { HomeProductsSection } from "./home-products-section";
 
 const services: Array<{
@@ -36,7 +39,7 @@ const services: Array<{
     {
       icon: "pump",
       title: "Petrol & Diesel",
-      description: "Clean, full-quantity fuel at 115+ stations across Ghana.",
+      description: `Clean, full-quantity fuel at ${RETAIL_NETWORK_SIZE} stations across Ghana.`,
       image: "/images/home/fuel-pump.webp",
       href: "/fuels",
     },
@@ -50,7 +53,8 @@ const services: Array<{
     {
       icon: "tanker",
       title: "Fuel Delivery",
-      description: "Direct-to-location fuel delivery for homes and businesses.",
+      description:
+        "Direct-to-location fuel delivery to your business or project site.",
       image: "/images/home/fuel-delivery.webp",
       href: "/fuel-delivery",
     },
@@ -69,29 +73,35 @@ function HeroSection() {
     // `isolate` scopes the negative z-indexes to the band. The header is
     // absolutely positioned over it, so the top padding has to clear it — and
     // it measures 78px on the mobile bar against 127px on the desktop tiers.
-    <section className="relative isolate flex min-h-[95svh] flex-col overflow-hidden bg-surface-inverse pt-[calc(78px+32px)] min-[961px]:pt-[calc(127px+40px)]">
-      <div className="absolute inset-0 -z-20">
-        <HeroVideo />
-      </div>
-      {/* The scrim, not the footage, is what guarantees text contrast. The DS
-          gradient runs left-to-right, which only works while the copy occupies
-          the left column — once it goes full width below 961px the right edge
-          is barely tinted, so mobile gets a vertical scrim instead. */}
-      <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(4,18,30,0.78)_0%,rgba(4,18,30,0.58)_45%,rgba(4,18,30,0.84)_100%)] min-[961px]:bg-[linear-gradient(90deg,rgba(4,18,30,0.86)_0%,rgba(4,18,30,0.62)_44%,rgba(4,18,30,0.24)_100%)]" />
+    // Phones get a taller band: the copy wraps to far more lines there, so the
+    // same 80svh that reads generously on a desktop leaves it cramped.
+    <section className="relative isolate flex min-h-[88svh] flex-col overflow-hidden bg-surface-inverse pt-[calc(78px+32px)] min-[601px]:min-h-[80svh] min-[961px]:pt-[calc(127px+40px)]">
+      {/* Renders its own layers: the media sits at -z-20, its controls at
+          z-20. They cannot share a wrapper — a negative z-index would trap the
+          buttons beneath the scrim. */}
+      <HeroMedia />
+      {/* The scrim, not the footage, is what guarantees text contrast. It runs
+          vertically at every width: the DS left-to-right gradient only held up
+          while the copy sat in the left column, and centred copy reaches into
+          the barely-tinted right edge. */}
+      <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(4,18,30,0.78)_0%,rgba(4,18,30,0.58)_45%,rgba(4,18,30,0.84)_100%)]" />
 
       <div className="relative flex flex-1 items-center pb-12">
         <div className="ps-container w-full">
-          <div className="max-w-[800px] min-[961px]:ml-[clamp(40px,6vw,96px)]">
+          {/* Centred column. The `max-w-*` caps stay — they keep the heading
+              and paragraph at a readable measure — but each needs `mx-auto` to
+              sit in the middle of the block rather than hug its left edge. */}
+          <div className="mx-auto max-w-[800px] text-center">
             {/* <Eyebrow tone="light">Efficiency meets reliability</Eyebrow> */}
-            <h1 className="mt-5 max-w-[16ch] font-display text-[clamp(34px,3.6vw,var(--size-display-xl))] leading-[1.06] font-bold tracking-[-0.02em] text-pretty text-white">
+            <h1 className="mt-5 mx-auto max-w-[16ch] font-display text-[clamp(34px,3.6vw,var(--size-display-xl))] leading-[1.06] font-bold tracking-[-0.02em] text-pretty text-white">
               Your Energy Solutions Provider
             </h1>
-            <p className="mt-6 max-w-[58ch] text-base leading-[1.62] text-white/85 min-[961px]:text-lg">
+            <p className="mx-auto mt-6 max-w-[58ch] text-base leading-[1.62] text-white/85 min-[961px]:text-lg">
               Whether you&apos;re chasing personal ambitions, driving business
               growth, or building the future of Ghana, PETROSOL is here to power
               every journey with energy solutions you can trust.
             </p>
-            <div className="mt-10 flex flex-wrap gap-4">
+            <div className="mt-10 flex flex-wrap justify-center gap-4">
               <Button asChild>
                 <Link href="/contact-us">Contact us</Link>
               </Button>
@@ -100,7 +110,6 @@ function HeroSection() {
               </Button>
             </div>
           </div>
-          {/* Pump price board intentionally hidden for now. */}
         </div>
       </div>
     </section>
@@ -112,7 +121,12 @@ function AboutSection() {
     // The photo column carries more weight than the copy once they sit side by
     // side, so it takes the larger share — below 961px they stack and auto-fit
     // governs again.
-    <section className="ps-container grid grid-cols-[repeat(auto-fit,minmax(min(100%,400px),1fr))] items-center gap-[clamp(48px,6.25vw,80px)] py-[var(--section-y)] min-[961px]:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
+    //
+    // Tighter on top than the standard section rhythm, deliberately: this is
+    // the first section under the hero, and the full `--section-y` pushed it
+    // far enough down that nothing showed above the fold. The bottom keeps the
+    // normal spacing so the cadence between later sections is unaffected.
+    <section className="ps-container grid grid-cols-[repeat(auto-fit,minmax(min(100%,400px),1fr))] items-center gap-[clamp(48px,6.25vw,80px)] pt-[var(--section-y-tight)] pb-[var(--section-y)] min-[961px]:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
       <div>
         <SectionHeading eyebrow="About us" highlight="PETROSOL Difference">
           Discover the
@@ -357,12 +371,15 @@ function QuoteBand() {
 function HomeSections({
   featuredPosts,
   lubricants,
+  priceBoard,
 }: {
   featuredPosts: BlogPostSummary[];
   lubricants: LubricantProductView[];
+  priceBoard: PumpPriceBoardView | null;
 }) {
   return (
     <main>
+      <HomePriceMarquee board={priceBoard} />
       <HeroSection />
       <AboutSection />
       <ServicesSection />

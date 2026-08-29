@@ -53,8 +53,8 @@ export type TeamMemberFull = TeamMemberSummary & {
   bio: PortableTextBlock[];
 };
 
-/** A sales territory in the station directory's filter. */
-export type StationTerritoryView = {
+/** One of Ghana's regions, as offered in the station directory's filter. */
+export type StationRegionView = {
   id: string;
   slug: string;
   name: string;
@@ -70,7 +70,7 @@ export type StationView = {
   slug: string;
   name: string;
   /** Dereferenced in the query; its slug is what the filter compares against. */
-  territory: { name: string; slug: string };
+  region: { name: string; slug: string };
   manager: string;
   phones: string[];
   amenities: string[];
@@ -186,6 +186,8 @@ export type GalleryEventView = {
   title: string;
   kind: "photos" | "story" | "video";
   stream: "event" | "community";
+  /** Optional programme classification for dedicated event collections. */
+  series: "pwn" | "industry-leadership" | null;
   /** Four-digit year. Null for community work, which shows "CSR" instead. */
   year: string | null;
   /** Story card photo, or a video poster override. Photos rows have none. */
@@ -202,6 +204,25 @@ export type GalleryEventView = {
   muxPlaybackId?: string | null;
   /** Seconds into the film for the Mux-generated poster frame. */
   posterTime: number;
+};
+
+export type NationalLeadershipAppointmentView = {
+  id: string;
+  institution: string;
+  position: string;
+  status: "current" | "former";
+  tenure?: string | null;
+  summary: string;
+  sourceUrl?: string | null;
+};
+
+export type NationalLeadershipProfileView = {
+  id: string;
+  name: string;
+  petrosolRole: string;
+  profileSlug?: string | null;
+  photo?: ContentImageValue | null;
+  appointments: NationalLeadershipAppointmentView[];
 };
 
 export type { PortableTextBlock };

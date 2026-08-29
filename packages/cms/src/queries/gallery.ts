@@ -6,8 +6,8 @@ import type { GalleryEventsQueryResult } from '../generated/sanity.types'
 
 /**
  * Gallery events in page order. Passing `stream: null` returns the whole
- * gallery for /events; passing a stream lets another page reuse the same
- * projection without downloading unrelated records.
+ * gallery for /events; passing a stream or series lets another page reuse the
+ * same projection without downloading unrelated records.
  *
  * `order` is not projected — it is the sort key, not something the page renders.
  *
@@ -17,13 +17,15 @@ import type { GalleryEventsQueryResult } from '../generated/sanity.types'
 export const galleryEventsQuery = defineQuery(`
   *[
     _type == "galleryEvent" &&
-    (!defined($stream) || stream == $stream)
+    (!defined($stream) || stream == $stream) &&
+    (!defined($series) || series == $series)
   ] | order(order asc) {
     _id,
     title,
     "slug": slug.current,
     kind,
     stream,
+    series,
     eventDate,
     coverImage,
     photos,
@@ -38,5 +40,5 @@ export const galleryEventsQuery = defineQuery(`
 export async function fetchGalleryEvents(
   client: SanityClient = getPublishedClient(),
 ): Promise<GalleryEventsQueryResult> {
-  return client.fetch(galleryEventsQuery, { stream: null })
+  return client.fetch(galleryEventsQuery, { stream: null, series: null })
 }

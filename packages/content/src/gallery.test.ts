@@ -9,6 +9,7 @@ const row = {
   slug: "gal-oilgas-awards-2025",
   kind: "photos",
   stream: "event",
+  series: null,
   eventDate: "2025-01-01",
   coverImage: null,
   photos: null,
@@ -27,6 +28,7 @@ describe("toGalleryEvent", () => {
       title: "Ghana Oil and Gas Awards",
       kind: "photos",
       stream: "event",
+      series: null,
       year: "2025",
       coverImage: null,
       photos: [],
@@ -49,6 +51,18 @@ describe("toGalleryEvent", () => {
   it("gives community work no year at all", () => {
     const community = { ...row, stream: "community", eventDate: null };
     expect(toGalleryEvent(community as never).year).toBeNull();
+  });
+
+  it("preserves the PWN series classification", () => {
+    expect(toGalleryEvent({ ...row, series: "pwn" } as never).series).toBe(
+      "pwn",
+    );
+  });
+
+  it("preserves the industry leadership series classification", () => {
+    expect(
+      toGalleryEvent({ ...row, series: "industry-leadership" } as never).series,
+    ).toBe("industry-leadership");
   });
 
   // Without a date there is no pill to file the row under, so it would vanish

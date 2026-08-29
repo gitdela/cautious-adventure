@@ -9,8 +9,7 @@ import { ensureSanityConfigured } from "@/lib/sanity/config";
 import { JsonLd } from "@/lib/json-ld";
 import "./globals.css";
 
-// Brand face is Verdana (system font — nothing to load); IBM Plex Mono is
-// imported by @workspace/ui/globals.css for spec/data readouts.
+// Verdana is the system-hosted brand face for all site typography.
 
 export const metadata: Metadata = {
   metadataBase: new URL(resolveWebsiteUrl(process.env)),

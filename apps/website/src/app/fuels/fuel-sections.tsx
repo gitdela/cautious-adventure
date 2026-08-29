@@ -4,17 +4,13 @@ import { RiLeafLine, RiShieldCheckLine } from "@remixicon/react";
 
 import {
   ContentEmpty,
-  formatCedis,
-  formatPumpDate,
   type FuelProductView,
-  type PumpPriceBoardView,
 } from "@workspace/content";
 import { Button } from "@workspace/ui/components/button";
 import { ImagePlaceholder } from "@workspace/ui/components/image-placeholder";
 import {
   PhotoTile,
   SectionHeading,
-  Stat,
 } from "@workspace/ui/components/marketing";
 import { ServiceCard } from "@workspace/ui/components/service-card";
 import { StationIcon } from "@workspace/ui/components/station-icon";
@@ -139,54 +135,22 @@ function FuelOverview({ products }: { products: FuelProductView[] }) {
             />
           </div>
         )}
-        <PhotoTile
-          ratio="news"
-          className="col-span-2 mt-2 aspect-[16/9]"
-          image={
-            <Image
-              src="/images/home/station-canopy-wide.webp"
-              alt="PETROSOL service station forecourt with petrol and diesel pumps"
-              fill
-              sizes="(max-width: 840px) 100vw, 58vw"
-            />
-          }
-        />
       </div>
     </section>
   );
 }
 
-function PriceBand({ board }: { board: PumpPriceBoardView | null }) {
-  if (!board) return null;
-
+function ForecourtPhotoBreak() {
   return (
-    <section
-      aria-label="Current pump prices"
-      className="bg-surface-inverse py-[var(--section-y-tight)]"
-    >
-      <div className="ps-container flex flex-wrap items-center justify-center gap-x-20 gap-y-8">
-        <time
-          dateTime={board.updatedAt.slice(0, 10)}
-          className="basis-full text-center font-mono text-[11px] tracking-[0.14em] text-white/65 uppercase"
-        >
-          At the pump today &middot; {formatPumpDate(board.updatedAt)}
-        </time>
-        {board.prices.map(({ fuel, amount }) => (
-          <Stat
-            key={fuel}
-            value={formatCedis(amount)}
-            label={
-              <>
-                {fuel} &middot; GHS/L
-              </>
-            }
-            size="md"
-            className="min-w-[120px]"
-            valueClassName="text-white"
-          />
-        ))}
-      </div>
-    </section>
+    <figure className="relative m-0 h-[clamp(280px,45vw,560px)] overflow-hidden">
+      <Image
+        src="/images/home/station-canopy-wide.webp"
+        alt="PETROSOL service station forecourt with petrol and diesel pumps"
+        fill
+        sizes="100vw"
+        className="object-cover"
+      />
+    </figure>
   );
 }
 
@@ -281,18 +245,12 @@ function BulkCta() {
   );
 }
 
-function FuelSections({
-  products,
-  priceBoard,
-}: {
-  products: FuelProductView[];
-  priceBoard: PumpPriceBoardView | null;
-}) {
+function FuelSections({ products }: { products: FuelProductView[] }) {
   return (
     <main>
       <FuelPageHeader />
       <FuelOverview products={products} />
-      <PriceBand board={priceBoard} />
+      <ForecourtPhotoBreak />
       <FuelPromiseSection />
       <FleetPhotoBreak />
       <BulkCta />

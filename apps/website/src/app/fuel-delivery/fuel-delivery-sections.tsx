@@ -100,8 +100,8 @@ function DeliverySplit() {
           <p>
             PETROSOL goes beyond providing quality fuel at our stations. Through
             our reliable fuel delivery service, we bring the same high-quality
-            products and commitment to accurate quantity directly to your
-            business.
+            products and commitment to accurate quantity straight to your
+            business or site, including construction and project sites.
           </p>
           <p>Every litre you pay for is a litre you receive.</p>
         </div>

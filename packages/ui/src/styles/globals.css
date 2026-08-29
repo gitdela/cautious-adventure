@@ -1,10 +1,8 @@
 /* PETROSOL theme — mapped from the PETROSOL Design System tokens
    (design handoff: "Petrosol Website/_ds/petrosol-design-system-…/tokens").
-   Brand face is Verdana (system font — nothing to load); IBM Plex Mono covers
-   spec/data readouts. Light-only: the DS has no dark theme — navy bands are
+   Brand face is Verdana (system font — nothing to load), including spec/data
+   readouts. Light-only: the DS has no dark theme — navy bands are
    inverse surfaces, not a theme. */
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap");
-
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -17,9 +15,9 @@
 @source "../../../content/src/**/*.{ts,tsx}";
 
 @theme inline {
-  /* Typography — Verdana everywhere (headings 700), IBM Plex Mono for readouts */
+  /* Typography — Verdana everywhere, including utility/data treatments. */
   --font-sans: Verdana, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-mono: Verdana, sans-serif;
   --font-display: Verdana, sans-serif;
   --font-heading: var(--font-sans);
 
@@ -285,7 +283,7 @@
 
 /* ── Utilities ──────────────────────────────────────────────────────────────── */
 @layer utilities {
-  /* Monospace treatment for spec/data readouts (IBM Plex Mono) */
+  /* Tabular-number treatment for spec/data readouts. */
   .num {
     font-family: var(--font-mono);
     font-feature-settings: "tnum";
@@ -400,10 +398,18 @@
   }
 }
 
+/* The compact pump-price strip is not a draggable gallery, so it continues
+   to roll at phone widths. It uses the same two-pass seam as the desktop
+   marquee but needs its own breakpoint-independent animation rule. */
+.ps-price-marquee-track {
+  animation: ps-marquee var(--marquee-duration, 28s) linear infinite;
+}
+
 /* Auto-scrolling content is a vestibular trigger, and there is no control to
    stop it — so it simply does not move for anyone who asked for less motion. */
 @media (prefers-reduced-motion: reduce) {
-  .ps-marquee-track { animation: none; }
+  .ps-marquee-track,
+  .ps-price-marquee-track { animation: none; }
 }
 
 /* Screen-swap entrance — gated so content never strands invisible */

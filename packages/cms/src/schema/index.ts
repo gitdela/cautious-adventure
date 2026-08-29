@@ -12,9 +12,11 @@ import { teamMemberType } from './documents/teamMember'
 import { lubricantCategoryType } from './documents/lubricantCategory'
 import { lubricantProductType } from './documents/lubricantProduct'
 import { fuelProductType } from './documents/fuelProduct'
+import { stationRegionType } from './documents/stationRegion'
 import { stationTerritoryType } from './documents/stationTerritory'
 import { stationType } from './documents/station'
 import { galleryEventType } from './documents/galleryEvent'
+import { nationalLeadershipProfileType } from './documents/nationalLeadershipProfile'
 
 /**
  * The single schema registry. Imported by Studio (`sanity.config.ts`) and by
@@ -39,9 +41,11 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   lubricantCategoryType,
   lubricantProductType,
   fuelProductType,
+  stationRegionType,
   stationTerritoryType,
   stationType,
   galleryEventType,
+  nationalLeadershipProfileType,
 ]
 
 export {
@@ -57,7 +61,9 @@ export {
   lubricantCategoryType,
   lubricantProductType,
   fuelProductType,
+  stationRegionType,
   stationTerritoryType,
   stationType,
   galleryEventType,
+  nationalLeadershipProfileType,
 }

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { getFuelProducts, getPumpPrices } from "@/lib/sanity/data";
+import { getFuelProducts } from "@/lib/sanity/data";
 
 import { FuelSections } from "./fuel-sections";
 
@@ -12,10 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default async function FuelsPage() {
-  const [products, priceBoard] = await Promise.all([
-    getFuelProducts(),
-    getPumpPrices(),
-  ]);
+  const products = await getFuelProducts();
 
-  return <FuelSections products={products} priceBoard={priceBoard} />;
+  return <FuelSections products={products} />;
 }

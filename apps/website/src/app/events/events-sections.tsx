@@ -36,7 +36,7 @@ function MediaCta() {
         </SectionHeading>
         <div className="flex flex-wrap justify-center gap-4">
           <Button asChild>
-            <Link href="/sustainability-and-community">Our CSR work</Link>
+            <Link href="/csr">Our CSR work</Link>
           </Button>
           <Button asChild variant="outlineInverse">
             <Link href="/contact-us">Media enquiries</Link>

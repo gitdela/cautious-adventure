@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 
-import { getFeaturedPosts, getLubricantProducts } from "@/lib/sanity/data";
+import {
+  getFeaturedPosts,
+  getLubricantProducts,
+  getPumpPrices,
+} from "@/lib/sanity/data";
 
 import { HomeSections } from "./home-sections";
 
@@ -12,9 +16,16 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const [featuredPosts, lubricants] = await Promise.all([
+  const [featuredPosts, lubricants, priceBoard] = await Promise.all([
     getFeaturedPosts(),
     getLubricantProducts(),
+    getPumpPrices(),
   ]);
-  return <HomeSections featuredPosts={featuredPosts} lubricants={lubricants} />;
+  return (
+    <HomeSections
+      featuredPosts={featuredPosts}
+      lubricants={lubricants}
+      priceBoard={priceBoard}
+    />
+  );
 }

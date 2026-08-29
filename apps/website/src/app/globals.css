@@ -1,11 +1,10 @@
 @import "@workspace/ui/globals.css";
 @import "lenis/dist/lenis.css";
 
-/* Fonts come from the ui package theme: Verdana (brand face, system font)
-   and IBM Plex Mono (spec/data readouts). */
+/* Verdana is the single site-wide face, including spec/data readouts. */
 @theme inline {
   --font-sans: Verdana, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-mono: Verdana, sans-serif;
 }
 
 :root {
@@ -23,6 +22,21 @@ html {
   background-attachment: fixed;
   background-position: center;
   background-size: cover;
+}
+
+/* iOS Safari ignores `background-attachment: fixed` and Chrome for Android
+   disabled it: phones scroll a rasterised layer rather than repainting, so the
+   parallax degrades to a plain scrolling cover. The windscreen shot is a wide
+   crop framed for that effect and reads as an arbitrary sliver once it is just
+   a static background in a narrow band, so small screens get the portrait
+   empathy photo instead, which stands up on its own. */
+@media (max-width: 840px) {
+  .home-quote {
+    background-image:
+      linear-gradient(rgba(11, 36, 66, 0.72), rgba(11, 36, 66, 0.72)),
+      url("/images/about/team-empathy.webp");
+    background-attachment: scroll;
+  }
 }
 
 body {

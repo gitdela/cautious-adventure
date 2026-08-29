@@ -26,10 +26,16 @@ const navigationItems: SiteNavItem[] = [
     label: "About",
     children: [
       { label: "Who We Are", href: "/who-we-are" },
-      { label: "Leadership Team", href: "/leadership-team" },
+      { label: "Senior Leadership Team", href: "/leadership-team" },
       { label: "Board of Directors", href: "/board-of-directors" },
+      {
+        label: "Industry & National Leadership",
+        href: "/industry-and-national-leadership",
+      },
       { label: "Awards & Recognition", href: "/awards-and-recognition" },
-      { label: "Sustainability & Community", href: "/sustainability-and-community" },
+      { label: "Sustainability", href: "/sustainability" },
+      { label: "Corporate Social Responsibility", href: "/csr" },
+      { label: "Diversity & Inclusion", href: "/diversity-and-inclusion" },
     ],
   },
   {
@@ -51,6 +57,10 @@ const footerGroups: SiteFooterGroup[] = [
       { label: "Who We Are", href: "/who-we-are" },
       { label: "Leadership Team", href: "/leadership-team" },
       { label: "Board of Directors", href: "/board-of-directors" },
+      {
+        label: "Industry & National Leadership",
+        href: "/industry-and-national-leadership",
+      },
       { label: "Awards & Recognition", href: "/awards-and-recognition" },
     ],
   },
@@ -73,7 +83,9 @@ const footerGroups: SiteFooterGroup[] = [
   {
     title: "Responsibility",
     items: [
-      { label: "Sustainability & Community", href: "/sustainability-and-community" },
+      { label: "Sustainability", href: "/sustainability" },
+      { label: "Corporate Social Responsibility", href: "/csr" },
+      { label: "Diversity & Inclusion", href: "/diversity-and-inclusion" },
     ],
   },
   {

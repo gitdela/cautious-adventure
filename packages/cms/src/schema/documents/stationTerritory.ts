@@ -2,8 +2,12 @@ import { defineField, defineType } from 'sanity'
 
 /**
  * A sales territory grouping PETROSOL stations — "North East Territory",
- * "Western Territory", and so on. It is what the directory's dropdown filters
- * by.
+ * "Western Territory", and so on.
+ *
+ * Internal only. It exists for reporting and for grouping stations in Studio;
+ * no public surface reads it. The website's directory filters by
+ * `stationRegion` instead, because customers know Ghana's regions, not
+ * PETROSOL's sales geography.
  *
  * A document type rather than a fixed list because the network is still
  * expanding: adding or renaming a territory should be an edit, not a deploy.

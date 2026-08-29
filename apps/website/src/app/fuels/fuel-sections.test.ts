@@ -2,10 +2,7 @@ import { createElement, type ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 
-import type {
-  FuelProductView,
-  PumpPriceBoardView,
-} from "@workspace/content";
+import type { FuelProductView } from "@workspace/content";
 
 vi.mock("next/image", () => ({
   default: (rawProps: Record<string, unknown>) => {
@@ -84,20 +81,9 @@ const products: FuelProductView[] = [
   },
 ];
 
-const priceBoard: PumpPriceBoardView = {
-  updatedAt: "2026-08-21T08:00:00Z",
-  prices: [
-    { fuel: "Petrol", amount: 12.5 },
-    { fuel: "Diesel", amount: 13.1 },
-  ],
-};
-
-function render(
-  productRows: FuelProductView[] = products,
-  board: PumpPriceBoardView | null = priceBoard,
-) {
+function render(productRows: FuelProductView[] = products) {
   return renderToStaticMarkup(
-    createElement(FuelSections, { products: productRows, priceBoard: board }),
+    createElement(FuelSections, { products: productRows }),
   );
 }
 
@@ -116,17 +102,8 @@ describe("FuelSections", () => {
     expect(html).toContain("Responsible Performance");
   });
 
-  it("renders the live price rail when a board is available", () => {
-    const html = render();
-
-    expect(html).toContain('aria-label="Current pump prices"');
-    expect(html).toContain("At the pump today");
-    expect(html).toContain("₵12.50");
-    expect(html).toContain("₵13.10");
-  });
-
-  it("omits the price rail and handles an empty product result", () => {
-    const html = render([], null);
+  it("handles an empty product result without showing pump prices", () => {
+    const html = render([]);
 
     expect(html).not.toContain('aria-label="Current pump prices"');
     expect(html).toContain("Fuel details are being updated");
@@ -134,7 +111,7 @@ describe("FuelSections", () => {
   });
 
   it("uses a neutral fallback when one product image is missing", () => {
-    const html = render([{ ...products[0], image: null }], null);
+    const html = render([{ ...products[0], image: null }]);
 
     expect(html).toContain('data-fuel-product="petrol"');
     expect(html).toContain("Petrol product photo unavailable");

@@ -78,10 +78,10 @@ function TrustSection() {
       <div className="mx-auto max-w-[900px] px-[var(--container-pad)] text-center">
         <SectionHeading
           eyebrow="Membership & regulation"
-          highlight="and accountable"
+          highlight="Professional Bodies"
           align="center"
         >
-          Connected
+          Institutions and
         </SectionHeading>
 
         <div className="mt-12 flex flex-col gap-10">
