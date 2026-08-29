@@ -69,6 +69,8 @@ type SiteHeaderProps = {
   brand: React.ReactNode;
   items: SiteNavItem[];
   renderLink: RenderSiteLink;
+  /** Flexible app-owned content before the desktop utility actions. */
+  utility?: React.ReactNode;
   socials?: SiteSocialItem[];
   action?: React.ReactNode;
   /** App-owned interactive desktop navigation, when CSS-only behavior is insufficient. */
@@ -82,6 +84,7 @@ function SiteHeader({
   brand,
   items,
   renderLink,
+  utility,
   socials = [],
   action,
   desktopNav,
@@ -104,7 +107,7 @@ function SiteHeader({
         // height. The spec's -118px bottom margin assumed a 118px header; this
         // one measures 127px, and the 9px difference showed as a white strip
         // above the hero. Going absolute is immune to that drift.
-        "group-data-[tone=overlay]/tone:absolute group-data-[tone=overlay]/tone:inset-x-0 group-data-[tone=overlay]/tone:top-0 group-data-[tone=overlay]/tone:bg-transparent group-data-[tone=overlay]/tone:[background-image:none]",
+        "group-data-[tone=overlay]/tone:absolute group-data-[tone=overlay]/tone:inset-x-0 group-data-[tone=overlay]/tone:top-[var(--site-header-overlay-top,0px)] group-data-[tone=overlay]/tone:bg-transparent group-data-[tone=overlay]/tone:[background-image:none]",
         className,
       )}
     >
@@ -117,8 +120,9 @@ function SiteHeader({
               than on the nav tier. With five nav items the button was the
               straw that pushed "Contact Us" onto a second line; up here it
               costs the nav nothing and the strip had spare width to give. */}
-          {action || socials.length > 0 ? (
+          {utility || action || socials.length > 0 ? (
             <div className="flex items-center justify-end gap-5 border-b border-border pb-3 group-data-[tone=overlay]/tone:border-white/16">
+              {utility}
               {socials.length > 0 ? <SocialStrip socials={socials} /> : null}
               {action ? <div className="shrink-0">{action}</div> : null}
             </div>

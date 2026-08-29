@@ -43,8 +43,8 @@ const fuels: FuelSeed[] = [
     slug: 'diesel',
     name: 'Diesel',
     eyebrow: 'Gasoil / Automotive Gasoil',
-    image: 'images/home/refinery-tanks.webp',
-    imageAlt: 'Petroleum storage tanks',
+    image: 'images/fuel/platinum-diesel-15w40.webp',
+    imageAlt: 'PETROSOL Platinum Diesel 15W40 in a 20-litre black container',
   },
 ]
 

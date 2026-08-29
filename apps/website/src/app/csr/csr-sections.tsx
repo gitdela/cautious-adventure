@@ -1,41 +1,44 @@
 import Image from "next/image";
+import Link from "next/link";
 import {
-  RiLeafLine,
-  RiScales3Line,
+  RiFirstAidKitLine,
+  RiGraduationCapLine,
+  RiHandHeartLine,
   RiShieldCheckLine,
-  RiVerifiedBadgeLine,
 } from "@remixicon/react";
 
 import type { GalleryEventView } from "@workspace/content";
+import { Button } from "@workspace/ui/components/button";
 import { Eyebrow, SectionHeading } from "@workspace/ui/components/marketing";
 import { ServiceCard } from "@workspace/ui/components/service-card";
 
+import { MosaicCtaBand } from "../mosaic-cta-band";
 import { CsrEvents } from "./csr-events";
 
-const responsibilityPillars = [
+const communityPriorities = [
   {
-    title: "Environmental stewardship",
+    title: "Healthcare support",
     description:
-      "We use resources responsibly, work to reduce waste and follow the environmental controls reflected in our ISO 14001:2015 management system.",
-    icon: RiLeafLine,
+      "We support health initiatives that strengthen access to care in the communities we serve.",
+    icon: RiFirstAidKitLine,
   },
   {
-    title: "Health and safety",
+    title: "Education & opportunity",
     description:
-      "We protect our people, customers and communities through disciplined safety practices supported by our ISO 45001:2018 management system.",
+      "We invest in learning and youth development to help people build stronger futures.",
+    icon: RiGraduationCapLine,
+  },
+  {
+    title: "Public safety",
+    description:
+      "We partner with communities on programmes that promote safer roads, public spaces and everyday life.",
     icon: RiShieldCheckLine,
   },
   {
-    title: "Responsible operations",
+    title: "Emergency response",
     description:
-      "We operate ethically, comply with applicable standards and use our ISO 9001:2015 quality management system to support consistent delivery.",
-    icon: RiScales3Line,
-  },
-  {
-    title: "Community investment",
-    description:
-      "We support programmes that strengthen healthcare, education, public safety and disaster response in communities across Ghana.",
-    icon: RiVerifiedBadgeLine,
+      "We respond when communities face urgent needs, supporting relief and recovery efforts where we can make a difference.",
+    icon: RiHandHeartLine,
   },
 ];
 
@@ -53,33 +56,33 @@ function CsrHero() {
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-navy-900/25 to-navy-900/78" />
       <div className="ps-container w-full pb-12">
         <Eyebrow tone="light" className="mb-4">
-          Sustainability &amp; community
+          Corporate social responsibility
         </Eyebrow>
         <h1 className="font-display text-[length:var(--size-display-lg)] leading-[1.08] font-bold tracking-[-0.02em] text-white">
-          Responsible today, <span className="swash">ready for tomorrow</span>
+          Investing in people, <span className="swash">strengthening communities</span>
         </h1>
       </div>
     </section>
   );
 }
 
-function ResponsibilityApproach() {
+function CommunityApproach() {
   return (
     <section className="ps-blueprint bg-muted py-[var(--section-y)]">
       <div className="ps-container">
         <div className="grid grid-cols-1 gap-8 min-[841px]:grid-cols-[minmax(0,1fr)_minmax(280px,0.7fr)] min-[841px]:items-end">
-          <SectionHeading eyebrow="Our approach" highlight="lasting impact">
-            Responsible energy,
+          <SectionHeading eyebrow="Our community" highlight="shared progress">
+            Investing in
           </SectionHeading>
           <p className="max-w-[54ch] min-[841px]:justify-self-end">
-            Sustainability at PETROSOL connects the way we manage our
-            operations with the difference we make beyond them. We consider
-            people, safety, the environment and long-term value in the
-            decisions we take today.
+            PETROSOL&apos;s community work supports the people and places around
+            our operations. We focus on practical partnerships that strengthen
+            healthcare, education, public safety and disaster response across
+            Ghana.
           </p>
         </div>
         <div className="mt-12 grid grid-cols-1 gap-5 min-[561px]:grid-cols-2 min-[1101px]:grid-cols-4">
-          {responsibilityPillars.map(({ title, description, icon: Icon }) => (
+          {communityPriorities.map(({ title, description, icon: Icon }) => (
             <ServiceCard key={title} title={title} icon={<Icon />}>
               {description}
             </ServiceCard>
@@ -90,12 +93,31 @@ function ResponsibilityApproach() {
   );
 }
 
+function SustainabilityCta() {
+  return (
+    <MosaicCtaBand>
+      <SectionHeading
+        eyebrow="Environmental responsibility"
+        tone="light"
+        align="center"
+        highlight="cleaner energy"
+      >
+        See how we&apos;re advancing
+      </SectionHeading>
+      <Button asChild>
+        <Link href="/sustainability">Explore sustainability</Link>
+      </Button>
+    </MosaicCtaBand>
+  );
+}
+
 function CsrSections({ events }: { events: GalleryEventView[] }) {
   return (
     <main>
       <CsrHero />
-      <ResponsibilityApproach />
+      <CommunityApproach />
       <CsrEvents events={events} />
+      <SustainabilityCta />
     </main>
   );
 }

@@ -9,6 +9,7 @@ import {
   legalKindVersionsQuery,
   lubricantCategoriesQuery,
   lubricantProductsQuery,
+  nationalLeadershipProfilesQuery,
   pageBySlugQuery,
   pageSlugsQuery,
   postBySlugQuery,
@@ -16,7 +17,7 @@ import {
   postCountQuery,
   postListQuery,
   postSlugsQuery,
-  stationTerritoriesQuery,
+  stationRegionsQuery,
   stationsQuery,
   teamMemberBySlugQuery,
   teamMemberSlugsQuery,
@@ -31,6 +32,7 @@ import type {
   LegalKindVersionsQueryResult,
   LubricantCategoriesQueryResult,
   LubricantProductsQueryResult,
+  NationalLeadershipProfilesQueryResult,
   PageBySlugQueryResult,
   PageSlugsQueryResult,
   PostBySlugQueryResult,
@@ -38,7 +40,7 @@ import type {
   PostListQueryResult,
   PostSlugsQueryResult,
   PumpPricesQueryResult,
-  StationTerritoriesQueryResult,
+  StationRegionsQueryResult,
   StationsQueryResult,
   TeamMemberBySlugQueryResult,
   TeamMemberSlugsQueryResult,
@@ -54,9 +56,10 @@ import {
   toLegalView,
   toLubricantCategory,
   toLubricantProduct,
+  toNationalLeadershipProfile,
   toPumpPriceBoard,
   toStation,
-  toStationTerritory,
+  toStationRegion,
   toTeamMemberFull,
   toTeamMemberSummary,
 } from "@workspace/content/mappers";
@@ -243,11 +246,11 @@ export async function getLubricantProducts() {
 // --- Stations ---
 // Live, like the other product surfaces. A station changing hands or a manager's
 // number changing is exactly the kind of edit that must not wait on a cache.
-export async function getStationTerritories() {
-  const result = await sanityFetchLive<StationTerritoriesQueryResult>({
-    query: stationTerritoriesQuery,
+export async function getStationRegions() {
+  const result = await sanityFetchLive<StationRegionsQueryResult>({
+    query: stationRegionsQuery,
   });
-  return (result ?? []).map(toStationTerritory);
+  return (result ?? []).map(toStationRegion);
 }
 
 export async function getStations() {
@@ -276,16 +279,47 @@ export async function getFuelProducts() {
 export async function getGalleryEvents() {
   const result = await sanityFetchLive<GalleryEventsQueryResult>({
     query: galleryEventsQuery,
-    params: { stream: null },
+    params: { stream: null, series: null },
   });
   return (result ?? []).map(toGalleryEvent);
 }
 
-/** Community / CSR entries for the sustainability page, in gallery order. */
+/** Community / CSR entries for the CSR page, in gallery order. */
 export async function getCommunityGalleryEvents() {
   const result = await sanityFetchLive<GalleryEventsQueryResult>({
     query: galleryEventsQuery,
-    params: { stream: "community" },
+    params: { stream: "community", series: null },
   });
   return (result ?? []).map(toGalleryEvent);
+}
+
+/** PWN conferences, kept in the main Events gallery and reused here. */
+export async function getPwnConferenceEvents() {
+  const result = await sanityFetchLive<GalleryEventsQueryResult>({
+    query: galleryEventsQuery,
+    params: { stream: null, series: "pwn" },
+  });
+  return (result ?? [])
+    .map(toGalleryEvent)
+    .sort((a, b) => (b.year ?? "").localeCompare(a.year ?? ""));
+}
+
+/** Industry conferences and summits shown on the national leadership page. */
+export async function getIndustryLeadershipEvents() {
+  const result = await sanityFetchLive<GalleryEventsQueryResult>({
+    query: galleryEventsQuery,
+    params: { stream: null, series: "industry-leadership" },
+  });
+  return (result ?? [])
+    .slice()
+    .sort((a, b) => (b.eventDate ?? "").localeCompare(a.eventDate ?? ""))
+    .map(toGalleryEvent);
+}
+
+/** CMS-managed appointments held by PETROSOL people on external platforms. */
+export async function getNationalLeadershipProfiles() {
+  const result = await sanityFetchLive<NationalLeadershipProfilesQueryResult>({
+    query: nationalLeadershipProfilesQuery,
+  });
+  return (result ?? []).map(toNationalLeadershipProfile);
 }

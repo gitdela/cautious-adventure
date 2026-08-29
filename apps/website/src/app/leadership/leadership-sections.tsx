@@ -14,7 +14,7 @@ import { TeamCard, splitNameForHeadline } from "../team-card";
 const leadershipPrinciples = [
   ["Integrity", "Honest, transparent and accountable in all our operations."],
   ["Professionalism", "Upholding industry best practice in everything we do."],
-  ["Excellence", "Setting the standard for petroleum OMCs in Africa."],
+  ["Excellence", "Setting the standard for oil marketing companies in Africa."],
   ["People first", "Our team is our greatest asset: we invest in their growth."],
 ];
 

@@ -81,6 +81,25 @@ export const galleryEventType = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'series',
+      title: 'Series (optional)',
+      type: 'string',
+      description:
+        'Tags an event for an additional programme page while keeping it in the main Events gallery.',
+      options: {
+        list: [
+          {
+            title: 'PETROSOL Women Network (PWN)',
+            value: 'pwn',
+          },
+          {
+            title: 'Industry & national leadership',
+            value: 'industry-leadership',
+          },
+        ],
+      },
+    }),
+    defineField({
       name: 'eventDate',
       title: 'Event date',
       type: 'date',

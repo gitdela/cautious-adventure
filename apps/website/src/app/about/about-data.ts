@@ -7,14 +7,17 @@ import {
   RiVerifiedBadgeLine,
 } from "@remixicon/react";
 
+import { RETAIL_NETWORK_SIZE } from "@/lib/company";
+
 /**
  * Copy for /who-we-are, drawn from the 2026 company profile.
  *
- * Two things are deliberate. The station count is "over 100" — the profile
- * states 110 in one place, 100 in three and 120 in a staff biography, so the
- * page uses the floor that every source supports. And the company is described
- * as "100% Ghanaian-owned and managed" rather than "privately-owned", which
- * would read as a contradiction now that it is a PLC.
+ * Two things are deliberate. The station count comes from
+ * `RETAIL_NETWORK_SIZE` rather than being written out here — the profile states
+ * 100 in three places, 110 in one and 120 in a staff biography, and PETROSOL
+ * has since confirmed the true figure, so the site keeps it in one place. And
+ * the company is described as "100% Ghanaian-owned and managed" rather than
+ * "privately-owned", which would read as a contradiction now that it is a PLC.
  */
 
 /**
@@ -120,8 +123,7 @@ const businessLines: BusinessLine[] = [
       position: "object-[center_25%]",
     },
     title: "Retail network",
-    description:
-      "Over 100 stations across Ghana, many in communities that had no fuel station before. Around 80% are run directly by trained PETROSOL managers.",
+    description: `${RETAIL_NETWORK_SIZE} stations across Ghana, many in communities that had no fuel station before. Around 80% are run directly by trained PETROSOL managers.`,
     href: "/find-a-station",
     linkLabel: "Find our station",
   },
@@ -404,8 +406,6 @@ const memberships = [
 
 const registrations = [
   "National Petroleum Authority (NPA)",
-  "Environmental Protection Agency (EPA)",
-  "Ghana Investment Promotion Centre (GIPC)",
   "Minerals Commission (Mine Support Service Company)",
 ];
 

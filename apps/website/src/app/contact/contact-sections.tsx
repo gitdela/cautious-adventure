@@ -2,11 +2,10 @@ import Link from "next/link";
 import {
   RiArrowRightUpLine,
   RiBriefcaseLine,
+  RiCustomerService2Line,
   RiMailLine,
   RiMapPinLine,
-  RiMegaphoneLine,
   RiPhoneLine,
-  RiScales3Line,
   RiTimeLine,
 } from "@remixicon/react";
 
@@ -27,36 +26,28 @@ const enquiryTeams = [
     description:
       "Enquiries about lubricants, fuel products, bulk purchasing, or corporate supply agreements.",
     icon: <StationIcon name="fuel-drop" />,
+    email: "sales@petrosol.com.gh",
   },
   {
-    title: "FullCare & services",
+    title: "Station & services",
     description:
       "Enquiries about our lube bay service, fuel delivery, or station-related services.",
-    icon: <StationIcon name="fullcare" />,
+    icon: <StationIcon name="station-pin" />,
+    email: "info@petrosol.com.gh",
   },
   {
     title: "Careers & HR",
     description:
       "Career opportunities, internships, and human resources related enquiries.",
     icon: <RiBriefcaseLine />,
+    email: "recruitment@petrosol.com.gh",
   },
   {
-    title: "Media & press",
+    title: "Customer complaints",
     description:
-      "Press releases, media enquiries, interviews, and corporate communications.",
-    icon: <RiMegaphoneLine />,
-  },
-  {
-    title: "Station franchising",
-    description:
-      "Interested in operating a PETROSOL fuel station? Contact our business development team.",
-    icon: <StationIcon name="station-pin" />,
-  },
-  {
-    title: "Compliance & legal",
-    description:
-      "Regulatory, legal, and compliance related communications for PETROSOL PLC.",
-    icon: <RiScales3Line />,
+      "Report a service issue, product concern, or anything that fell short of our standards.",
+    icon: <RiCustomerService2Line />,
+    email: "complaint@petrosol.com.gh",
   },
 ];
 
@@ -199,15 +190,15 @@ function EnquiriesGrid() {
         >
           Contact the right team
         </SectionHeading>
-        <div className="mt-14 grid grid-cols-[repeat(auto-fit,minmax(min(100%,264px),1fr))] gap-[var(--gutter)] min-[1100px]:grid-cols-3">
-          {enquiryTeams.map(({ title, description, icon }) => (
+        <div className="mt-14 grid grid-cols-1 gap-[var(--gutter)] sm:grid-cols-2 min-[1100px]:grid-cols-4">
+          {enquiryTeams.map(({ title, description, icon, email }) => (
             <ServiceCard key={title} title={title} icon={icon}>
               {description}
               <a
-                href="mailto:info@petrosol.com.gh"
+                href={`mailto:${email}`}
                 className="mt-3 block font-display font-bold text-brand transition-colors hover:text-orange-600"
               >
-                info@petrosol.com.gh
+                {email}
               </a>
             </ServiceCard>
           ))}

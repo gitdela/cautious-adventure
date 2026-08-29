@@ -60,7 +60,10 @@ function TeamMemberPhoto({
       alt={member.photo.alt ?? member.name}
       width={PHOTO_WIDTH}
       height={PHOTO_HEIGHT}
-      sizes="(max-width: 1100px) 50vw, 300px"
+      // Phones give each card its own row on both the board and leadership
+      // grids, so the tile is full-bleed there — asking for 50vw would serve a
+      // half-resolution crop into a full-width frame.
+      sizes="(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 300px"
       priority={priority}
     />
   );
@@ -107,13 +110,8 @@ function TeamCard({
       href={teamProfileHref(member.slug)}
       aria-label={`View profile — ${member.name}, ${member.role}`}
       className={cn(
-        // A 3px lift was the only signal these cards were links, which says
-        // nothing on a touch screen and little on a desktop. The lift stays,
-        // but the underlined "View profile" beside the name now carries the
-        // affordance, and the name shifts to brand on hover.
-        //
-        // `no-underline` here only clears the link's own decoration — the
-        // footer span sets its own, which a descendant is free to add.
+        // The lift, the name shifting to brand, and the "View profile" overlay
+        // that fades in over the photo all hang off this `group`.
         "group rounded-xl no-underline transition-transform duration-400 ease-[cubic-bezier(.16,1,.3,1)] hover:-translate-y-[3px]",
         "[&_h3]:transition-colors hover:[&_h3]:text-brand",
         "focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:outline-none",
@@ -128,21 +126,26 @@ function TeamCard({
         tone={tone}
         className={fill ? "h-full" : undefined}
         mediaClassName={fill ? "aspect-auto min-h-[400px] flex-1" : undefined}
-        media={<TeamMemberPhoto member={member} />}
-        footer={
-          // Rendered at rest rather than on hover: hover does not exist on a
-          // phone, which is where the cards read as inert.
-          <span
-            aria-hidden="true"
-            className={cn(
-              // `shrink-0` so a long name wraps instead of crushing this, and
-              // `whitespace-nowrap` so the label never breaks across two lines.
-              "shrink-0 font-display text-[13px] font-semibold whitespace-nowrap underline underline-offset-4 transition-colors",
-              tone === "dark" ? "text-orange-400" : "text-orange-600",
-            )}
-          >
-            View profile
-          </span>
+        media={
+          <>
+            <TeamMemberPhoto member={member} />
+            {/*
+              The affordance rides on the photo itself rather than sitting under
+              the name, so what it points at — click the portrait — is where it
+              appears. Hidden at rest and faded in on hover, and on
+              `focus-visible` too, so a keyboard sees the same cue the mouse
+              does. `aria-hidden` because the link already names its
+              destination; a screen reader repeating "View profile" adds nothing.
+            */}
+            <span
+              aria-hidden="true"
+              className="absolute inset-0 z-10 grid place-items-center bg-navy-900/55 opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100 group-focus-visible:opacity-100 motion-reduce:transition-none"
+            >
+              <span className="pill bg-white px-4 py-2 font-display text-[13px] font-semibold whitespace-nowrap text-navy-900">
+                View profile
+              </span>
+            </span>
+          </>
         }
       />
     </Link>

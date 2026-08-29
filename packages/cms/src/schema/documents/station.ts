@@ -31,11 +31,23 @@ export const stationType = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'region',
+      title: 'Region',
+      type: 'reference',
+      to: [{ type: 'stationRegion' }],
+      description:
+        'Which of Ghana’s sixteen regions this station sits in. This is what ' +
+        'the public directory groups and filters by.',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
       name: 'territory',
       title: 'Territory',
       type: 'reference',
       to: [{ type: 'stationTerritory' }],
-      description: 'Which territory this station is listed under.',
+      description:
+        'Internal sales territory, for reporting and Studio grouping only. ' +
+        'Never shown on the website — customers see the region instead.',
       validation: (rule) => rule.required(),
     }),
     defineField({
@@ -72,7 +84,7 @@ export const stationType = defineType({
       name: 'order',
       title: 'Display order',
       type: 'number',
-      description: 'Lower numbers appear first within the territory.',
+      description: 'Lower numbers appear first within the region.',
       validation: (rule) => rule.required().integer().min(0),
     }),
   ],
@@ -89,10 +101,16 @@ export const stationType = defineType({
     },
   ],
   preview: {
-    select: { title: 'name', subtitle: 'manager', territory: 'territory.name' },
-    prepare: ({ title, subtitle, territory }) => ({
+    select: {
+      title: 'name',
+      region: 'region.name',
+      territory: 'territory.name',
+    },
+    // Both taxonomies, so an editor can see at a glance that the public region
+    // and the internal territory line up the way they expect.
+    prepare: ({ title, region, territory }) => ({
       title: title ?? 'Station',
-      subtitle: [territory, subtitle].filter(Boolean).join(' · '),
+      subtitle: [region, territory].filter(Boolean).join(' · '),
     }),
   },
 })

@@ -22,7 +22,11 @@ const governanceCommitments = [
   ],
   [
     "Stakeholder responsibility",
-    "The board holds itself accountable to employees, partners, customers, and the communities in which PETROSOL operates.",
+    "The board holds itself accountable to employees, partners, shareholders, customers, and the communities in which PETROSOL operates.",
+  ],
+  [
+    "Risk management",
+    "The board oversees strategic, operational, financial, and compliance risks, ensuring appropriate controls and resilience across the business.",
   ],
   [
     "Strategic oversight",
@@ -67,39 +71,23 @@ function ChairmanFeature({ member }: { member: TeamMemberSummary }) {
             <p key={paragraph.slice(0, 32)}>{paragraph}</p>
           ))}
         </div>
-        {member.quote ? (
-          <blockquote className="mt-7 max-w-[46ch] border-t border-border pt-5 font-display text-[clamp(18px,2vw,24px)] leading-[1.5] font-bold text-navy-900">
-            &ldquo;
-            <QuoteText quote={member.quote} emphasise="honest commerce" />
-            &rdquo;
-          </blockquote>
-        ) : null}
         <Button asChild variant="outline" className="mt-8">
           <Link href="/leadership-team">View leadership team</Link>
         </Button>
       </div>
 
-      {/* `fill` stretches the tile to the copy column's height. */}
-      <TeamCard member={member} fill />
+      {/*
+        `fill` stretches the tile to the copy column's height. The min-height
+        sets the floor for the whole row — without it the portrait collapses to
+        whatever the bio happens to run to, which reads as a thumbnail beside
+        three paragraphs.
+      */}
+      <TeamCard
+        member={member}
+        fill
+        className="min-[841px]:min-h-[clamp(520px,42vw,680px)]"
+      />
     </section>
-  );
-}
-
-/**
- * Wraps a phrase in the brand swash without the quote itself carrying markup —
- * the text comes from a plain CMS field. Degrades to plain text if the phrase
- * is edited away.
- */
-function QuoteText({ quote, emphasise }: { quote: string; emphasise: string }) {
-  const at = quote.indexOf(emphasise);
-  if (at === -1) return <>{quote}</>;
-
-  return (
-    <>
-      {quote.slice(0, at)}
-      <span className="swash">{emphasise}</span>
-      {quote.slice(at + emphasise.length)}
-    </>
   );
 }
 
@@ -110,24 +98,27 @@ function BoardGrid({ members }: { members: TeamMemberSummary[] }) {
         <SectionHeading
           eyebrow="Board of directors"
           tone="light"
+          align="center"
           highlight="oversight"
         >
-          Independent
+          Strong
         </SectionHeading>
         {members.length > 0 ? (
           // Bento: six columns, every tile spanning two, so five tiles land as
           // two over three — the Board Secretary and CEO on top, the three
           // Board Members beneath. The first tile starts at column 2, which
-          // centres that top pair over the full-width row below it. Below 880px
-          // it collapses to two columns with the first tile spanning both.
-          <div className="mt-12 grid grid-cols-2 gap-[var(--gutter)] min-[881px]:grid-cols-6">
+          // centres that top pair over the full-width row below it. Between
+          // 641px and 880px it collapses to two columns with the first tile
+          // spanning both; on phones every tile gets its own row, because two
+          // 4:5 portraits side by side leave the faces too small to read.
+          <div className="mt-12 grid grid-cols-1 gap-[var(--gutter)] min-[641px]:grid-cols-2 min-[881px]:grid-cols-6">
             {members.map((member, index) => (
               <TeamCard
                 key={member.id}
                 member={member}
                 tone="dark"
                 className={cn(
-                  index === 0 ? "col-span-2" : "col-span-1",
+                  index === 0 && "min-[641px]:col-span-2",
                   "min-[881px]:col-span-2",
                   index === 0 && "min-[881px]:col-start-2",
                 )}

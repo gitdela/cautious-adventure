@@ -10,6 +10,8 @@ import {
   Stat,
 } from "@workspace/ui/components/marketing";
 
+import { RETAIL_NETWORK_SIZE } from "@/lib/company";
+
 import { MosaicPageHeader } from "../mosaic-page-header";
 import { MosaicCtaBand } from "../mosaic-cta-band";
 import { SiteBreadcrumbs } from "../site-breadcrumbs";
@@ -56,14 +58,15 @@ function WhoWeAreSection() {
           </p>
           <p>
             Our product lines include Gasoline (Petrol), Gas Oil (Diesel),
-            Liquefied Petroleum Gas (LPG), Fuel Oils and Lubricants. We operate
-            over 100 fuel stations across the country and directly supply bulk
-            corporate consumers of petroleum products.
+            Liquefied Petroleum Gas (LPG), Fuel Oils and Lubricants. We operate{" "}
+            {RETAIL_NETWORK_SIZE} fuel stations across the country and directly
+            supply bulk corporate consumers of petroleum products.
           </p>
           <p>
             We&apos;re licensed by the industry regulator, the National Petroleum
             Authority, and our operations are registered with the Ghana
-            Investment Promotion Centre and the Environmental Protection Agency.
+            Investment Promotion Authority and the Environmental Protection
+            Authority.
           </p>
         </div>
         <div className="mt-8 flex flex-wrap gap-3">
@@ -72,7 +75,8 @@ function WhoWeAreSection() {
             NPA licensed
           </Badge>
           <Badge>Triple ISO certified</Badge>
-          <Badge variant="secondary">100% Ghanaian-owned</Badge>
+          <Badge variant="secondary">EPA certified</Badge>
+          <Badge variant="secondary">Registered with GIPA</Badge>
         </div>
       </div>
 
@@ -101,7 +105,7 @@ function WhoWeAreSection() {
           />
         </div>
         <Stat
-          value="100+"
+          value={String(RETAIL_NETWORK_SIZE)}
           label="Fuel stations operating nationwide"
           size="md"
           tone="default"
@@ -183,11 +187,26 @@ function CultureBand() {
 
 const furtherReading = [
   ["Leadership team", "The people running the company", "/leadership-team"],
+  [
+    "Industry & national leadership",
+    "Our contribution to Ghana's energy conversation",
+    "/industry-and-national-leadership",
+  ],
   ["Awards & recognition", "How the industry rates us", "/awards-and-recognition"],
   [
-    "Sustainability & community",
-    "What we give back",
-    "/sustainability-and-community",
+    "Sustainability",
+    "Our green energy initiatives",
+    "/sustainability",
+  ],
+  [
+    "Corporate social responsibility",
+    "How we invest in communities",
+    "/csr",
+  ],
+  [
+    "Diversity & inclusion",
+    "Meet the PETROSOL Women Network",
+    "/diversity-and-inclusion",
   ],
 ];
 

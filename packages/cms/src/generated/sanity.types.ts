@@ -15,11 +15,64 @@
 export declare const internalGroqTypeReferenceTo: unique symbol;
 
 // Source: ../../packages/cms/src/generated/schema.json
+export type TeamMemberReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "teamMember";
+};
+
 export type SanityImageAssetReference = {
   _ref: string;
   _type: "reference";
   _weak?: boolean;
   [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+};
+
+export type NationalLeadershipProfile = {
+  _id: string;
+  _type: "nationalLeadershipProfile";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  personName: string;
+  petrosolRole: string;
+  teamMember?: TeamMemberReference;
+  photo?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+  appointments: Array<{
+    institution: string;
+    position: string;
+    status: "current" | "former";
+    tenure?: string;
+    summary: string;
+    sourceUrl?: string;
+    _type: "appointment";
+    _key: string;
+  }>;
+  order: number;
+};
+
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top: number;
+  bottom: number;
+  left: number;
+  right: number;
+};
+
+export type SanityImageHotspot = {
+  _type: "sanity.imageHotspot";
+  x: number;
+  y: number;
+  height: number;
+  width: number;
 };
 
 export type GalleryEvent = {
@@ -32,6 +85,7 @@ export type GalleryEvent = {
   slug: Slug;
   kind: "photos" | "story" | "video";
   stream: "event" | "community";
+  series?: "pwn" | "industry-leadership";
   eventDate?: string;
   order: number;
   coverImage?: {
@@ -89,26 +143,17 @@ export type BlockContent = Array<
     }
 >;
 
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top: number;
-  bottom: number;
-  left: number;
-  right: number;
-};
-
-export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x: number;
-  y: number;
-  height: number;
-  width: number;
-};
-
 export type Slug = {
   _type: "slug";
   current: string;
   source?: string;
+};
+
+export type StationRegionReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "stationRegion";
 };
 
 export type StationTerritoryReference = {
@@ -126,6 +171,7 @@ export type Station = {
   _rev: string;
   name: string;
   slug: Slug;
+  region: StationRegionReference;
   territory: StationTerritoryReference;
   manager: string;
   phones: Array<string>;
@@ -136,6 +182,17 @@ export type Station = {
 export type StationTerritory = {
   _id: string;
   _type: "stationTerritory";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name: string;
+  slug: Slug;
+  order: number;
+};
+
+export type StationRegion = {
+  _id: string;
+  _type: "stationRegion";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
@@ -538,15 +595,19 @@ export type Geopoint = {
 };
 
 export type AllSanitySchemaTypes =
+  | TeamMemberReference
   | SanityImageAssetReference
-  | GalleryEvent
-  | BlockContent
+  | NationalLeadershipProfile
   | SanityImageCrop
   | SanityImageHotspot
+  | GalleryEvent
+  | BlockContent
   | Slug
+  | StationRegionReference
   | StationTerritoryReference
   | Station
   | StationTerritory
+  | StationRegion
   | FuelProduct
   | LubricantCategoryReference
   | LubricantProduct
@@ -591,13 +652,14 @@ export type FuelProductsQueryResult = Array<{
 
 // Source: ../../packages/cms/src/queries/gallery.ts
 // Variable: galleryEventsQuery
-// Query: *[    _type == "galleryEvent" &&    (!defined($stream) || stream == $stream)  ] | order(order asc) {    _id,    title,    "slug": slug.current,    kind,    stream,    eventDate,    coverImage,    photos,    excerpt,    body,    caption,    muxPlaybackId,    posterTime  }
+// Query: *[    _type == "galleryEvent" &&    (!defined($stream) || stream == $stream) &&    (!defined($series) || series == $series)  ] | order(order asc) {    _id,    title,    "slug": slug.current,    kind,    stream,    series,    eventDate,    coverImage,    photos,    excerpt,    body,    caption,    muxPlaybackId,    posterTime  }
 export type GalleryEventsQueryResult = Array<{
   _id: string;
   title: string;
   slug: string;
   kind: "photos" | "story" | "video";
   stream: "community" | "event";
+  series: "industry-leadership" | "pwn" | null;
   eventDate: string | null;
   coverImage: {
     asset?: SanityImageAssetReference;
@@ -701,6 +763,43 @@ export type LubricantProductsQueryResult = Array<{
     title: string;
     slug: string;
   };
+}>;
+
+// Source: ../../packages/cms/src/queries/nationalLeadership.ts
+// Variable: nationalLeadershipProfilesQuery
+// Query: *[_type == "nationalLeadershipProfile"] | order(order asc) {    _id,    personName,    petrosolRole,    "profileSlug": teamMember->slug.current,    "photo": coalesce(photo, teamMember->photo),    appointments[] {      _key,      institution,      position,      status,      tenure,      summary,      sourceUrl    }  }
+export type NationalLeadershipProfilesQueryResult = Array<{
+  _id: string;
+  personName: string;
+  petrosolRole: string;
+  profileSlug: string | null;
+  photo:
+    | {
+        asset?: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt: string;
+        _type: "image";
+      }
+    | {
+        asset?: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+      }
+    | null;
+  appointments: Array<{
+    _key: string;
+    institution: string;
+    position: string;
+    status: "current" | "former";
+    tenure: string | null;
+    summary: string;
+    sourceUrl: string | null;
+  }>;
 }>;
 
 // Source: ../../packages/cms/src/queries/pages.ts
@@ -914,9 +1013,9 @@ export type PumpPricesQueryResult = {
 } | null;
 
 // Source: ../../packages/cms/src/queries/stations.ts
-// Variable: stationTerritoriesQuery
-// Query: *[_type == "stationTerritory"] | order(order asc) {    _id,    name,    "slug": slug.current  }
-export type StationTerritoriesQueryResult = Array<{
+// Variable: stationRegionsQuery
+// Query: *[_type == "stationRegion" && count(*[_type == "station" && references(^._id)]) > 0]    | order(order asc) {    _id,    name,    "slug": slug.current  }
+export type StationRegionsQueryResult = Array<{
   _id: string;
   name: string;
   slug: string;
@@ -924,7 +1023,7 @@ export type StationTerritoriesQueryResult = Array<{
 
 // Source: ../../packages/cms/src/queries/stations.ts
 // Variable: stationsQuery
-// Query: *[_type == "station"] | order(order asc) {    _id,    name,    "slug": slug.current,    manager,    phones,    amenities,    "territory": territory->{ name, "slug": slug.current }  }
+// Query: *[_type == "station"] | order(order asc) {    _id,    name,    "slug": slug.current,    manager,    phones,    amenities,    "region": region->{ name, "slug": slug.current }  }
 export type StationsQueryResult = Array<{
   _id: string;
   name: string;
@@ -932,7 +1031,7 @@ export type StationsQueryResult = Array<{
   manager: string;
   phones: Array<string>;
   amenities: Array<string> | null;
-  territory: {
+  region: {
     name: string;
     slug: string;
   };
@@ -1001,12 +1100,13 @@ import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
     '\n  *[_type == "fuelProduct"] | order(order asc) {\n    _id,\n    name,\n    "slug": slug.current,\n    eyebrow,\n    image\n  }\n': FuelProductsQueryResult;
-    '\n  *[\n    _type == "galleryEvent" &&\n    (!defined($stream) || stream == $stream)\n  ] | order(order asc) {\n    _id,\n    title,\n    "slug": slug.current,\n    kind,\n    stream,\n    eventDate,\n    coverImage,\n    photos,\n    excerpt,\n    body,\n    caption,\n    muxPlaybackId,\n    posterTime\n  }\n': GalleryEventsQueryResult;
+    '\n  *[\n    _type == "galleryEvent" &&\n    (!defined($stream) || stream == $stream) &&\n    (!defined($series) || series == $series)\n  ] | order(order asc) {\n    _id,\n    title,\n    "slug": slug.current,\n    kind,\n    stream,\n    series,\n    eventDate,\n    coverImage,\n    photos,\n    excerpt,\n    body,\n    caption,\n    muxPlaybackId,\n    posterTime\n  }\n': GalleryEventsQueryResult;
     '\n  *[\n    _type == "legalDocument" &&\n    documentKind == $kind &&\n    approvalState == "approved" &&\n    effectiveAt <= now()\n  ] | order(effectiveAt desc)[0] {\n    _id,\n    documentKind,\n    title,\n    version,\n    "slug": slug.current,\n    effectiveAt,\n    publishedAt,\n    body,\n    jurisdiction,\n    seo\n  }\n': LegalCurrentByKindQueryResult;
     '\n  *[\n    _type == "legalDocument" &&\n    documentKind == $kind &&\n    version == $version\n  ][0] {\n    _id,\n    documentKind,\n    title,\n    version,\n    "slug": slug.current,\n    effectiveAt,\n    publishedAt,\n    approvalState,\n    body,\n    jurisdiction,\n    seo\n  }\n': LegalByKindAndVersionQueryResult;
     '\n  *[_type == "legalDocument" && documentKind == $kind && approvalState in ["approved", "superseded"]]\n    | order(effectiveAt desc) {\n    documentKind,\n    version,\n    effectiveAt,\n    approvalState\n  }\n': LegalKindVersionsQueryResult;
     '\n  *[_type == "lubricantCategory"] | order(order asc) {\n    _id,\n    title,\n    "slug": slug.current,\n    description\n  }\n': LubricantCategoriesQueryResult;
     '\n  *[_type == "lubricantProduct"] | order(order asc) {\n    _id,\n    name,\n    "slug": slug.current,\n    grade,\n    standard,\n    applications,\n    drainInterval,\n    benefits,\n    image,\n    featuredOnHome,\n    "category": category->{ title, "slug": slug.current }\n  }\n': LubricantProductsQueryResult;
+    '\n  *[_type == "nationalLeadershipProfile"] | order(order asc) {\n    _id,\n    personName,\n    petrosolRole,\n    "profileSlug": teamMember->slug.current,\n    "photo": coalesce(photo, teamMember->photo),\n    appointments[] {\n      _key,\n      institution,\n      position,\n      status,\n      tenure,\n      summary,\n      sourceUrl\n    }\n  }\n': NationalLeadershipProfilesQueryResult;
     '\n  *[_type == "page" && slug.current == $slug][0] {\n    _id,\n    title,\n    "slug": slug.current,\n    sections,\n    seo\n  }\n': PageBySlugQueryResult;
     '\n  *[_type == "page" && defined(slug.current)]{ "slug": slug.current }\n': PageSlugsQueryResult;
     '\n  *[_type == "post" && defined(slug.current) && publishedAt <= now()] | order(publishedAt desc) [$start...$end] {\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    publishedAt,\n    updatedAt,\n    coverImage,\n    featuredRank,\n    "author": author->{ name, "slug": slug.current, avatar },\n    "category": category->{ title, "slug": slug.current }\n  }\n': PostListQueryResult;
@@ -1015,8 +1115,8 @@ declare module "@sanity/client" {
     '\n  *[_type == "post" && defined(slug.current) && publishedAt <= now() && slug.current == $slug][0] {\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    publishedAt,\n    updatedAt,\n    coverImage,\n    body,\n    "author": author->{ name, "slug": slug.current, avatar, bio, links },\n    "category": category->{ title, "slug": slug.current },\n    seo\n  }\n': PostBySlugQueryResult;
     '\n  *[_type == "post" && defined(slug.current) && publishedAt <= now()]{ "slug": slug.current }\n': PostSlugsQueryResult;
     '\n  *[_type == "pumpPrices"][0] {\n    _id,\n    _updatedAt,\n    prices[] { fuel, price }\n  }\n': PumpPricesQueryResult;
-    '\n  *[_type == "stationTerritory"] | order(order asc) {\n    _id,\n    name,\n    "slug": slug.current\n  }\n': StationTerritoriesQueryResult;
-    '\n  *[_type == "station"] | order(order asc) {\n    _id,\n    name,\n    "slug": slug.current,\n    manager,\n    phones,\n    amenities,\n    "territory": territory->{ name, "slug": slug.current }\n  }\n': StationsQueryResult;
+    '\n  *[_type == "stationRegion" && count(*[_type == "station" && references(^._id)]) > 0]\n    | order(order asc) {\n    _id,\n    name,\n    "slug": slug.current\n  }\n': StationRegionsQueryResult;
+    '\n  *[_type == "station"] | order(order asc) {\n    _id,\n    name,\n    "slug": slug.current,\n    manager,\n    phones,\n    amenities,\n    "region": region->{ name, "slug": slug.current }\n  }\n': StationsQueryResult;
     '\n  *[_type == "teamMember" && $group in groups] | order(order asc) {\n    _id,\n    name,\n    "slug": slug.current,\n    role,\n    groups,\n    photo,\n    shortBio,\n    quote,\n    featured\n  }\n': TeamMembersByGroupQueryResult;
     '\n  *[_type == "teamMember" && slug.current == $slug][0] {\n    _id,\n    name,\n    "slug": slug.current,\n    role,\n    groups,\n    photo,\n    coverPhoto,\n    shortBio,\n    quote,\n    featured,\n    bio\n  }\n': TeamMemberBySlugQueryResult;
     '\n  *[_type == "teamMember" && defined(slug.current)].slug.current\n': TeamMemberSlugsQueryResult;

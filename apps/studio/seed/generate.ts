@@ -164,10 +164,7 @@ const teamMembers: Doc[] = [
     draftBio('Isaac Debezor', 'risk and internal audit'),
   ),
 
-  teamMember(['board'], 10, 'Daniel Acheampong', 'Board Chairman', CHAIRMAN_BIO, {
-    quote:
-      'We do not build petroleum companies for the next quarter. We build them for the next generation of Ghanaians who deserve reliable energy and honest commerce.',
-  }),
+  teamMember(['board'], 10, 'Daniel Acheampong', 'Board Chairman', CHAIRMAN_BIO),
   teamMember(
     ['board'],
     11,

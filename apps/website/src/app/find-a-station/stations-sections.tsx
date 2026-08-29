@@ -2,7 +2,7 @@ import Link from "next/link";
 import { RiMailLine } from "@remixicon/react";
 
 import type {
-  StationTerritoryView,
+  StationRegionView,
   StationView,
 } from "@workspace/content";
 import { Button } from "@workspace/ui/components/button";
@@ -92,15 +92,15 @@ function StationsCta() {
 
 function StationsSections({
   stations,
-  territories,
+  regions,
 }: {
   stations: StationView[];
-  territories: StationTerritoryView[];
+  regions: StationRegionView[];
 }) {
   return (
     <main>
       <StationsPageHeader />
-      <StationsDirectory stations={stations} territories={territories} />
+      <StationsDirectory stations={stations} regions={regions} />
       <StationsCta />
     </main>
   );

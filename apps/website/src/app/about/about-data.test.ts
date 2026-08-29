@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 
+import { RETAIL_NETWORK_SIZE } from "@/lib/company";
+
 import {
   businessLines,
   customerPromises,
@@ -69,15 +71,16 @@ describe("about page data", () => {
     expect(businessLines.every(({ href }) => href.startsWith("/"))).toBe(true);
   });
 
-  // The station figure is the one number that appears in several places in the
-  // source profile. The page states the floor every source supports, so this
-  // pins it against a well-meant edit back to an unsourced 115.
-  it("claims over 100 stations, the figure every source supports", () => {
+  // The station figure appears on the home page and in the footer too, so it is
+  // owned by RETAIL_NETWORK_SIZE rather than written out per page. Asserting
+  // against the constant keeps this honest without re-freezing a literal, which
+  // is how the site ended up quoting 100 and 115 at the same time.
+  it("states the confirmed network size on the retail business line", () => {
     const retail = businessLines.find(
       ({ title }) => title === "Retail network",
     );
 
-    expect(retail?.description).toContain("Over 100 stations");
+    expect(retail?.description).toContain(`${RETAIL_NETWORK_SIZE} stations`);
   });
 
   // An unqualified GHS 1.3bn beside three present-tense figures reads as an
@@ -88,10 +91,11 @@ describe("about page data", () => {
     expect(tax?.[1]).toContain("2014–2024");
   });
 
-  // These were one list, which put the EPA beside the AGI and implied PETROSOL
-  // was a member of its own regulator.
+  // These were one list, which put regulators beside professional bodies and
+  // implied PETROSOL was a member of them.
   it("keeps regulators out of the membership list", () => {
-    expect(memberships.join(" ")).not.toMatch(/EPA|NPA|GIPC/);
-    expect(registrations.join(" ")).toMatch(/EPA/);
+    expect(memberships.join(" ")).not.toMatch(/EPA|NPA|GIPA/);
+    expect(registrations.join(" ")).not.toMatch(/EPA|GIPA/);
+    expect(registrations.join(" ")).toMatch(/NPA|Minerals Commission/);
   });
 });

@@ -25,10 +25,16 @@ describe("site navigation", () => {
         label: "About",
         children: [
           { label: "Who We Are", href: "/who-we-are" },
-          { label: "Leadership Team", href: "/leadership-team" },
+          { label: "Senior Leadership Team", href: "/leadership-team" },
           { label: "Board of Directors", href: "/board-of-directors" },
+          {
+            label: "Industry & National Leadership",
+            href: "/industry-and-national-leadership",
+          },
           { label: "Awards & Recognition", href: "/awards-and-recognition" },
-          { label: "Sustainability & Community", href: "/sustainability-and-community" },
+          { label: "Sustainability", href: "/sustainability" },
+          { label: "Corporate Social Responsibility", href: "/csr" },
+          { label: "Diversity & Inclusion", href: "/diversity-and-inclusion" },
         ],
       },
       {
@@ -51,6 +57,11 @@ describe("site navigation", () => {
       "Blog & Events",
     ]);
     expect(footerGroups).not.toEqual(navigationItems);
+    expect(footerGroups.find(({ title }) => title === "Responsibility")?.items).toEqual([
+      { label: "Sustainability", href: "/sustainability" },
+      { label: "Corporate Social Responsibility", href: "/csr" },
+      { label: "Diversity & Inclusion", href: "/diversity-and-inclusion" },
+    ]);
     expect(footerGroups.at(-1)?.items).toEqual([
       { label: "Events", href: "/events" },
       { label: "Blog", href: "/blog" },

@@ -12,7 +12,7 @@ import type {
   PostBySlugQueryResult,
   PostListQueryResult,
   PumpPricesQueryResult,
-  StationTerritoriesQueryResult,
+  StationRegionsQueryResult,
   StationsQueryResult,
   TeamMemberBySlugQueryResult,
   TeamMembersByGroupQueryResult,
@@ -29,9 +29,10 @@ import type {
   LegalDocumentView,
   LubricantCategoryView,
   LubricantProductView,
+  NationalLeadershipProfileView,
   PortableTextBlock,
   PumpPriceBoardView,
-  StationTerritoryView,
+  StationRegionView,
   StationView,
   TeamMemberFull,
   TeamMemberSummary,
@@ -175,13 +176,13 @@ export function toTeamMemberFull(
 }
 
 // --- Stations ---
-export function toStationTerritory(
-  t: StationTerritoriesQueryResult[number],
-): StationTerritoryView {
+export function toStationRegion(
+  r: StationRegionsQueryResult[number],
+): StationRegionView {
   return {
-    id: t._id,
-    slug: assertSlug(t.slug),
-    name: t.name,
+    id: r._id,
+    slug: assertSlug(r.slug),
+    name: r.name,
   };
 }
 
@@ -190,9 +191,14 @@ export function toStation(s: StationsQueryResult[number]): StationView {
     id: s._id,
     slug: assertSlug(s.slug),
     name: s.name,
-    territory: {
-      name: s.territory.name,
-      slug: assertSlug(s.territory.slug, "territory.slug"),
+    // Optional chain deliberately: `region` is a required reference, but one
+    // pointing at a deleted document dereferences to null. Naming the field in
+    // a CmsValidationError beats an opaque TypeError, and the directory groups
+    // solely by region — a station without one has nowhere to appear.
+    region: {
+      slug: assertSlug(s.region?.slug, "region.slug"),
+      // Unreachable once the slug above asserts, but it keeps the type honest.
+      name: s.region?.name ?? "",
     },
     manager: s.manager,
     phones: s.phones ?? [],
@@ -299,6 +305,7 @@ export function toGalleryEvent(
     title: e.title,
     kind: e.kind,
     stream: e.stream,
+    series: e.series ?? null,
     // Community work has no date by design — its pill reads "CSR". A dated
     // event without one is a hard failure: there would be no year pill to file
     // it under, so it would drop off the page silently instead of loudly.
@@ -323,5 +330,29 @@ export function toGalleryEvent(
     caption: isVideo ? (e.caption ?? null) : null,
     muxPlaybackId: isVideo ? (e.muxPlaybackId ?? null) : null,
     posterTime: isVideo ? (e.posterTime ?? 0) : 0,
+  };
+}
+
+type NationalLeadershipProfileItem =
+  import("@workspace/cms/types").NationalLeadershipProfilesQueryResult[number];
+
+export function toNationalLeadershipProfile(
+  p: NationalLeadershipProfileItem,
+): NationalLeadershipProfileView {
+  return {
+    id: p._id,
+    name: p.personName,
+    petrosolRole: p.petrosolRole,
+    profileSlug: p.profileSlug ?? null,
+    photo: hasAsset(p.photo) ? (p.photo as ContentImageValue) : null,
+    appointments: (p.appointments ?? []).map((appointment) => ({
+      id: appointment._key,
+      institution: appointment.institution,
+      position: appointment.position,
+      status: appointment.status,
+      tenure: appointment.tenure ?? null,
+      summary: appointment.summary,
+      sourceUrl: appointment.sourceUrl ?? null,
+    })),
   };
 }

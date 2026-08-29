@@ -74,6 +74,7 @@ export const deskStructure: StructureResolver = (S) =>
             .title('Stations')
             .items([
               S.documentTypeListItem('station').title('Stations'),
+              S.documentTypeListItem('stationRegion').title('Regions'),
               S.documentTypeListItem('stationTerritory').title('Territories'),
             ]),
         ),
@@ -103,6 +104,9 @@ export const deskStructure: StructureResolver = (S) =>
                     .filter('_type == "teamMember" && "board" in groups')
                     .defaultOrdering([{ field: 'order', direction: 'asc' }]),
                 ),
+              S.documentTypeListItem('nationalLeadershipProfile').title(
+                'Industry & National Leadership',
+              ),
             ]),
         ),
 

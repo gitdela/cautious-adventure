@@ -1,27 +1,27 @@
 import { describe, expect, it } from "vitest";
 
-import { toStation, toStationTerritory } from "./mappers";
+import { toStation, toStationRegion } from "./mappers";
 
 /** Shape of one row from `stationsQuery`. */
 const row = {
-  _id: "station-garu-no-2",
-  name: "PETROSOL Garu No.2 Station",
-  slug: "petrosol-garu-no-2-station",
-  manager: "Vincent Sekle",
-  phones: ["0248376729"],
+  _id: "station-spintex",
+  name: "PETROSOL Spintex Station",
+  slug: "petrosol-spintex-station",
+  manager: "Peter Bankole",
+  phones: ["0501416172"],
   amenities: ["shop", "washroom", "fullcare"],
-  territory: { name: "North East Territory", slug: "north-east-territory" },
+  region: { name: "Greater Accra", slug: "greater-accra" },
 };
 
 describe("toStation", () => {
   it("maps a full row onto the view model", () => {
     expect(toStation(row as never)).toEqual({
-      id: "station-garu-no-2",
-      slug: "petrosol-garu-no-2-station",
-      name: "PETROSOL Garu No.2 Station",
-      territory: { name: "North East Territory", slug: "north-east-territory" },
-      manager: "Vincent Sekle",
-      phones: ["0248376729"],
+      id: "station-spintex",
+      slug: "petrosol-spintex-station",
+      name: "PETROSOL Spintex Station",
+      region: { name: "Greater Accra", slug: "greater-accra" },
+      manager: "Peter Bankole",
+      phones: ["0501416172"],
       amenities: ["shop", "washroom", "fullcare"],
     });
   });
@@ -40,12 +40,21 @@ describe("toStation", () => {
     expect(station.phones).toEqual(["0201151695", "0553131245"]);
   });
 
-  // The dropdown filters on territory slug, so a territory saved without one
-  // would silently hide every station under it.
-  it("rejects a station whose territory has no slug", () => {
+  // The dropdown filters on region slug, so a region saved without one would
+  // silently hide every station under it.
+  it("rejects a station whose region has no slug", () => {
     expect(() =>
-      toStation({ ...row, territory: { name: "North East" } } as never),
-    ).toThrow(/territory\.slug/);
+      toStation({ ...row, region: { name: "Greater Accra" } } as never),
+    ).toThrow(/region\.slug/);
+  });
+
+  // `region` is a required reference, but one pointing at a deleted document
+  // dereferences to null. That must name the field, not blow up with a
+  // TypeError halfway through the mapper.
+  it("rejects a station whose region reference is unresolved", () => {
+    expect(() => toStation({ ...row, region: null } as never)).toThrow(
+      /region\.slug/,
+    );
   });
 
   it("rejects a station with no slug", () => {
@@ -53,18 +62,18 @@ describe("toStation", () => {
   });
 });
 
-describe("toStationTerritory", () => {
-  it("maps a territory row", () => {
+describe("toStationRegion", () => {
+  it("maps a region row", () => {
     expect(
-      toStationTerritory({
-        _id: "stationTerritory-ashanti",
-        name: "Ashanti Territory",
-        slug: "ashanti-territory",
+      toStationRegion({
+        _id: "stationRegion-ashanti",
+        name: "Ashanti",
+        slug: "ashanti",
       } as never),
     ).toEqual({
-      id: "stationTerritory-ashanti",
-      slug: "ashanti-territory",
-      name: "Ashanti Territory",
+      id: "stationRegion-ashanti",
+      slug: "ashanti",
+      name: "Ashanti",
     });
   });
 });

@@ -15,7 +15,7 @@ function CsrEvents({ events }: { events: GalleryEventView[] }) {
         </SectionHeading>
         <p className="mt-6 max-w-[62ch]">
           See the programmes and partnerships through which PETROSOL supports
-          communities across Ghana.
+          communities across Ghana through practical, lasting investment.
         </p>
         <div className="mt-14">
           <EventList

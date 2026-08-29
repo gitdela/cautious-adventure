@@ -16,6 +16,7 @@
     "lubricants:import": "bun run seed/lubricants-import.ts",
     "fuel:import": "bun run seed/fuel-import.ts",
     "stations:import": "bun run seed/stations-import.ts",
+    "stations:region:backfill": "sanity exec seed/stations-region-backfill.ts --with-user-token",
     "gallery:import": "bun run seed/gallery-import.ts",
     "blog:import": "bun run seed/blog-import.ts",
     "blog:titles": "bun run seed/blog-titles.ts",
