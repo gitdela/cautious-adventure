@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { RiArrowLeftSLine, RiArrowRightSLine } from "@remixicon/react";
@@ -92,64 +92,30 @@ function ArticleMeta({ post }: { post: BlogPostSummary }) {
   );
 }
 
-function FeaturedCarousel({ slides }: { slides: BlogPostSummary[] }) {
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(
-      () => setIndex((current) => (current + 1) % slides.length),
-      6000,
-    );
-    return () => clearInterval(timer);
-  }, [slides.length]);
-
+/** The latest story, held above the archive as a single static highlight. */
+function FeaturedPost({ post }: { post: BlogPostSummary }) {
   return (
-    <div>
-      <div className="overflow-hidden rounded-2xl bg-background shadow-card">
-        {slides.map((post, i) => (
-          <div
-            key={post.slug}
-            className={cn(
-              "grid-cols-1 items-stretch min-[841px]:grid-cols-2",
-              i === index ? "grid" : "hidden",
-            )}
-          >
-            <div className="relative min-h-[220px] min-[841px]:min-h-[300px]">
-              <PostCover
-                post={post}
-                width={1200}
-                height={900}
-                sizes="(min-width: 841px) 50vw, 100vw"
-                priority={i === 0}
-              />
-            </div>
-            <div className="flex flex-col gap-4 p-[clamp(24px,3vw,40px)]">
-              <ArticleMeta post={post} />
-              <Link
-                href={`/blog/${post.slug}`}
-                className="font-display text-[length:var(--size-display-sm)] leading-[1.18] font-bold tracking-[-0.02em] text-navy-900 transition-colors hover:text-brand"
-              >
-                {post.title}
-              </Link>
-              <p className="flex-1">{post.excerpt}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="mt-5 flex justify-center gap-3">
-        {slides.map((post, i) => (
-          <button
-            key={post.slug}
-            type="button"
-            onClick={() => setIndex(i)}
-            aria-label={`Story ${i + 1}`}
-            aria-current={i === index}
-            className={cn(
-              "h-2.5 cursor-pointer rounded-full transition-[width,background-color]",
-              i === index ? "w-7 bg-brand" : "w-2.5 bg-ink-200 hover:bg-ink-300",
-            )}
+    <div className="overflow-hidden rounded-2xl bg-background shadow-card">
+      <div className="grid grid-cols-1 items-stretch min-[841px]:grid-cols-2">
+        <div className="relative min-h-[220px] min-[841px]:min-h-[300px]">
+          <PostCover
+            post={post}
+            width={1200}
+            height={900}
+            sizes="(min-width: 841px) 50vw, 100vw"
+            priority
           />
-        ))}
+        </div>
+        <div className="flex flex-col gap-4 p-[clamp(24px,3vw,40px)]">
+          <ArticleMeta post={post} />
+          <Link
+            href={`/blog/${post.slug}`}
+            className="font-display text-[length:var(--size-display-sm)] leading-[1.18] font-bold tracking-[-0.02em] text-navy-900 transition-colors hover:text-brand"
+          >
+            {post.title}
+          </Link>
+          <p className="flex-1">{post.excerpt}</p>
+        </div>
       </div>
     </div>
   );
@@ -204,22 +170,15 @@ function NewsListing({ posts }: { posts: BlogPostSummary[] }) {
   }
 
   const tags = ["All", ...new Set(posts.map(tagOf))];
-  // Honour the same `featuredRank` the home page band reads, so featuring a
-  // post in the Studio means one thing across the site.
+  // The newest post leads the page. `posts` arrives sorted by publishedAt desc
+  // from the query, and the empty case has already returned above.
+  const featured = posts[0]!;
+  // The highlight is laid over the archive, not a slice taken out of it: the
+  // grid lists every post, including the featured one.
   //
-  // Falls back to the three newest when nothing is ranked. That is not
-  // defensive padding: the home page has no such fallback, and an import that
-  // dropped the ranks left its news section rendering nothing at all.
-  const ranked = posts
-    .filter((post) => typeof post.featuredRank === "number")
-    .sort((a, b) => (a.featuredRank ?? 0) - (b.featuredRank ?? 0));
-  const featured = (ranked.length > 0 ? ranked : posts).slice(0, 3);
-  // The carousel is a highlight reel laid over the archive, not a slice taken
-  // out of it — the grid lists every post, including the featured three.
-  //
-  // They used to be cut from the grid, which also cut them from the tag filter:
-  // the chips are built from all posts, so "Leadership" and "Recognition",
-  // whose only articles were featured, both filtered down to an empty grid.
+  // Featured posts used to be cut from the grid, which also cut them from the
+  // tag filter: the chips are built from all posts, so a tag whose only
+  // article was featured filtered down to an empty grid.
   const filtered =
     tag === "All" ? posts : posts.filter((post) => tagOf(post) === tag);
   const pages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
@@ -262,7 +221,7 @@ function NewsListing({ posts }: { posts: BlogPostSummary[] }) {
           </span>
         </div>
 
-        <FeaturedCarousel slides={featured} />
+        <FeaturedPost post={featured} />
 
         <div className="mt-6 flex flex-wrap gap-3" role="group" aria-label="Filter blog by tag">
           {tags.map((item) => (

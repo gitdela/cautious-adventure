@@ -92,7 +92,7 @@ export async function getBlogPostCount() {
   return count ?? 0;
 }
 
-/** Editor-curated home slots: posts with a featuredRank, best-ranked first. */
+/** Home-page slots: the three most recently published posts. */
 export async function getFeaturedPosts() {
   const result = await sanityFetchLive<FeaturedPostsQueryResult>({
     query: featuredPostsQuery,

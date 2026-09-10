@@ -4,8 +4,8 @@ import { defineField, defineType } from 'sanity'
  * Blog post. Validation prevents publishing without the fields the public
  * routes and SEO depend on: slug, excerpt, author, body, and published date.
  * The cover image is optional (a placeholder renders without it) but requires
- * alt text when set. `featuredRank` drives featured ordering explicitly rather
- * than relying on array position.
+ * alt text when set. Featured surfaces (home band, blog carousel) always show
+ * the three newest posts — there is no manual curation field.
  */
 export const postType = defineType({
   name: 'post',
@@ -77,13 +77,6 @@ export const postType = defineType({
       title: 'Body',
       type: 'blockContent',
       validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'featuredRank',
-      title: 'Featured rank',
-      description: 'Lower numbers surface first in featured slots. Leave empty if not featured.',
-      type: 'number',
-      validation: (rule) => rule.min(0).integer(),
     }),
     defineField({
       name: 'seo',
