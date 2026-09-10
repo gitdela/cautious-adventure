@@ -2783,13 +2783,6 @@
         },
         "optional": false
       },
-      "featuredRank": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "number"
-        },
-        "optional": true
-      },
       "seo": {
         "type": "objectAttribute",
         "value": {

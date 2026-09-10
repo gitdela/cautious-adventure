@@ -67,7 +67,6 @@ export function toBlogSummary(p: PostListItem): BlogPostSummary {
       : null,
     readMinutes: null,
     coverImage: (p.coverImage as ContentImageValue | null) ?? null,
-    featuredRank: p.featuredRank ?? null,
   };
 }
 
@@ -345,8 +344,11 @@ export function toNationalLeadershipProfile(
     petrosolRole: p.petrosolRole,
     profileSlug: p.profileSlug ?? null,
     photo: hasAsset(p.photo) ? (p.photo as ContentImageValue) : null,
-    appointments: (p.appointments ?? []).map((appointment) => ({
-      id: appointment._key,
+    appointments: (p.appointments ?? []).map((appointment, index) => ({
+      // Typegen says `_key` is always there, but documents seeded outside
+      // Studio can miss it — fall back to the position so React keys stay
+      // unique either way.
+      id: appointment._key ?? `appointment-${index}`,
       institution: appointment.institution,
       position: appointment.position,
       status: appointment.status,

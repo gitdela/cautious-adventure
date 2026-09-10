@@ -24,7 +24,7 @@ function PersonCard({
   role: string;
   tone?: "light" | "dark";
   /**
-   * Photo for the 4:5 frame. A slot rather than an image prop because this
+   * Photo for the 3:4 frame. A slot rather than an image prop because this
    * package must not import framework image components — the app passes its
    * own. Without it the card falls back to the person's initials.
    */
@@ -42,12 +42,14 @@ function PersonCard({
     <article className={cn("flex flex-col", className)}>
       <div
         className={cn(
-          "ps-blueprint relative grid aspect-[4/5] place-items-center overflow-hidden rounded-xl",
+          "ps-blueprint relative grid aspect-[3/4] place-items-center overflow-hidden rounded-xl",
           // Tone-dependent fill: the tile must never be the same navy as the
           // band behind it, or it disappears into the background.
           tone === "dark" ? "bg-navy-700" : "bg-navy-800",
           // A filled image should cover the frame; the initials stay centred.
-          media && "[&_img]:absolute [&_img]:inset-0 [&_img]:size-full [&_img]:object-cover",
+          // `object-top` so a frame wider than the delivered crop (the `fill`
+          // variant) sacrifices the bottom of the photo, never the head.
+          media && "[&_img]:absolute [&_img]:inset-0 [&_img]:size-full [&_img]:object-cover [&_img]:object-top",
           mediaClassName,
         )}
       >

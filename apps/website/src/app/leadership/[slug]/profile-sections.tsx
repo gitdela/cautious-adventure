@@ -68,14 +68,17 @@ function ProfilePortrait({ member }: { member: TeamMemberFull }) {
     <NextImage
       src={urlForImage(member.coverPhoto)
         .width(480)
-        .height(600)
+        .height(640)
         // `fit("crop")` honours the hotspot the editor set in Studio.
         .fit("crop")
+        // Same upward bias as the listing cards: sources are taller than this
+        // 3:4 frame and a centre crop clips heads.
+        .crop("top")
         .auto("format")
         .url()}
       alt={member.coverPhoto.alt ?? member.name}
       width={480}
-      height={600}
+      height={640}
       sizes="(max-width: 840px) 100vw, 400px"
       priority
       className="size-full object-cover"
@@ -103,7 +106,7 @@ function ProfileBody({ member }: { member: TeamMemberFull }) {
             clears the fixed 78px header. Static once the columns stack, where
             sticking would pin the portrait over the text. */}
         <div className="w-full max-w-[400px] min-[841px]:sticky min-[841px]:top-[102px]">
-          <div className="aspect-[4/5] overflow-hidden rounded-2xl">
+          <div className="aspect-[3/4] overflow-hidden rounded-2xl">
             <ProfilePortrait member={member} />
           </div>
           <div className="mt-5 border-t border-border pt-4">

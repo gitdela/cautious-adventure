@@ -217,6 +217,10 @@ function EventModal({
   return (
     <Dialog open={open} onOpenChange={(next) => !next && onClose()}>
       <DialogContent
+        // Same reason as the mobile nav panel: Lenis is stopped while this is
+        // open, and a stopped Lenis preventDefaults every wheel and touchmove,
+        // including the ones meant for this scroll box.
+        data-lenis-prevent
         className={cn(
           "max-h-[90vh] overflow-y-auto px-[var(--card-pad)] pt-12 pb-[var(--card-pad)]",
           // Stories are a column of prose and read better narrow; the lightbox

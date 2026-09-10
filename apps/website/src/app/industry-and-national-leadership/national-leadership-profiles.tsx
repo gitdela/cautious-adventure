@@ -58,24 +58,35 @@ function NationalLeadershipProfileCard({
   const { Image: CmsImage } = contentAdapters;
 
   const card = (
-    <article className="overflow-hidden rounded-2xl border border-border bg-card shadow-card">
-      <div className="grid grid-cols-1 min-[841px]:grid-cols-[minmax(210px,0.72fr)_minmax(0,1.28fr)]">
-        <div className="relative aspect-[4/5] min-[841px]:aspect-auto min-[841px]:min-h-[360px]">
+    <article className="@container/profile overflow-hidden rounded-2xl border border-border bg-card shadow-card">
+      {/*
+        Container query, not a viewport breakpoint: this card renders both full
+        width (the featured profile) and two-up, so only its own width can say
+        whether a side-by-side portrait fits.
+      */}
+      <div className="grid grid-cols-1 @[640px]/profile:grid-cols-[minmax(240px,0.34fr)_minmax(0,1fr)]">
+        {/*
+          The frame bleeds to the card edges but holds a fixed ratio and stays
+          top-aligned: stretching it to the height of a long appointments list
+          is what turned these portraits into slivers. A wide crop when the
+          photo sits above the copy, a 3:4 portrait when it sits beside it.
+        */}
+        <div className="relative grid aspect-[16/10] w-full place-items-center self-start overflow-hidden bg-ink-100 @[640px]/profile:aspect-[3/4]">
           {profile.photo ? (
             <CmsImage
               source={profile.photo}
               alt={profile.photo.alt ?? profile.name}
               width={640}
-              height={800}
-              sizes="(max-width: 840px) 100vw, 34vw"
-              className="size-full object-cover"
+              height={854}
+              sizes="(max-width: 840px) 100vw, 600px"
+              className="size-full object-cover object-top"
               priority={featured}
             />
           ) : (
             <ImagePlaceholder label={`Portrait coming soon: ${profile.name}`} />
           )}
         </div>
-        <div className="p-7 min-[841px]:p-9">
+        <div className="p-7 @[640px]/profile:p-9">
           <p className="font-mono text-[11px] font-semibold tracking-[0.14em] text-brand uppercase">
             PETROSOL leadership
           </p>
@@ -85,7 +96,9 @@ function NationalLeadershipProfileCard({
           <p className="mt-2 font-display text-[15px] font-bold text-muted-foreground">
             {profile.petrosolRole}
           </p>
-          <ul className="mt-7 flex flex-col gap-5">
+          {/* Two-up once the card is wide enough that a single column of
+              13px summaries would run past a comfortable measure. */}
+          <ul className="mt-7 grid gap-5 @[1000px]/profile:grid-cols-2">
             {profile.appointments.map((appointment) => (
               <Appointment key={appointment.id} {...appointment} />
             ))}

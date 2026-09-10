@@ -110,6 +110,12 @@ function SiteMobileNav({ items }: { items: SiteNavItem[] }) {
 
           <nav
             aria-label="Mobile navigation"
+            // A stopped Lenis calls `preventDefault()` on every wheel and
+            // touchmove it sees, which kills native scrolling inside this
+            // panel too — invisible until an open accordion makes the menu
+            // taller than the screen. `data-lenis-prevent` is checked before
+            // that, so gestures starting in here reach the browser untouched.
+            data-lenis-prevent
             className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-[var(--container-pad)] pt-4 pb-8"
           >
             <Accordion type="single" collapsible className="rounded-none border-0">

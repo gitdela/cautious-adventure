@@ -22,15 +22,14 @@ export const postListQuery = defineQuery(`
     publishedAt,
     updatedAt,
     coverImage,
-    featuredRank,
     "author": author->{ name, "slug": slug.current, avatar },
     "category": category->{ title, "slug": slug.current }
   }
 `)
 
-// Explicitly-curated home slots: only posts with a featuredRank, best first.
+// Home-page band and blog carousel: the three most recent posts.
 export const featuredPostsQuery = defineQuery(`
-  *[${PUBLISHED} && defined(featuredRank)] | order(featuredRank asc) [0...3] {
+  *[${PUBLISHED}] | order(publishedAt desc) [0...3] {
     _id,
     title,
     "slug": slug.current,
@@ -38,7 +37,6 @@ export const featuredPostsQuery = defineQuery(`
     publishedAt,
     updatedAt,
     coverImage,
-    featuredRank,
     "author": author->{ name, "slug": slug.current, avatar },
     "category": category->{ title, "slug": slug.current }
   }

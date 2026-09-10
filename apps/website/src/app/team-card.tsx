@@ -30,10 +30,12 @@ export function splitNameForHeadline(name: string) {
   return { lead, last };
 }
 
-/** 4:5 to match `PersonCard`'s frame. `fit("crop")` honours the Sanity hotspot,
+/** 3:4 to match `PersonCard`'s frame — close to the sources' own ratios
+ *  (~0.67–0.74), so almost the whole portrait shows and heads keep whatever
+ *  headroom the photographer left. `fit("crop")` honours the Sanity hotspot,
  *  which is the reason these photos live in the CMS at all. */
 const PHOTO_WIDTH = 480;
-const PHOTO_HEIGHT = 600;
+const PHOTO_HEIGHT = 640;
 
 function TeamMemberPhoto({
   member,
@@ -50,7 +52,7 @@ function TeamMemberPhoto({
         .width(PHOTO_WIDTH)
         .height(PHOTO_HEIGHT)
         .fit("crop")
-        // Portrait sources are taller than this 4:5 tile, so something has to
+        // Portrait sources are taller than this 3:4 tile, so something has to
         // go. Sanity's default is a centre crop, which takes it off the top and
         // clips heads — bias upward instead. A hotspot set in Studio overrides
         // this per image, and is the right fix for any individual photo.
@@ -126,6 +128,27 @@ function TeamCard({
         tone={tone}
         className={fill ? "h-full" : undefined}
         mediaClassName={fill ? "aspect-auto min-h-[400px] flex-1" : undefined}
+        footer={
+          /*
+            The hover overlay below never fires on a touch screen, so the card
+            reads as a plain photo with no way in. This pill is that cue where
+            hovering is not available — a `span`, not a link: the whole card is
+            already the anchor, and the outer `aria-label` already announces
+            the destination.
+          */
+          <span
+            aria-hidden="true"
+            className={cn(
+              "pill hidden shrink-0 border px-2.5 py-1 font-display text-[11px] font-semibold whitespace-nowrap",
+              "max-[880px]:inline-flex pointer-coarse:inline-flex",
+              tone === "dark"
+                ? "border-white/30 text-white/85"
+                : "border-border text-navy-900",
+            )}
+          >
+            View profile
+          </span>
+        }
         media={
           <>
             <TeamMemberPhoto member={member} />

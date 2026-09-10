@@ -110,8 +110,10 @@ function BoardGrid({ members }: { members: TeamMemberSummary[] }) {
           // centres that top pair over the full-width row below it. Between
           // 641px and 880px it collapses to two columns with the first tile
           // spanning both; on phones every tile gets its own row, because two
-          // 4:5 portraits side by side leave the faces too small to read.
-          <div className="mt-12 grid grid-cols-1 gap-[var(--gutter)] min-[641px]:grid-cols-2 min-[881px]:grid-cols-6">
+          // 3:4 portraits side by side leave the faces too small to read.
+          // Phones stack the tiles, where the gutter is at its 16px floor and
+          // the portraits run together; they get a wider gap of their own.
+          <div className="mt-12 grid grid-cols-1 gap-8 min-[641px]:grid-cols-2 min-[641px]:gap-[var(--gutter)] min-[881px]:grid-cols-6">
             {members.map((member, index) => (
               <TeamCard
                 key={member.id}

@@ -130,14 +130,6 @@ export type BlogPostSummary = {
   author?: AuthorRef | null;
   readMinutes?: number | null;
   coverImage?: ContentImageValue | null;
-  /**
-   * Editor-set feature position, lowest first. Null means "not featured".
-   *
-   * Carried on the summary so any listing can honour the same choice — the
-   * home page band and the blog carousel would otherwise disagree about what
-   * "featured" means.
-   */
-  featuredRank?: number | null;
 };
 
 export type BlogPostFull = BlogPostSummary & {

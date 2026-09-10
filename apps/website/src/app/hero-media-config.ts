@@ -69,17 +69,11 @@ function nextHeroMediaIndex(active: number) {
   return (active + 1) % HERO_MEDIA.length;
 }
 
-/** Wraps backwards, so the controls loop in both directions. */
-function previousHeroMediaIndex(active: number) {
-  return (active - 1 + HERO_MEDIA.length) % HERO_MEDIA.length;
-}
-
 export {
   FADE_MS,
   FADE_SECONDS,
   HERO_MEDIA,
   nextHeroMediaIndex,
-  previousHeroMediaIndex,
   STILL_ADVANCE_MS,
   STILL_SLOT_MS,
   type HeroMediaItem,
