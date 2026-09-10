@@ -209,7 +209,11 @@ function SiteFooter({
           <div>
             {brand}
             {summary ? (
-              <p className="mt-5 max-w-[30ch] text-[13px] leading-relaxed text-white/72">
+              // The 30ch measure is for the narrow brand column of the
+              // three-across desktop footer. Below that the brand block owns
+              // the full width, and holding the cap stretched this sentence
+              // into a tall ribbon of three-word lines beside empty space.
+              <p className="mt-5 text-[13px] leading-relaxed text-white/72 min-[641px]:max-w-[46ch] min-[1101px]:max-w-[30ch]">
                 {summary}
               </p>
             ) : null}

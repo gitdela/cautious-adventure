@@ -256,12 +256,18 @@ function StationsDirectory({
           Find a PETROSOL station
         </SectionHeading>
 
-        <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
+        {/*
+          Stacked and full width on phones: at 280px apiece the two controls
+          wrap to their own lines anyway, and `ml-auto` then pushed the search
+          field to the opposite edge from the region select. They only sit on
+          one line, pinned to either end, once there is room for both.
+        */}
+        <div className="mb-8 flex flex-col gap-3 min-[601px]:flex-row min-[601px]:flex-wrap min-[601px]:items-center min-[601px]:justify-between min-[601px]:gap-4">
           <NativeSelect
             aria-label="Region"
             value={region}
             onChange={(event) => setRegion(event.target.value)}
-            className="w-[min(100%,280px)] bg-background rounded-3xl"
+            className="w-full rounded-3xl bg-background min-[601px]:w-[280px]"
           >
             {regions.map((item) => (
               <NativeSelectOption key={item.slug} value={item.slug}>
@@ -274,7 +280,7 @@ function StationsDirectory({
             onChange={(event) => setSearch(event.target.value)}
             placeholder="Search station or manager…"
             aria-label="Search stations"
-            className="ml-auto w-[min(100%,280px)] rounded-3xl bg-background"
+            className="w-full rounded-3xl bg-background min-[601px]:ml-auto min-[601px]:w-[280px]"
           />
         </div>
 

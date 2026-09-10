@@ -108,7 +108,7 @@ function TeamGrid({ members }: { members: TeamMemberSummary[] }) {
           Meet the full
         </SectionHeading>
         {members.length > 0 ? (
-          <div className="mt-14 grid grid-cols-[repeat(auto-fit,minmax(min(100%,264px),1fr))] gap-[var(--gutter)] min-[1100px]:grid-cols-3">
+          <div className="mt-14 grid grid-cols-[repeat(auto-fit,minmax(min(100%,264px),1fr))] gap-8 min-[641px]:gap-[var(--gutter)] min-[1100px]:grid-cols-3">
             {members.map((member) => (
               <TeamCard key={member.id} member={member} tone="dark" />
             ))}
