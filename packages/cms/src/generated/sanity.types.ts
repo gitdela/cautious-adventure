@@ -461,7 +461,6 @@ export type Post = {
   publishedAt: string;
   updatedAt?: string;
   body: BlockContent;
-  featuredRank?: number;
   seo?: Seo;
 };
 
@@ -767,7 +766,7 @@ export type LubricantProductsQueryResult = Array<{
 
 // Source: ../../packages/cms/src/queries/nationalLeadership.ts
 // Variable: nationalLeadershipProfilesQuery
-// Query: *[_type == "nationalLeadershipProfile"] | order(order asc) {    _id,    personName,    petrosolRole,    "profileSlug": teamMember->slug.current,    "photo": coalesce(photo, teamMember->photo),    appointments[] {      _key,      institution,      position,      status,      tenure,      summary,      sourceUrl    }  }
+// Query: *[_type == "nationalLeadershipProfile"] | order(order asc) {    _id,    personName,    petrosolRole,    "profileSlug": coalesce(      teamMember->slug.current,      *[_type == "teamMember" && name == ^.personName][0].slug.current    ),    "photo": coalesce(      photo,      teamMember->photo,      *[_type == "teamMember" && name == ^.personName][0].photo    ),    appointments[] {      _key,      institution,      position,      status,      tenure,      summary,      sourceUrl    }  }
 export type NationalLeadershipProfilesQueryResult = Array<{
   _id: string;
   personName: string;
@@ -876,7 +875,7 @@ export type PageSlugsQueryResult = Array<{
 
 // Source: ../../packages/cms/src/queries/posts.ts
 // Variable: postListQuery
-// Query: *[_type == "post" && defined(slug.current) && publishedAt <= now()] | order(publishedAt desc) [$start...$end] {    _id,    title,    "slug": slug.current,    excerpt,    publishedAt,    updatedAt,    coverImage,    featuredRank,    "author": author->{ name, "slug": slug.current, avatar },    "category": category->{ title, "slug": slug.current }  }
+// Query: *[_type == "post" && defined(slug.current) && publishedAt <= now()] | order(publishedAt desc) [$start...$end] {    _id,    title,    "slug": slug.current,    excerpt,    publishedAt,    updatedAt,    coverImage,    "author": author->{ name, "slug": slug.current, avatar },    "category": category->{ title, "slug": slug.current }  }
 export type PostListQueryResult = Array<{
   _id: string;
   title: string;
@@ -892,7 +891,6 @@ export type PostListQueryResult = Array<{
     alt: string;
     _type: "image";
   } | null;
-  featuredRank: number | null;
   author: {
     name: string;
     slug: string;
@@ -913,7 +911,7 @@ export type PostListQueryResult = Array<{
 
 // Source: ../../packages/cms/src/queries/posts.ts
 // Variable: featuredPostsQuery
-// Query: *[_type == "post" && defined(slug.current) && publishedAt <= now() && defined(featuredRank)] | order(featuredRank asc) [0...3] {    _id,    title,    "slug": slug.current,    excerpt,    publishedAt,    updatedAt,    coverImage,    featuredRank,    "author": author->{ name, "slug": slug.current, avatar },    "category": category->{ title, "slug": slug.current }  }
+// Query: *[_type == "post" && defined(slug.current) && publishedAt <= now()] | order(publishedAt desc) [0...3] {    _id,    title,    "slug": slug.current,    excerpt,    publishedAt,    updatedAt,    coverImage,    "author": author->{ name, "slug": slug.current, avatar },    "category": category->{ title, "slug": slug.current }  }
 export type FeaturedPostsQueryResult = Array<{
   _id: string;
   title: string;
@@ -929,7 +927,6 @@ export type FeaturedPostsQueryResult = Array<{
     alt: string;
     _type: "image";
   } | null;
-  featuredRank: number | null;
   author: {
     name: string;
     slug: string;
@@ -1106,11 +1103,11 @@ declare module "@sanity/client" {
     '\n  *[_type == "legalDocument" && documentKind == $kind && approvalState in ["approved", "superseded"]]\n    | order(effectiveAt desc) {\n    documentKind,\n    version,\n    effectiveAt,\n    approvalState\n  }\n': LegalKindVersionsQueryResult;
     '\n  *[_type == "lubricantCategory"] | order(order asc) {\n    _id,\n    title,\n    "slug": slug.current,\n    description\n  }\n': LubricantCategoriesQueryResult;
     '\n  *[_type == "lubricantProduct"] | order(order asc) {\n    _id,\n    name,\n    "slug": slug.current,\n    grade,\n    standard,\n    applications,\n    drainInterval,\n    benefits,\n    image,\n    featuredOnHome,\n    "category": category->{ title, "slug": slug.current }\n  }\n': LubricantProductsQueryResult;
-    '\n  *[_type == "nationalLeadershipProfile"] | order(order asc) {\n    _id,\n    personName,\n    petrosolRole,\n    "profileSlug": teamMember->slug.current,\n    "photo": coalesce(photo, teamMember->photo),\n    appointments[] {\n      _key,\n      institution,\n      position,\n      status,\n      tenure,\n      summary,\n      sourceUrl\n    }\n  }\n': NationalLeadershipProfilesQueryResult;
+    '\n  *[_type == "nationalLeadershipProfile"] | order(order asc) {\n    _id,\n    personName,\n    petrosolRole,\n    "profileSlug": coalesce(\n      teamMember->slug.current,\n      *[_type == "teamMember" && name == ^.personName][0].slug.current\n    ),\n    "photo": coalesce(\n      photo,\n      teamMember->photo,\n      *[_type == "teamMember" && name == ^.personName][0].photo\n    ),\n    appointments[] {\n      _key,\n      institution,\n      position,\n      status,\n      tenure,\n      summary,\n      sourceUrl\n    }\n  }\n': NationalLeadershipProfilesQueryResult;
     '\n  *[_type == "page" && slug.current == $slug][0] {\n    _id,\n    title,\n    "slug": slug.current,\n    sections,\n    seo\n  }\n': PageBySlugQueryResult;
     '\n  *[_type == "page" && defined(slug.current)]{ "slug": slug.current }\n': PageSlugsQueryResult;
-    '\n  *[_type == "post" && defined(slug.current) && publishedAt <= now()] | order(publishedAt desc) [$start...$end] {\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    publishedAt,\n    updatedAt,\n    coverImage,\n    featuredRank,\n    "author": author->{ name, "slug": slug.current, avatar },\n    "category": category->{ title, "slug": slug.current }\n  }\n': PostListQueryResult;
-    '\n  *[_type == "post" && defined(slug.current) && publishedAt <= now() && defined(featuredRank)] | order(featuredRank asc) [0...3] {\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    publishedAt,\n    updatedAt,\n    coverImage,\n    featuredRank,\n    "author": author->{ name, "slug": slug.current, avatar },\n    "category": category->{ title, "slug": slug.current }\n  }\n': FeaturedPostsQueryResult;
+    '\n  *[_type == "post" && defined(slug.current) && publishedAt <= now()] | order(publishedAt desc) [$start...$end] {\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    publishedAt,\n    updatedAt,\n    coverImage,\n    "author": author->{ name, "slug": slug.current, avatar },\n    "category": category->{ title, "slug": slug.current }\n  }\n': PostListQueryResult;
+    '\n  *[_type == "post" && defined(slug.current) && publishedAt <= now()] | order(publishedAt desc) [0...3] {\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    publishedAt,\n    updatedAt,\n    coverImage,\n    "author": author->{ name, "slug": slug.current, avatar },\n    "category": category->{ title, "slug": slug.current }\n  }\n': FeaturedPostsQueryResult;
     'count(*[_type == "post" && defined(slug.current) && publishedAt <= now()])': PostCountQueryResult;
     '\n  *[_type == "post" && defined(slug.current) && publishedAt <= now() && slug.current == $slug][0] {\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    publishedAt,\n    updatedAt,\n    coverImage,\n    body,\n    "author": author->{ name, "slug": slug.current, avatar, bio, links },\n    "category": category->{ title, "slug": slug.current },\n    seo\n  }\n': PostBySlugQueryResult;
     '\n  *[_type == "post" && defined(slug.current) && publishedAt <= now()]{ "slug": slug.current }\n': PostSlugsQueryResult;
