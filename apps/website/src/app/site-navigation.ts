@@ -105,23 +105,23 @@ const socialLinks: Array<{
 }> = [
   {
     label: "Facebook",
-    href: "https://www.facebook.com/petrosolghana",
+    href: "https://www.facebook.com/petrosolplatinum",
     name: "facebook",
   },
-  { label: "X", href: "https://x.com/petrosolghana", name: "x" },
+  { label: "X", href: "https://x.com/petrosolgh", name: "x" },
   {
     label: "Instagram",
-    href: "https://www.instagram.com/petrosolghana",
+    href: "https://www.instagram.com/petrosolplatinum",
     name: "instagram",
   },
   {
     label: "LinkedIn",
-    href: "https://www.linkedin.com/company/petrosol-ghana",
+    href: "https://www.linkedin.com/company/petrosol-platinum",
     name: "linkedin",
   },
   {
     label: "TikTok",
-    href: "https://www.tiktok.com/@petrosolghana",
+    href: "https://www.tiktok.com/@petrosolplatinumenergy",
     name: "tiktok",
   },
 ];

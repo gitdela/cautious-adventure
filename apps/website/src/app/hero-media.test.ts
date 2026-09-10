@@ -23,13 +23,15 @@ const { HeroMedia } = await import("./hero-media");
 const html = renderToStaticMarkup(createElement(HeroMedia));
 
 describe("hero media controls", () => {
-  it("renders previous and next controls", () => {
+  // The arrows were removed by design — the dashes are the whole control
+  // surface, so nothing here should render a Previous/Next button.
+  it("renders only the dash controls, no arrow buttons", () => {
     expect(html).toContain('aria-label="Hero media"');
-    expect(html).toContain('aria-label="Previous"');
-    expect(html).toContain('aria-label="Next"');
+    expect(html).not.toContain('aria-label="Previous"');
+    expect(html).not.toContain('aria-label="Next"');
   });
 
-  it("renders one dot per media item", () => {
+  it("renders one dash per media item", () => {
     for (let index = 0; index < HERO_MEDIA.length; index += 1) {
       expect(html).toContain(
         `aria-label="Show item ${index + 1} of ${HERO_MEDIA.length}"`,

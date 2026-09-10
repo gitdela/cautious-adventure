@@ -11,8 +11,6 @@ import {
   type ReactNode,
   type RefObject,
 } from "react";
-import { RiArrowLeftSLine, RiArrowRightSLine } from "@remixicon/react";
-
 import { cn } from "@workspace/ui/lib/utils";
 
 import { usePrefersReducedMotion } from "@/lib/use-prefers-reduced-motion";
@@ -22,7 +20,6 @@ import {
   FADE_SECONDS,
   HERO_MEDIA,
   nextHeroMediaIndex,
-  previousHeroMediaIndex,
   STILL_ADVANCE_MS,
   type HeroMediaItem,
   type HeroVideoItem,
@@ -282,16 +279,14 @@ function MediaLayer({
   );
 }
 
-const controlButtonClass =
-  "inline-grid size-8 cursor-pointer place-items-center rounded-full border border-white/30 bg-black/25 text-white backdrop-blur-sm transition-colors hover:bg-black/50 focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:outline-none";
-
 /**
- * The dot is 8px, but the button around it is padded out to a ~28px target.
- * A bare 8px control would be far below the 24px minimum and near-impossible to
- * hit on a phone, which is exactly where these controls matter most.
+ * The dash is 4px tall, but the button around it is padded out to a ~26px
+ * target. A bare 4px control would be far below the 24px minimum and
+ * near-impossible to hit on a phone, which is exactly where these controls
+ * matter most.
  */
-const controlDotClass =
-  "group grid cursor-pointer place-items-center p-2.5 focus-visible:outline-none";
+const controlDashClass =
+  "group grid cursor-pointer place-items-center px-1.5 py-2.5 focus-visible:outline-none";
 
 function HeroControls({
   active,
@@ -303,20 +298,10 @@ function HeroControls({
   onSelect: (index: number) => void;
 }) {
   return (
-    <nav
-      aria-label="Hero media"
-      className="absolute inset-x-0 bottom-5 z-20 flex items-center justify-center gap-2"
-    >
-      <button
-        type="button"
-        aria-label="Previous"
-        onClick={() => onSelect(previousHeroMediaIndex(active))}
-        className={controlButtonClass}
-      >
-        <RiArrowLeftSLine className="size-4" />
-      </button>
-
-      <ul className="flex items-center">
+    <nav aria-label="Hero media" className="absolute inset-x-0 bottom-5 z-20">
+      {/* `ps-container` keeps the dashes on the same right edge as the rest of
+          the page content instead of hugging the viewport. */}
+      <ul className="ps-container flex items-center justify-end">
         {Array.from({ length: count }, (_, index) => (
           <li key={index}>
             <button
@@ -326,13 +311,13 @@ function HeroControls({
               // set, they are not independent toggles.
               aria-current={index === active ? "true" : undefined}
               onClick={() => onSelect(index)}
-              className={controlDotClass}
+              className={controlDashClass}
             >
               <span
                 className={cn(
-                  // The ring rides the dot, since the padded button itself is
+                  // The ring rides the dash, since the padded button itself is
                   // invisible and would show focus in mid-air.
-                  "block size-2 rounded-full transition-colors group-focus-visible:ring-2 group-focus-visible:ring-white/70 group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-transparent",
+                  "block h-1 w-6 rounded-full transition-colors group-focus-visible:ring-2 group-focus-visible:ring-white/70 group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-transparent",
                   index === active
                     ? "bg-white"
                     : "bg-white/40 group-hover:bg-white/75",
@@ -342,15 +327,6 @@ function HeroControls({
           </li>
         ))}
       </ul>
-
-      <button
-        type="button"
-        aria-label="Next"
-        onClick={() => onSelect(nextHeroMediaIndex(active))}
-        className={controlButtonClass}
-      >
-        <RiArrowRightSLine className="size-4" />
-      </button>
     </nav>
   );
 }

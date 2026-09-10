@@ -4,7 +4,6 @@ import {
   FADE_MS,
   HERO_MEDIA,
   nextHeroMediaIndex,
-  previousHeroMediaIndex,
   STILL_ADVANCE_MS,
   STILL_SLOT_MS,
 } from "./hero-media-config";
@@ -47,12 +46,5 @@ describe("homepage hero media sequence", () => {
 
   it("wraps from the final photo to the opening station image", () => {
     expect(nextHeroMediaIndex(HERO_MEDIA.length - 1)).toBe(0);
-  });
-
-  // The controls loop both ways, so "previous" from the opening item has to
-  // land on the last one rather than on -1.
-  it("wraps backwards from the opening item to the final one", () => {
-    expect(previousHeroMediaIndex(0)).toBe(HERO_MEDIA.length - 1);
-    expect(previousHeroMediaIndex(2)).toBe(1);
   });
 });

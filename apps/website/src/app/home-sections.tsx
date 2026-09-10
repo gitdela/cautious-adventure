@@ -74,8 +74,8 @@ function HeroSection() {
     // absolutely positioned over it, so the top padding has to clear it — and
     // it measures 78px on the mobile bar against 127px on the desktop tiers.
     // Phones get a taller band: the copy wraps to far more lines there, so the
-    // same 80svh that reads generously on a desktop leaves it cramped.
-    <section className="relative isolate flex min-h-[88svh] flex-col overflow-hidden bg-surface-inverse pt-[calc(78px+32px)] min-[601px]:min-h-[80svh] min-[961px]:pt-[calc(127px+40px)]">
+    // same 86svh that reads generously on a desktop leaves it cramped.
+    <section className="relative isolate flex min-h-[92svh] flex-col overflow-hidden bg-surface-inverse pt-[calc(78px+32px)] min-[601px]:min-h-[86svh] min-[961px]:pt-[calc(127px+40px)]">
       {/* Renders its own layers: the media sits at -z-20, its controls at
           z-20. They cannot share a wrapper — a negative z-index would trap the
           buttons beneath the scrim. */}
