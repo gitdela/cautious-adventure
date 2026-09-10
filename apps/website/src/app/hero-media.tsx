@@ -424,12 +424,14 @@ function HeroMedia() {
                   className={cn(
                     "object-cover",
                     item.position,
-                    // A slow drift, not a push-in. Anything much past 1.03 over
-                    // the ten-second slot crops noticeably into the frame by the
-                    // end — on these lube-bay stills it walks the subject out of
-                    // shot — and reads as the page moving rather than as depth.
+                    // The drift runs the full ten-second slot, so its speed is
+                    // the distance travelled: 1.08 pushes in about two and a
+                    // half times faster than the 1.03 it started at. Raising
+                    // the target rather than shortening the transition keeps
+                    // the movement alive for the whole slot instead of
+                    // arriving early and freezing.
                     isMovingStill
-                      ? "scale-[1.03] transition-transform duration-[10000ms] ease-linear"
+                      ? "scale-[1.08] transition-transform duration-[10000ms] ease-linear"
                       : "scale-100 transition-none",
                   )}
                 />
