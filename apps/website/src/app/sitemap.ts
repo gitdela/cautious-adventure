@@ -17,6 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "",
     "/who-we-are",
     "/awards-and-recognition",
+    "/annual-reports",
     "/leadership-team",
     "/board-of-directors",
     "/industry-and-national-leadership",

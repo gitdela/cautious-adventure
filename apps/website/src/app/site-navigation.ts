@@ -33,6 +33,7 @@ const navigationItems: SiteNavItem[] = [
         href: "/industry-and-national-leadership",
       },
       { label: "Awards & Recognition", href: "/awards-and-recognition" },
+      { label: "Annual Reports", href: "/annual-reports" },
       { label: "Sustainability", href: "/sustainability" },
       { label: "Corporate Social Responsibility", href: "/csr" },
       { label: "Diversity & Inclusion", href: "/diversity-and-inclusion" },
@@ -62,6 +63,7 @@ const footerGroups: SiteFooterGroup[] = [
         href: "/industry-and-national-leadership",
       },
       { label: "Awards & Recognition", href: "/awards-and-recognition" },
+      { label: "Annual Reports", href: "/annual-reports" },
     ],
   },
   {
