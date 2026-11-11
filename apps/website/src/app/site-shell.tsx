@@ -88,6 +88,15 @@ export function SiteShell({ children }: { children: ReactNode }) {
         legal={
           <span>
             © {new Date().getFullYear()} PETROSOL PLATINUM ENERGY PLC. All rights reserved.
+            {" · "}Website designed by{" "}
+            <a
+              href="https://kennartey.dev/contact"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-2 transition-colors hover:text-white"
+            >
+              DELADIM Technologies LTD
+            </a>
           </span>
         }
         tagline="energizing dreams!"

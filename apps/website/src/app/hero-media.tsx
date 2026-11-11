@@ -92,18 +92,15 @@ function useHeroPlayback(enabled: boolean) {
   }, [outgoing]);
 
   /**
-   * Moves to any index — the sequence's own advance, or a jump from the
-   * controls. Reads position from the refs so its identity stays stable.
+   * Advances the sequence. Reads position from refs so its identity stays stable.
    */
   const goTo = useCallback(
     (target: number) => {
       const current = activeRef.current;
       if (target === current) return;
 
-      // A viewer can press next again mid-crossfade. The pending layer is
-      // about to be replaced, so retire its video now rather than leave it
-      // playing unseen underneath — its own cleanup timer is about to be
-      // cancelled and would never fire.
+      // Retire a pending video replaced mid-crossfade. Its cleanup timer
+      // would be cancelled, leaving it playing unseen.
       const pending = outgoingRef.current;
       if (pending !== null && pending !== target) {
         const pendingItem = HERO_MEDIA[pending];
@@ -252,19 +249,13 @@ function useHeroPlayback(enabled: boolean) {
   return {
     active,
     containerRef,
-    goTo,
     isVisible,
     outgoing,
     videoRefs,
   };
 }
 
-/**
- * The media's own layer. It carries the negative z-index that used to live on a
- * wrapper in `home-sections.tsx` — a negative z-index makes a stacking context,
- * so anything rendered inside it can never rise above the scrim. The controls
- * are a sibling of this, not a child, which is what lets them be clickable.
- */
+/** The media layer sits behind the hero's text and scrim. */
 function MediaLayer({
   children,
   containerRef,
@@ -276,58 +267,6 @@ function MediaLayer({
     <div ref={containerRef} className="absolute inset-0 -z-20">
       {children}
     </div>
-  );
-}
-
-/**
- * The dash is 4px tall, but the button around it is padded out to a ~26px
- * target. A bare 4px control would be far below the 24px minimum and
- * near-impossible to hit on a phone, which is exactly where these controls
- * matter most.
- */
-const controlDashClass =
-  "group grid cursor-pointer place-items-center px-1.5 py-2.5 focus-visible:outline-none";
-
-function HeroControls({
-  active,
-  count,
-  onSelect,
-}: {
-  active: number;
-  count: number;
-  onSelect: (index: number) => void;
-}) {
-  return (
-    <nav aria-label="Hero media" className="absolute inset-x-0 bottom-5 z-20">
-      {/* `ps-container` keeps the dashes on the same right edge as the rest of
-          the page content instead of hugging the viewport. */}
-      <ul className="ps-container flex items-center justify-end">
-        {Array.from({ length: count }, (_, index) => (
-          <li key={index}>
-            <button
-              type="button"
-              aria-label={`Show item ${index + 1} of ${count}`}
-              // `aria-current` rather than `aria-pressed`: these select one of a
-              // set, they are not independent toggles.
-              aria-current={index === active ? "true" : undefined}
-              onClick={() => onSelect(index)}
-              className={controlDashClass}
-            >
-              <span
-                className={cn(
-                  // The ring rides the dash, since the padded button itself is
-                  // invisible and would show focus in mid-air.
-                  "block h-1 w-6 rounded-full transition-colors group-focus-visible:ring-2 group-focus-visible:ring-white/70 group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-transparent",
-                  index === active
-                    ? "bg-white"
-                    : "bg-white/40 group-hover:bg-white/75",
-                )}
-              />
-            </button>
-          </li>
-        ))}
-      </ul>
-    </nav>
   );
 }
 
@@ -375,7 +314,7 @@ function HeroMedia() {
   const prefersReducedMotion = usePrefersReducedMotion();
   const firstItem = HERO_MEDIA[0];
   const enabled = Boolean(firstItem) && !prefersReducedMotion;
-  const { active, containerRef, goTo, isVisible, outgoing, videoRefs } =
+  const { active, containerRef, isVisible, outgoing, videoRefs } =
     useHeroPlayback(enabled);
 
   if (!firstItem)
@@ -394,7 +333,6 @@ function HeroMedia() {
     );
 
   return (
-    <>
       <MediaLayer containerRef={containerRef}>
         {HERO_MEDIA.map((item, index) => {
           const isActive = index === active;
@@ -425,13 +363,12 @@ function HeroMedia() {
                     "object-cover",
                     item.position,
                     // The drift runs the full ten-second slot, so its speed is
-                    // the distance travelled: 1.08 pushes in about two and a
-                    // half times faster than the 1.03 it started at. Raising
-                    // the target rather than shortening the transition keeps
+                    // the distance travelled. Raising the target to 1.14
+                    // makes the push more noticeable while keeping
                     // the movement alive for the whole slot instead of
                     // arriving early and freezing.
                     isMovingStill
-                      ? "scale-[1.08] transition-transform duration-[10000ms] ease-linear"
+                      ? "scale-[1.14] transition-transform duration-[10000ms] ease-linear"
                       : "scale-100 transition-none",
                   )}
                 />
@@ -461,15 +398,6 @@ function HeroMedia() {
           );
         })}
       </MediaLayer>
-
-      {HERO_MEDIA.length > 1 && (
-        <HeroControls
-          active={active}
-          count={HERO_MEDIA.length}
-          onSelect={goTo}
-        />
-      )}
-    </>
   );
 }
 
